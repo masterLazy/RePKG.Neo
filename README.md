@@ -1,4 +1,8 @@
-# RePKG
+# RePKG.Neo
+RePKG.Neo provides a easy-use Graphics Interface, using .NET 10.
+
+---
+
 Wallpaper engine PKG unpacker/TEX converter, written in C#.
 
 PKG and TEX formats reverse engineered by me.
@@ -36,7 +40,7 @@ Feel free to report errors.
 -e, --printentries     Print entries in packages
 --title-filter         Title filter
 ```
- 
+
 ### Examples
 Simply extract PKG and convert TEX entries into images to output folder created in current directory
 ```

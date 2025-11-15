@@ -36,7 +36,7 @@ namespace RePKG.Command
             _packageReader = new PackageReader();
         }
 
-        public static void Action(ExtractOptions options)
+        public static bool Action(ExtractOptions options)
         {
             _options = options;
 
@@ -64,16 +64,17 @@ namespace RePKG.Command
                         ExtractPkgDirectory(directoryInfo);
 
                     Console.WriteLine("Done");
-                    return;
+                    return true;
                 }
 
                 Console.WriteLine("Input file not found");
                 Console.WriteLine(options.Input);
-                return;
+                return false;
             }
 
             ExtractFile(fileInfo);
             Console.WriteLine("Done");
+            return true;
         }
 
         private static string[] NormalizeExtensions(string[] array)

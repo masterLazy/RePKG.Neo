@@ -1,0 +1,54 @@
+﻿<Window x:Class="RePKG.Neo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+        mc:Ignorable="d"
+        Title="RePKG.Neo" 
+        SizeToContent="Height" Width="600"
+        Background="{StaticResource BhDefault}" ThemeMode="Light"
+        WindowStartupLocation="CenterScreen"
+        RenderOptions.BitmapScalingMode="HighQuality"
+        x:Name="root">
+    <StackPanel>
+        <!--Header-->
+        <StackPanel Orientation="Horizontal" Margin="10 10 10 5">
+            <Image Height="35" Margin="0 0 5 0" VerticalAlignment="Center" Source="Resources/icon.png" />
+            <TextBlock VerticalAlignment="Center" FontSize="13">
+                <Run FontWeight="Bold">RePKG.Neo</Run>
+                <Run>1.0.0 with RePKG v0.4.0</Run>
+            </TextBlock>
+        </StackPanel>
+        <Separator BorderBrush="{StaticResource BhBorder}"/>
+        <!--Body-->
+        <DockPanel Margin="20 10 20 5">
+            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center">
+                Input File (.pkg):
+            </TextBlock>
+            <Button Content="Open" DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
+                    x:Name="BtnBrowseIn" Click="BtnBrowseIn_Click"
+                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+            <TextBox Margin="10 0 5 0" x:Name="TbInput"  VerticalAlignment="Center" FontSize="13"
+                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+        </DockPanel>
+        <DockPanel Margin="20 10 20 20">
+            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center">
+                Output Folder:
+            </TextBlock>
+            <Button Content="Select" DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
+                    x:Name="BtnBrowseOut" Click="BtnBrowseOut_Click"
+                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+            <TextBox Margin="10 0 5 0" x:Name="TbOutput" VerticalAlignment="Center" Text="repkg" FontSize="13"
+                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+        </DockPanel>
+        <Separator BorderBrush="{StaticResource BhBorder}"/>
+        <!--Footer-->
+        <DockPanel LastChildFill="False"  Background="{StaticResource BhGray}">
+            <Button Content="Extract" DockPanel.Dock="Right" Margin="20 10 20 10" Width="70" Height="32"
+                    Style="{DynamicResource AccentButtonStyle}" FontSize="13"
+                    x:Name="BtnExtract" Click="BtnExtract_Click"
+                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+        </DockPanel>
+    </StackPanel>
+</Window>
