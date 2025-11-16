@@ -88,6 +88,7 @@ namespace RePKG.Neo {
             if(string.IsNullOrEmpty(TbInput.Text)) {
                 MessageBox.Show($"Please specify an input file first.",
                         "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                IsInputEnabled = true;
                 return;
             }
             if (Path.Exists(TbOutput.Text)) {

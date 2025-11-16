@@ -50,10 +50,15 @@
         <Separator BorderBrush="{StaticResource BhBorder}"/>
         <!--Footer-->
         <DockPanel LastChildFill="False"  Background="{StaticResource BhGray}">
-            <Button Content="Extract" DockPanel.Dock="Right" Margin="20 10 20 10" Width="70" Height="32"
+            <Button DockPanel.Dock="Right" Margin="20 10 20 10" MinWidth="70" Height="36"
                     Style="{DynamicResource AccentButtonStyle}" FontSize="13"
                     x:Name="BtnExtract" Click="BtnExtract_Click"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}" Text="&#xF78C;" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                    <TextBlock>Extract</TextBlock>
+                </StackPanel>
+            </Button>
             <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10">
                 Tip: You can drop a file / folder here.
             </TextBlock>
