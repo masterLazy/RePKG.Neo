@@ -1,28 +1,26 @@
 # RePKG.Neo
 <img src="RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
 
-此自述文件还有 [中文版](README_zh.md)。
-
-An enhanced Wallpaper Engine PKG extractor and TEX converter, built upon the original [RePKG](https://github.com/notscuffed/repkg), **featuring a modern GUI** – supporting extracting images, sounds, videos, and more.
+一个功能增强的的 Wallpaper Engine PKG 解包器与 TEX 转换器，基于原版 [RePKG](https://github.com/notscuffed/repkg) 构建，**并配备现代图形界面**——支持提取图像、音频、视频等多种资源。
 
 <br/>
 
-## New Features
+## 新功能
 
 > [!tip]
 >
-> To use RePKG.Neo, you need to install [.NET 10 Desktop Runtime](https://get.dot.net/10).
+> 要使用 RePKG.Neo，你需要安装 [.NET 10 Desktop Runtime](https://get.dot.net/10)。
 
-- **Modern Graphical Interface (GUI)**: Built with WPF, providing an intuitive and user-friendly desktop application experience.
-- **Upgraded to .NET 10**: Leverage the latest performance optimizations and framework features.
-- **Flexible File Input Methods**:
-  - Right-click and select "Open with RePKG.Neo"
-  - Drag and drop files onto the program icon
-  - Select files directly within the application
-  - Drag and drop files or folders directly into the program window
-  - **Smart Folder Recognition**: Automatically detects the `scene.pkg` file when a folder is dragged in
+- **现代化的图形界面 (GUI)**：使用 WPF 构建，提供了直观易用的桌面应用程序体验。
+- **升级至 .NET 10**：享受最新的性能优化和框架特性。
+- **灵活的文件输入方式**：
+  - 右键菜单选择“用 RePKG.Neo 打开”
+  - 拖拽文件到程序图标
+  - 在程序内直接选择文件
+  - 将文件或文件夹直接拖入程序窗口
+  - **智能文件夹识别**：拖入文件夹时自动识别其中的 `scene.pkg` 文件
 
-> The following part are from the original README of RePKG.
+> 下面的部分来自 RePKG 的原始 README。
 
 ---
 
