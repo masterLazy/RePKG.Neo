@@ -1,13 +1,14 @@
-﻿using RePKG.Command;
-using System.Text;
+﻿/**
+   Copyright 2025 masterLazy
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+ */
+using RePKG.Command;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.IO;
 using System.ComponentModel;
 
@@ -33,16 +34,26 @@ namespace RePKG.Neo {
 
         public MainWindow() {
             InitializeComponent();
-
-            if (!string.IsNullOrEmpty(App.droppedFile)) {
-                TbInput.Text = App.droppedFile;
-                MakeOutputDir();
-            }
+            HandleDrop(App.droppedFile);
         }
 
-        public void MakeOutputDir() {
+        private void MakeOutputDir() {
             int i = TbInput.Text.LastIndexOf('.');
             TbOutput.Text = string.Concat(TbInput.Text.AsSpan(0, i), "-repkg\\");
+        }
+
+        private void HandleDrop (string droppedFile) {
+            if (!string.IsNullOrEmpty(droppedFile)) {
+                if (!File.Exists(droppedFile)) {
+                    droppedFile += "\\scene.pkg";
+                }
+                TbInput.Text = droppedFile;
+                MakeOutputDir();
+                if (!File.Exists(droppedFile)) {
+                    MessageBox.Show($"File \"{droppedFile}\" not found.\nPlease check the input filename.",
+                        "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         // Open input file
@@ -50,8 +61,9 @@ namespace RePKG.Neo {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.FileName = "scene";
             dialog.DefaultExt = ".pkg";
-            dialog.Filter = "Wallpaper Engine Pakage|*.pkg" +
-                "|All Files|*.*"; ;
+            dialog.Filter = "Package File|*.pkg" +
+                "|Texture File|*.tex" +
+                "|All Files|*.*";
             bool? result = dialog.ShowDialog();
             if (result == true) {
                 TbInput.Text = dialog.FileName;
@@ -59,6 +71,7 @@ namespace RePKG.Neo {
             }
         }
 
+        // Select output folder
         private void BtnBrowseOut_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFolderDialog dialog = new();
             dialog.Multiselect = false;
@@ -69,10 +82,16 @@ namespace RePKG.Neo {
             }
         }
 
+        // Start extraction
         private void BtnExtract_Click(object sender, RoutedEventArgs e) {
             IsInputEnabled = false;
+            if(string.IsNullOrEmpty(TbInput.Text)) {
+                MessageBox.Show($"Please specify an input file first.",
+                        "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
             if (Path.Exists(TbOutput.Text)) {
-                if (MessageBox.Show($"Folder \"{TbOutput.Text}\" has existed. Do you want to overwrite it?",
+                if (MessageBox.Show($"Folder \"{TbOutput.Text}\" has existed.\nDo you want to overwrite it?",
                     "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) {
                     IsInputEnabled = true;
                     MessageBox.Show($"Extraction canceled.",
@@ -85,17 +104,40 @@ namespace RePKG.Neo {
                 Input = TbInput.Text,
                 OutputDirectory = TbOutput.Text,
                 Overwrite = true,
+                NoTexConvert = CbNoCvt.IsChecked == true,
+                CopyProject = CbCopy.IsChecked == true,
             };
-            var result = Extract.Action(extractOptions);
-            // Info
-            if (result) {
-                MessageBox.Show($"The package has been extracted to \"{TbOutput.Text}\"",
-                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            } else {
-                MessageBox.Show($"File \"{TbInput.Text}\" not found. Please check the input filename.",
-                    "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+            try {
+                var result = Extract.Action(extractOptions);
+                // Info
+                if (result) {
+                    MessageBox.Show($"The package has been extracted to: \"{TbOutput.Text}\"",
+                        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                } else {
+                    MessageBox.Show($"File \"{TbInput.Text}\" not found.\nPlease check the input filename.",
+                        "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            } catch (Exception ex) {
+                MessageBox.Show($"An error occurred during extraction:\n{ex.Message}\n\nPlease check if the input file is valid.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            } finally {
+                IsInputEnabled = true;
             }
-            IsInputEnabled = true;
+        }
+
+        // Drop file onto window
+        private void root_Drop(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                HandleDrop(files[0]);
+                if (files.Length > 1) {
+                    MessageBox.Show($"Only the first file / folder will be input.",
+                            "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            } else {
+                MessageBox.Show($"Invalid dropping. Please drop a single file / folder",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

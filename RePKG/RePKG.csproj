@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>RePKG</RootNamespace>
-		<OutputType>Exe</OutputType>
+		<OutputType>Library</OutputType>
 		<TargetFramework>net10.0</TargetFramework>
 		<Version>0.4.0</Version>
 		<Copyright>Copyright © NotScuffed 2025</Copyright>

@@ -1,7 +1,13 @@
-﻿using System.Configuration;
-using System.Data;
+﻿/**
+   Copyright 2025 masterLazy
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+ */
 using System.Windows;
-using System.IO;
 
 namespace RePKG.Neo {
     /// <summary>
@@ -13,7 +19,7 @@ namespace RePKG.Neo {
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
             string[] args = e.Args;
-            if (args.Length > 0 && File.Exists(args[0])) {
+            if (args.Length > 0) {
                 droppedFile = args[0];
             }
         }
