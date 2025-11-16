@@ -1,5 +1,5 @@
 # RePKG.Neo
-<img src="RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
+<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
 
 此自述文件还有 [中文版](README_zh.md)。
 
@@ -22,7 +22,11 @@ An enhanced Wallpaper Engine PKG extractor and TEX converter, built upon the ori
   - Drag and drop files or folders directly into the program window
   - **Smart Folder Recognition**: Automatically detects the `scene.pkg` file when a folder is dragged in
 
-> The following part are from the original README of RePKG.
+## Screenshot
+
+![screenshot](https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/img/screenshot.webp)
+
+> The following parts are from the original README of RePKG.
 >
 > The original license file of RePKG see LICENSE-RePKG.
 

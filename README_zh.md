@@ -1,5 +1,5 @@
 # RePKG.Neo
-<img src="RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
+<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
 
 一个功能增强的的 Wallpaper Engine PKG 解包器与 TEX 转换器，基于原版 [RePKG](https://github.com/notscuffed/repkg) 构建，**并配备现代图形界面**——支持提取图像、音频、视频等多种资源。
 
@@ -19,6 +19,10 @@
   - 在程序内直接选择文件
   - 将文件或文件夹直接拖入程序窗口
   - **智能文件夹识别**：拖入文件夹时自动识别其中的 `scene.pkg` 文件
+
+## 屏幕截图
+
+![screenshot](https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/img/screenshot.webp)
 
 > 下面的部分来自 RePKG 的原始 README。
 >
