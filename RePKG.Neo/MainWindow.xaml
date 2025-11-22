@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+        xmlns:loc="clr-namespace:RePKG.Neo.Res"
         mc:Ignorable="d"
         Title="RePKG.Neo" 
         SizeToContent="Height" Width="640"
+        ResizeMode="NoResize" TextOptions.TextFormattingMode="Display"
         Background="{StaticResource BhDefault}" ThemeMode="Light"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
@@ -15,7 +16,7 @@
     <StackPanel>
         <!--Header-->
         <StackPanel Orientation="Horizontal" Margin="10 10 10 5">
-            <Image Height="35" Margin="0 0 5 0" VerticalAlignment="Center" Source="Resources/icon.png" />
+            <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" />
             <TextBlock VerticalAlignment="Center" FontSize="13">
                 <Run FontWeight="Bold">RePKG.Neo</Run>
                 <Run>1.0.0-beta.1 with RePKG v0.4.0</Run>
@@ -24,29 +25,29 @@
         <Separator BorderBrush="{StaticResource BhBorder}"/>
         <!--Body-->
         <DockPanel Margin="20 20 20 5">
-            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center">
-                Input File (.pkg/.tex):
-            </TextBlock>
-            <Button Content="Open" DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
+            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
+                       Text="{x:Static loc:Lang.Main_InputFile}"/>
+            <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
                     x:Name="BtnBrowseIn" Click="BtnBrowseIn_Click"
+                     Content="{x:Static loc:Lang.Main_Open}"
                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
             <TextBox Margin="10 0 5 0" x:Name="TbInput"  VerticalAlignment="Center" FontSize="13"
                      IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
         </DockPanel>
         <DockPanel Margin="20 5 20 10">
-            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center">
-                Output Directory:
-            </TextBlock>
-            <Button Content="Select" DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
+            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
+                       Text="{x:Static loc:Lang.Main_OutputDir}"/>
+            <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
                     x:Name="BtnBrowseOut" Click="BtnBrowseOut_Click"
+                    Content="{x:Static loc:Lang.Main_Select}"
                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
             <TextBox Margin="10 0 5 0" x:Name="TbOutput" VerticalAlignment="Center" Text="repkg\" FontSize="13"
                      IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
         </DockPanel>
         <CheckBox Margin="20 10 20 0" FontSize="13" Height="32" x:Name="CbNoCvt"
-                  Content="Don't convert TEX files into images while extracting PKG"/>
+                  Content="{x:Static loc:Lang.Main_NoCvt}"/>
         <CheckBox Margin="20 0 20 10" FontSize="13" Height="32" x:Name="CbCopy"
-          Content="Copy project.json and preview.jpg from beside PKG into output directory"/>
+                  Content="{x:Static loc:Lang.Main_Copy}"/>
         <Separator BorderBrush="{StaticResource BhBorder}"/>
         <!--Footer-->
         <DockPanel LastChildFill="False"  Background="{StaticResource BhGray}">
@@ -56,12 +57,11 @@
                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}" Text="&#xF78C;" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                    <TextBlock>Extract</TextBlock>
+                    <TextBlock Text="{x:Static loc:Lang.Main_Extract}"/>
                 </StackPanel>
             </Button>
-            <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10">
-                Tip: You can drop a file / folder here.
-            </TextBlock>
+            <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10"
+                       Text="{x:Static loc:Lang.Main_Tip}"/>
         </DockPanel>
     </StackPanel>
 </Window>

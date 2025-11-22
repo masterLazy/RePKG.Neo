@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Main_Copy" xml:space="preserve">
+    <value>Copy project.json and preview.jpg from beside PKG into output directory</value>
+  </data>
+  <data name="Main_InputFile" xml:space="preserve">
+    <value>Input File (.pkg/.tex):</value>
+  </data>
+  <data name="Main_NoCvt" xml:space="preserve">
+    <value>Don't convert TEX files into images while extracting PKG</value>
+  </data>
+  <data name="Main_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Main_OutputDir" xml:space="preserve">
+    <value>Output Directory:</value>
+  </data>
+  <data name="Main_Tip" xml:space="preserve">
+    <value>Tip: You can drop a file / folder here.</value>
+  </data>
+  <data name="Main_Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Main_Extract" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="Msg_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Msg_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Msg_FileNotFound" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="Msg_SelectOutputDir" xml:space="preserve">
+    <value>Select an Output Folder</value>
+  </data>
+  <data name="Msg_SpecifyInput" xml:space="preserve">
+    <value>Please specify an input file first.</value>
+  </data>
+  <data name="Msg_FileNotFoundContent" xml:space="preserve">
+    <value>File "{0}" not found.
+Please check the input filename.</value>
+  </data>
+  <data name="Msg_FileFilter" xml:space="preserve">
+    <value>PKG File|*.pkg|TEX File|*.tex|All Files|*.*</value>
+  </data>
+  <data name="Msg_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Msg_Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Msg_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Msg_CanceledContent" xml:space="preserve">
+    <value>Extraction canceled.</value>
+  </data>
+  <data name="Msg_FolderExisted" xml:space="preserve">
+    <value>Folder "{0}" has existed.
+Do you want to overwrite it?</value>
+  </data>
+  <data name="Msg_Extracted" xml:space="preserve">
+    <value>The package has been extracted to: "{0}"</value>
+  </data>
+  <data name="Msg_ErrorContent" xml:space="preserve">
+    <value>An error occurred during extraction:
+{0}
+
+Please check if the input file is valid.</value>
+  </data>
+  <data name="Msg_MultiDrop" xml:space="preserve">
+    <value>Only the first file / folder will be input.</value>
+  </data>
+  <data name="Msg_InvalidDrop" xml:space="preserve">
+    <value>Invalid dropping. Please drop a file / folder.</value>
+  </data>
+</root>

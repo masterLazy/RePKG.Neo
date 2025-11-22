@@ -42,7 +42,7 @@ namespace RePKG.Neo {
             TbOutput.Text = string.Concat(TbInput.Text.AsSpan(0, i), "-repkg\\");
         }
 
-        private void HandleDrop (string droppedFile) {
+        private void HandleDrop(string droppedFile) {
             if (!string.IsNullOrEmpty(droppedFile)) {
                 if (!File.Exists(droppedFile)) {
                     droppedFile += "\\scene.pkg";
@@ -50,8 +50,8 @@ namespace RePKG.Neo {
                 TbInput.Text = droppedFile;
                 MakeOutputDir();
                 if (!File.Exists(droppedFile)) {
-                    MessageBox.Show($"File \"{droppedFile}\" not found.\nPlease check the input filename.",
-                        "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(string.Format(Res.Lang.Msg_FileNotFoundContent, droppedFile),
+                        Res.Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -61,9 +61,7 @@ namespace RePKG.Neo {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.FileName = "scene";
             dialog.DefaultExt = ".pkg";
-            dialog.Filter = "Package File|*.pkg" +
-                "|Texture File|*.tex" +
-                "|All Files|*.*";
+            dialog.Filter = Res.Lang.Msg_FileFilter;
             bool? result = dialog.ShowDialog();
             if (result == true) {
                 TbInput.Text = dialog.FileName;
@@ -75,7 +73,7 @@ namespace RePKG.Neo {
         private void BtnBrowseOut_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFolderDialog dialog = new();
             dialog.Multiselect = false;
-            dialog.Title = "Select an Output Folder";
+            dialog.Title = Res.Lang.Msg_SelectOutputDir;
             bool? result = dialog.ShowDialog();
             if (result == true) {
                 TbOutput.Text = dialog.FolderName;
@@ -85,18 +83,18 @@ namespace RePKG.Neo {
         // Start extraction
         private void BtnExtract_Click(object sender, RoutedEventArgs e) {
             IsInputEnabled = false;
-            if(string.IsNullOrEmpty(TbInput.Text)) {
-                MessageBox.Show($"Please specify an input file first.",
-                        "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (string.IsNullOrEmpty(TbInput.Text)) {
+                MessageBox.Show(Res.Lang.Msg_SpecifyInput,
+                        Res.Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
                 IsInputEnabled = true;
                 return;
             }
             if (Path.Exists(TbOutput.Text)) {
-                if (MessageBox.Show($"Folder \"{TbOutput.Text}\" has existed.\nDo you want to overwrite it?",
-                    "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) {
+                if (MessageBox.Show(string.Format(Res.Lang.Msg_FolderExisted, TbOutput.Text),
+                    Res.Lang.Msg_Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) {
                     IsInputEnabled = true;
-                    MessageBox.Show($"Extraction canceled.",
-                    "Canceled", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Res.Lang.Msg_CanceledContent,
+                    Res.Lang.Msg_Canceled, MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
             }
@@ -112,16 +110,18 @@ namespace RePKG.Neo {
                 var result = Extract.Action(extractOptions);
                 // Info
                 if (result) {
-                    MessageBox.Show($"The package has been extracted to: \"{TbOutput.Text}\"",
-                        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(string.Format(Res.Lang.Msg_Extracted, TbOutput.Text),
+                        Res.Lang.Msg_Success, MessageBoxButton.OK, MessageBoxImage.Information);
                 } else {
-                    MessageBox.Show($"File \"{TbInput.Text}\" not found.\nPlease check the input filename.",
-                        "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(string.Format(Res.Lang.Msg_FileNotFoundContent, TbInput.Text),
+                        Res.Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            } catch (Exception ex) {
-                MessageBox.Show($"An error occurred during extraction:\n{ex.Message}\n\nPlease check if the input file is valid.",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            } finally {
+            }
+            catch (Exception ex) {
+                MessageBox.Show(string.Format(Res.Lang.Msg_ErrorContent, ex.Message),
+                    Res.Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally {
                 IsInputEnabled = true;
             }
         }
@@ -132,12 +132,12 @@ namespace RePKG.Neo {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 HandleDrop(files[0]);
                 if (files.Length > 1) {
-                    MessageBox.Show($"Only the first file / folder will be input.",
-                            "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Res.Lang.Msg_MultiDrop,
+                            Res.Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             } else {
-                MessageBox.Show($"Invalid dropping. Please drop a single file / folder",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Res.Lang.Msg_InvalidDrop,
+                    Res.Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

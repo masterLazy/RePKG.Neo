@@ -6,16 +6,16 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
-		<ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+		<ApplicationIcon>Res\icon.ico</ApplicationIcon>
 		<Version>1.0.0-beta.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\icon.png" />
+	  <None Remove="Res\icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Resources\icon.ico" />
+		<Content Include="Res\icon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -23,11 +23,35 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\icon.png" />
+	  <Resource Include="Res\icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Resources\file-icon.ico">
+	  <Compile Update="Res\Lang.zh-CN.Designer.cs">
+	    <DependentUpon>Lang.zh-CN.resx</DependentUpon>
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	  </Compile>
+	  <Compile Update="Res\Lang.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Lang.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Res\Lang.zh-CN.resx">
+	    <LastGenOutput>Lang.zh-CN.Designer.cs</LastGenOutput>
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Res\Lang.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Lang.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Res\file-icon.ico">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

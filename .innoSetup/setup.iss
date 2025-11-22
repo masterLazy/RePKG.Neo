@@ -2,6 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Non-commercial use only
 
+#define ReleaseDir "D:\Repos\masterLazy\RePKG.Neo\RePKG.Neo\bin\Release\net10.0-windows\"
+#define RepoDir "D:\Repos\masterLazy\RePKG.Neo\"
+
 #define MyAppName "RePKG.Neo"
 #define MyAppVersion "1.0.0-beta.1"
 #define MyAppPublisher "masterLazy"
@@ -36,39 +39,40 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
-LicenseFile=D:\Repos\repkg\LICENSE
+LicenseFile={#RepoDir}LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=D:\Repos\repkg\.innoSetup
+OutputDir={#RepoDir}.innoSetup
 OutputBaseFilename=RePKG.Neo-Setup
 SolidCompression=yes
 WizardStyle=modern windows11
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\CommandLine.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\K4os.Compression.LZ4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\RePKG.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\RePKG.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\RePKG.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\RePKG.Neo.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\RePKG.Neo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\RePKG.Neo.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\SixLabors.ImageSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\RePKG.Neo\bin\Release\net10.0-windows\Resources\file-icon.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\LICENSE-RePKG"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\README.md"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repos\repkg\README_zh.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}CommandLine.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}K4os.Compression.LZ4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}RePKG.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}RePKG.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}RePKG.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}RePKG.Neo.deps.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}RePKG.Neo.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}RePKG.Neo.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}SixLabors.ImageSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}Resources\file-icon.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#RepoDir}LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#RepoDir}LICENSE-RePKG"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#RepoDir}README.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#RepoDir}README_zh.md"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
