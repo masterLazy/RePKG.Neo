@@ -22,6 +22,10 @@
 
 ## 屏幕截图
 
+> [!tip]
+>
+> RePKG.Neo 支持中文。如果你的系统语言配置为 `zh-CN`，应该能看到中文的界面。
+
 ![screenshot](https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/img/screenshot.webp)
 
 > 下面的部分来自 RePKG 的原始 README。
