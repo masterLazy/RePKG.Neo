@@ -5,8 +5,5 @@
     <EmbeddedResource Update="Res\Lang.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Update="Res\Lang.zh-CN.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
 </Project>

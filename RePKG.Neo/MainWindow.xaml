@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="RePKG.Neo" 
         SizeToContent="Height" Width="640"
-        ResizeMode="NoResize" TextOptions.TextFormattingMode="Display"
+        ResizeMode="NoResize"
         Background="{StaticResource BhDefault}" ThemeMode="Light"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
@@ -15,13 +15,13 @@
         AllowDrop="True" Drop="root_Drop">
     <StackPanel>
         <!--Header-->
-        <StackPanel Orientation="Horizontal" Margin="10 10 10 5">
-            <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" />
+        <DockPanel Margin="10 10 10 5">
+            <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" DockPanel.Dock="Left" />
             <TextBlock VerticalAlignment="Center" FontSize="13">
                 <Run FontWeight="Bold">RePKG.Neo</Run>
                 <Run>1.0.0-beta.2 with RePKG v0.4.0</Run>
             </TextBlock>
-        </StackPanel>
+        </DockPanel>
         <Separator BorderBrush="{StaticResource BhBorder}"/>
         <!--Body-->
         <DockPanel Margin="20 20 20 5">

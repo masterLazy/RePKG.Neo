@@ -2,11 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Non-commercial use only
 
-#define ReleaseDir "D:\Repos\masterLazy\RePKG.Neo\RePKG.Neo\bin\Release\net10.0-windows\"
-#define RepoDir "D:\Repos\masterLazy\RePKG.Neo\"
+#define ReleaseDir "..\RePKG.Neo\bin\Release\net10.0-windows\"
+#define RepoDir "..\"
 
 #define MyAppName "RePKG.Neo"
-#define MyAppVersion "1.0.0-beta.1"
+#define MyAppVersion "1.0.0-beta.2"
 #define MyAppPublisher "masterLazy"
 #define MyAppURL "https://github.com/masterLazy/RePKG.Neo"
 #define MyAppExeName "RePKG.Neo.exe"
@@ -56,19 +56,8 @@ Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.i
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#ReleaseDir}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}CommandLine.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}K4os.Compression.LZ4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}RePKG.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}RePKG.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}RePKG.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}RePKG.Neo.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}RePKG.Neo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}RePKG.Neo.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}SixLabors.ImageSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}Resources\file-icon.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}\zh-CN\*"; DestDir: "{app}\zh-CN\"; Flags: ignoreversion
 Source: "{#RepoDir}LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#RepoDir}LICENSE-RePKG"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#RepoDir}README.md"; DestDir: "{app}"; Flags: ignoreversion

@@ -27,11 +27,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Res\Lang.zh-CN.Designer.cs">
-	    <DependentUpon>Lang.zh-CN.resx</DependentUpon>
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	  </Compile>
 	  <Compile Update="Res\Lang.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -40,10 +35,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Res\Lang.zh-CN.resx">
-	    <LastGenOutput>Lang.zh-CN.Designer.cs</LastGenOutput>
-	    <Generator>PublicResXFileCodeGenerator</Generator>
-	  </EmbeddedResource>
 	  <EmbeddedResource Update="Res\Lang.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Lang.Designer.cs</LastGenOutput>
