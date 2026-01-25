@@ -9,3 +9,4 @@ RePKG.Tests/TestTextures/*
 RePKG.Tests/TestTexturesValidated/*
 *.lnk
 *.exe
+*.ini

@@ -6,7 +6,7 @@
 #define RepoDir "..\"
 
 #define MyAppName "RePKG.Neo"
-#define MyAppVersion "1.0.0-beta.2"
+#define MyAppVersion "1.0.0-beta.3"
 #define MyAppPublisher "masterLazy"
 #define MyAppURL "https://github.com/masterLazy/RePKG.Neo"
 #define MyAppExeName "RePKG.Neo.exe"
@@ -57,6 +57,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#ReleaseDir}*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}\Res\*"; DestDir: "{app}\Res\"; Flags: ignoreversion
 Source: "{#ReleaseDir}\zh-CN\*"; DestDir: "{app}\zh-CN\"; Flags: ignoreversion
 Source: "{#RepoDir}LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#RepoDir}LICENSE-RePKG"; DestDir: "{app}"; Flags: ignoreversion
