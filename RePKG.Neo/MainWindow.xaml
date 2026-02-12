@@ -12,14 +12,16 @@
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         x:Name="root"
-        AllowDrop="True" Drop="root_Drop">
+        AllowDrop="True" Drop="root_Drop"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Closed="root_Closed">
     <StackPanel>
         <!--Header-->
         <DockPanel Margin="10 10 10 5">
             <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" DockPanel.Dock="Left" />
             <TextBlock VerticalAlignment="Center" FontSize="13">
                 <Run FontWeight="Bold">RePKG.Neo</Run>
-                <Run>1.0.0-beta.2 with RePKG v0.4.0</Run>
+                <Run>1.0.0 with RePKG 3f573fa</Run>
             </TextBlock>
         </DockPanel>
         <Separator BorderBrush="{StaticResource BhBorder}"/>
@@ -32,7 +34,7 @@
                      Content="{x:Static loc:Lang.Main_Open}"
                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
             <TextBox Margin="10 0 5 0" x:Name="TbInput"  VerticalAlignment="Center" FontSize="13"
-                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
+                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}" AllowDrop="False"/>
         </DockPanel>
         <DockPanel Margin="20 5 20 10">
             <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
@@ -44,10 +46,13 @@
             <TextBox Margin="10 0 5 0" x:Name="TbOutput" VerticalAlignment="Center" Text="repkg\" FontSize="13"
                      IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
         </DockPanel>
-        <CheckBox Margin="20 10 20 0" FontSize="13" Height="32" x:Name="CbNoCvt"
-                  Content="{x:Static loc:Lang.Main_NoCvt}"/>
-        <CheckBox Margin="20 0 20 10" FontSize="13" Height="32" x:Name="CbCopy"
-                  Content="{x:Static loc:Lang.Main_Copy}"/>
+        <CheckBox Margin="20 10 20 0" FontSize="13" Height="32"
+                  Content="{x:Static loc:Lang.Main_NoCvt}" IsChecked="{Binding Options.NoTexConvert, Mode=TwoWay}"/>
+        <CheckBox Margin="20 0 20 0" FontSize="13" Height="32"
+                  Content="{x:Static loc:Lang.Main_Copy}" IsChecked="{Binding Options.CopyProject, Mode=TwoWay}"/>
+        <CheckBox Margin="20 0 20 10" FontSize="13" Height="32"
+          Content="{x:Static loc:Lang.Main_Auto}" IsChecked="{Binding Options.AutoExtract, Mode=TwoWay}"/>
+        <ProgressBar x:Name="ProgressBar" Background="Transparent" Minimum="0" Maximum="100"/>
         <Separator BorderBrush="{StaticResource BhBorder}"/>
         <!--Footer-->
         <DockPanel LastChildFill="False"  Background="{StaticResource BhGray}">

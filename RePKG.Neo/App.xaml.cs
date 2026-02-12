@@ -7,6 +7,10 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Windows;
 
 namespace RePKG.Neo {
@@ -18,11 +22,21 @@ namespace RePKG.Neo {
 
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
+            // handle file-dropping
             string[] args = e.Args;
             if (args.Length > 0) {
                 droppedFile = args[0];
             }
         }
-    }
 
+        public static readonly JsonSerializerOptions JsonOptions = new() {
+            // serialization
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs),
+            // deserialization
+            PropertyNameCaseInsensitive = true,
+            UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
+            UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement,
+        };
+    }
 }

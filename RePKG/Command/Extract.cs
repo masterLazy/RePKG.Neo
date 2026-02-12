@@ -17,6 +17,11 @@ namespace RePKG.Command
 {
     public static class Extract
     {
+        // *
+        private static IProgress<double> _progress;
+        private static int _totalWork;
+        private static int _processed;
+
         private static ExtractOptions _options;
         private static string[] _skipExtArray;
         private static string[] _onlyExtArray;
@@ -36,9 +41,15 @@ namespace RePKG.Command
             _packageReader = new PackageReader();
         }
 
-        public static bool Action(ExtractOptions options)
+        // *
+        public static bool Action(ExtractOptions options) => Action(options, null);
+
+        public static bool Action(ExtractOptions options, IProgress<double> progress)
         {
             _options = options;
+            _progress = progress;
+            _processed = 0;
+            _totalWork = CountTotalWork();
 
             if (string.IsNullOrEmpty(options.OutputDirectory))
             {
@@ -64,17 +75,80 @@ namespace RePKG.Command
                         ExtractPkgDirectory(directoryInfo);
 
                     Console.WriteLine("Done");
+                    // * Report progress
+                    _progress?.Report(1);
+                    _progress = null;
                     return true;
                 }
 
                 Console.WriteLine("Input file not found");
                 Console.WriteLine(options.Input);
+                _progress = null;
                 return false;
             }
 
             ExtractFile(fileInfo);
             Console.WriteLine("Done");
+            // * Report progress
+            _progress?.Report(1);
+            _progress = null;
             return true;
+        }
+
+        // * 
+        private static int CountTotalWork()
+        {
+            int total = 0;
+            var input = _options.Input;
+            var fileInfo = new FileInfo(input);
+            var directoryInfo = new DirectoryInfo(input);
+
+            if (!fileInfo.Exists)
+            {
+                if (directoryInfo.Exists)
+                {
+                    if (_options.TexDirectory)
+                    {
+                        // TEX
+                        var flags = _options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                        total = directoryInfo.EnumerateFiles("*.tex", flags).Count();
+                    }
+                    else
+                    {
+                        // PKG
+                        var flags = _options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                        var pkgFiles = directoryInfo.EnumerateFiles("*.pkg", flags).ToList();
+
+                        foreach (var pkgFile in pkgFiles)
+                        {
+                            using (var reader = new BinaryReader(pkgFile.Open(FileMode.Open, FileAccess.Read, FileShare.Read)))
+                            {
+                                var package = _packageReader.ReadFrom(reader);
+                                var entries = FilterEntries(package.Entries);
+                                total += entries.Count();
+                            }
+                        }
+                    }
+                }
+                return total;
+            }
+
+            // Single file
+            if (fileInfo.Extension.Equals(".pkg", StringComparison.OrdinalIgnoreCase))
+            {
+                using (var reader = new BinaryReader(fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    var package = _packageReader.ReadFrom(reader);
+                    var entries = FilterEntries(package.Entries);
+                    total = entries.Count();
+                }
+            }
+            else if (fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase))
+            {
+                total = 1; // * Report progress
+            }
+
+            return total;
         }
 
         private static string[] NormalizeExtensions(string[] array)
@@ -122,6 +196,10 @@ namespace RePKG.Command
                     Console.WriteLine("Failed to write texture");
                     Console.WriteLine(e);
                 }
+
+                // * Report progress
+                _processed++;
+                _progress?.Report((double)_processed / _totalWork);
             }
         }
 
@@ -177,6 +255,10 @@ namespace RePKG.Command
                 {
                     Console.WriteLine(e);
                 }
+
+                // * Report progress
+                _processed++;
+                _progress?.Report((double)_processed / _totalWork);
             }
             else
                 Console.WriteLine($"Unrecognized file extension: {fileInfo.Extension}");
@@ -207,6 +289,9 @@ namespace RePKG.Command
             foreach (var entry in entries)
             {
                 ExtractEntry(entry, ref outputDirectory);
+                // * Report progress
+                _processed++;
+                _progress?.Report((double)_processed / _totalWork);
             }
 
             // Copy project files project.json/preview image
@@ -241,15 +326,15 @@ namespace RePKG.Command
             if (!string.IsNullOrEmpty(_options.IgnoreExts))
             {
                 return from entry in entries
-                    where !_skipExtArray.Any(s => entry.FullPath.EndsWith(s, StringComparison.OrdinalIgnoreCase))
-                    select entry;
+                       where !_skipExtArray.Any(s => entry.FullPath.EndsWith(s, StringComparison.OrdinalIgnoreCase))
+                       select entry;
             }
 
             if (!string.IsNullOrEmpty(_options.OnlyExts))
             {
                 return from entry in entries
-                    where _onlyExtArray.Any(s => entry.FullPath.EndsWith(s, StringComparison.OrdinalIgnoreCase))
-                    select entry;
+                       where _onlyExtArray.Any(s => entry.FullPath.EndsWith(s, StringComparison.OrdinalIgnoreCase))
+                       select entry;
             }
 
             return entries;
@@ -360,7 +445,7 @@ namespace RePKG.Command
 
             return null;
         }
-        
+
         private static void ConvertToImageAndSave(ITex tex, string path, bool overwrite)
         {
             var format = _texToImageConverter.GetConvertedFormat(tex);
@@ -368,7 +453,7 @@ namespace RePKG.Command
 
             if (!overwrite && File.Exists(outputPath))
                 return;
-            
+
             var resultImage = _texToImageConverter.ConvertToImage(tex);
 
             File.WriteAllBytes(outputPath, resultImage.Bytes);

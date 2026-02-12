@@ -141,6 +141,9 @@
   <data name="Main_Extract" xml:space="preserve">
     <value>Extract</value>
   </data>
+  <data name="Main_Extracting" xml:space="preserve">
+    <value>Extracting...</value>
+  </data>
   <data name="Msg_Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -193,5 +196,8 @@ Please check if the input file is valid.</value>
   </data>
   <data name="Msg_InvalidDrop" xml:space="preserve">
     <value>Invalid dropping. Please drop a file / folder.</value>
+  </data>
+  <data name="Main_Auto" xml:space="preserve">
+    <value>Automatically extract upon double-click or file drop</value>
   </data>
 </root>

@@ -61,6 +61,15 @@ namespace RePKG.Neo.Res {
         }
         
         /// <summary>
+        ///   查找类似 Automatically extract upon double-click or file drop 的本地化字符串。
+        /// </summary>
+        public static string Main_Auto {
+            get {
+                return ResourceManager.GetString("Main_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Copy project.json and preview.jpg from beside PKG into output directory 的本地化字符串。
         /// </summary>
         public static string Main_Copy {
@@ -75,6 +84,15 @@ namespace RePKG.Neo.Res {
         public static string Main_Extract {
             get {
                 return ResourceManager.GetString("Main_Extract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Extracting... 的本地化字符串。
+        /// </summary>
+        public static string Main_Extracting {
+            get {
+                return ResourceManager.GetString("Main_Extracting", resourceCulture);
             }
         }
         
