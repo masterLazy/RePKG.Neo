@@ -1,5 +1,5 @@
 # RePKG.Neo
-<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
+<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Res/icon.png" width="162px" align="right"/>
 
 此自述文件还有 [中文版](README_zh.md)。
 
