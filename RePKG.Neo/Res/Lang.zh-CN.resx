@@ -141,6 +141,9 @@
   <data name="Main_Extract" xml:space="preserve">
     <value>提取</value>
   </data>
+  <data name="Main_Extracting" xml:space="preserve">
+    <value>提取中...</value>
+  </data>
   <data name="Msg_Error" xml:space="preserve">
     <value>错误</value>
   </data>
@@ -193,5 +196,8 @@
   </data>
   <data name="Msg_InvalidDrop" xml:space="preserve">
     <value>拖拽不合法。请拖拽一个文件 / 文件夹。</value>
+  </data>
+  <data name="Main_Auto" xml:space="preserve">
+    <value>双击文件或拖拽文件时自动提取</value>
   </data>
 </root>

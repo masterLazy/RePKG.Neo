@@ -14,6 +14,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace RePKG.Neo {
     /// <summary>
@@ -23,6 +24,16 @@ namespace RePKG.Neo {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private Options _options = new();
+        public Options Options {
+            get { return _options; }
+            set {
+                if (_options == value) return;
+                _options = value;
+                OnPropertyChanged(nameof(Options));
+            }
         }
 
         private bool _isInputEnabled = true;
@@ -37,6 +48,7 @@ namespace RePKG.Neo {
 
         public MainWindow() {
             InitializeComponent();
+            Options = Options.Load() ?? new();
             HandleDrop(App.droppedFile);
         }
 
@@ -53,8 +65,10 @@ namespace RePKG.Neo {
                 TbInput.Text = droppedFile;
                 MakeOutputDir();
                 if (!File.Exists(droppedFile)) {
-                    MessageBox.Show(string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
+                    MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
                         Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
+                } else if (Options.AutoExtract) {
+                    DoExtract();
                 }
             }
         }
@@ -87,47 +101,63 @@ namespace RePKG.Neo {
 
         // Start extraction
         private void BtnExtract_Click(object sender, RoutedEventArgs e) {
-            IsInputEnabled = false;
             if (string.IsNullOrEmpty(TbInput.Text)) {
-                MessageBox.Show(Lang.Msg_SpecifyInput,
+                MessageBox.Show(this, Lang.Msg_SpecifyInput,
                         Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
-                IsInputEnabled = true;
                 return;
             }
             if (Path.Exists(TbOutput.Text)) {
-                if (MessageBox.Show(string.Format(Lang.Msg_FolderExisted, TbOutput.Text),
+                if (MessageBox.Show(this, string.Format(Lang.Msg_FolderExisted, TbOutput.Text),
                     Lang.Msg_Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) {
                     IsInputEnabled = true;
-                    MessageBox.Show(Lang.Msg_CanceledContent,
+                    MessageBox.Show(this, Lang.Msg_CanceledContent,
                     Lang.Msg_Canceled, MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
             }
-            // Do extract
+            DoExtract();
+        }
+
+        // ProgressBar animation
+        private DoubleAnimation _smoothAnimation = new DoubleAnimation {
+            Duration = TimeSpan.FromMilliseconds(300),
+            EasingFunction = new QuadraticEase()
+        };
+
+        private async void DoExtract() {
+            IsInputEnabled = false;
+            ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extracting;
+            var progress = new Progress<double>(percent => {
+                _smoothAnimation.To = percent * 100;
+                ProgressBar.BeginAnimation(ProgressBar.ValueProperty, _smoothAnimation);
+            });
             ExtractOptions extractOptions = new() {
                 Input = TbInput.Text,
                 OutputDirectory = TbOutput.Text,
                 Overwrite = true,
-                NoTexConvert = CbNoCvt.IsChecked == true,
-                CopyProject = CbCopy.IsChecked == true,
+                NoTexConvert = Options.NoTexConvert,
+                CopyProject = Options.CopyProject,
             };
+            bool result = false;
             try {
-                var result = Extract.Action(extractOptions);
-                // Info
-                if (result) {
-                    MessageBox.Show(string.Format(Lang.Msg_Extracted, TbOutput.Text),
-                        Lang.Msg_Success, MessageBoxButton.OK, MessageBoxImage.Information);
-                } else {
-                    MessageBox.Show(string.Format(Lang.Msg_FileNotFoundContent, TbInput.Text),
-                        Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                result = await Task.Run(() => {
+                    return Extract.Action(extractOptions, progress);
+                });
             }
             catch (Exception ex) {
-                MessageBox.Show(string.Format(Lang.Msg_ErrorContent, ex.Message),
+                MessageBox.Show(this, string.Format(Lang.Msg_ErrorContent, ex.Message),
                     Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally {
                 IsInputEnabled = true;
+                ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extract;
+                if (result) {
+                    MessageBox.Show(this, string.Format(Lang.Msg_Extracted, TbOutput.Text),
+                        Lang.Msg_Success, MessageBoxButton.OK, MessageBoxImage.Information);
+                } else {
+                    MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, TbInput.Text),
+                        Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -137,11 +167,11 @@ namespace RePKG.Neo {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 HandleDrop(files[0]);
                 if (files.Length > 1) {
-                    MessageBox.Show(Lang.Msg_MultiDrop,
+                    MessageBox.Show(this, Lang.Msg_MultiDrop,
                             Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             } else {
-                MessageBox.Show(Lang.Msg_InvalidDrop,
+                MessageBox.Show(this, Lang.Msg_InvalidDrop,
                     Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -150,7 +180,7 @@ namespace RePKG.Neo {
             Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
 
-            // 对于WPF，需要更新所有打开的窗口
+            // Update all windows
             foreach (Window window in System.Windows.Application.Current.Windows) {
                 if (window.IsLoaded) {
                     var oldDataContext = window.DataContext;
@@ -158,6 +188,10 @@ namespace RePKG.Neo {
                     window.DataContext = oldDataContext;
                 }
             }
+        }
+
+        private void root_Closed(object sender, EventArgs e) {
+            Options.Save();
         }
     }
 }
