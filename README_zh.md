@@ -1,5 +1,5 @@
 # RePKG.Neo
-<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Resources/icon.png" width="162px" align="right"/>
+<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Res/icon.png" width="162px" align="right"/>
 
 一个功能增强的的 Wallpaper Engine PKG 解包器与 TEX 转换器，基于原版 [RePKG](https://github.com/notscuffed/repkg) 构建，**并配备现代图形界面**——支持提取图像、音频、视频等多种资源。
 
