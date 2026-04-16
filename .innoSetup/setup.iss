@@ -6,15 +6,17 @@
 #define RepoDir "..\"
 
 #define MyAppName "RePKG.Neo"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "masterLazy"
 #define MyAppURL "https://github.com/masterLazy/RePKG.Neo"
 #define MyAppExeName "RePKG.Neo.exe"
 #define MyAppAssocName "Wallpaper Package File"
 #define MyAppAssocExt ".pkg"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
-#define MyAppAssocExt2 ".tex"
+#define MyAppAssocExt2 ".mpkg"
 #define MyAppAssocKey2 StringChange(MyAppAssocName, " ", "") + MyAppAssocExt2
+#define MyAppAssocExt3 ".tex"
+#define MyAppAssocKey3 StringChange(MyAppAssocName, " ", "") + MyAppAssocExt3
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.

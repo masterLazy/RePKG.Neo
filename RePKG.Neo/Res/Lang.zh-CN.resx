@@ -121,7 +121,7 @@
     <value>将 project.json 和 preview.jpg 从 PKG 旁复制到输出目录</value>
   </data>
   <data name="Main_InputFile" xml:space="preserve">
-    <value>输入文件 (.pkg/.tex)：</value>
+    <value>输入文件：</value>
   </data>
   <data name="Main_NoCvt" xml:space="preserve">
     <value>提取 PKG 时不要将 TEX 文件转换为图像</value>
@@ -164,7 +164,7 @@
 请检查输入文件名。</value>
   </data>
   <data name="Msg_FileFilter" xml:space="preserve">
-    <value>PKG 文件|*.pkg|TEX 文件|*.tex|所有文件|*.*</value>
+    <value>PKG 文件|*.pkg|MPKG 文件|*.mpkg|TEX 文件|*.tex|所有文件|*.*</value>
   </data>
   <data name="Msg_Confirm" xml:space="preserve">
     <value>确认操作</value>

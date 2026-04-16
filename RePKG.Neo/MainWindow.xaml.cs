@@ -140,9 +140,7 @@ namespace RePKG.Neo {
             };
             bool result = false;
             try {
-                result = await Task.Run(() => {
-                    return Extract.Action(extractOptions, progress);
-                });
+                result = await Task.Run(() => Extract.Action(extractOptions, progress));
             }
             catch (Exception ex) {
                 MessageBox.Show(this, string.Format(Lang.Msg_ErrorContent, ex.Message),
@@ -152,8 +150,7 @@ namespace RePKG.Neo {
                 IsInputEnabled = true;
                 ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extract;
                 if (result) {
-                    MessageBox.Show(this, string.Format(Lang.Msg_Extracted, TbOutput.Text),
-                        Lang.Msg_Success, MessageBoxButton.OK, MessageBoxImage.Information);
+                    Text_Tip.Text = string.Format(Lang.Msg_Extracted, TbOutput.Text);
                 } else {
                     MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, TbInput.Text),
                         Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);

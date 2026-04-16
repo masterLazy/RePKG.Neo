@@ -21,7 +21,7 @@
             <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" DockPanel.Dock="Left" />
             <TextBlock VerticalAlignment="Center" FontSize="13">
                 <Run FontWeight="Bold">RePKG.Neo</Run>
-                <Run>1.0.0 with RePKG 3f573fa</Run>
+                <Run>1.0.1 with RePKG 3f573fa</Run>
             </TextBlock>
         </DockPanel>
         <Separator BorderBrush="{StaticResource BhBorder}"/>
@@ -34,7 +34,8 @@
                      Content="{x:Static loc:Lang.Main_Open}"
                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
             <TextBox Margin="10 0 5 0" x:Name="TbInput"  VerticalAlignment="Center" FontSize="13"
-                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}" AllowDrop="False"/>
+                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}" AllowDrop="False"
+                     ToolTip=".pkg/.mpkg/.tex" ToolTipService.InitialShowDelay="100"/>
         </DockPanel>
         <DockPanel Margin="20 5 20 10">
             <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
@@ -66,7 +67,7 @@
                 </StackPanel>
             </Button>
             <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10"
-                       Text="{x:Static loc:Lang.Main_Tip}"/>
+                       Text="{x:Static loc:Lang.Main_Tip}" x:Name="Text_Tip"/>
         </DockPanel>
     </StackPanel>
 </Window>
