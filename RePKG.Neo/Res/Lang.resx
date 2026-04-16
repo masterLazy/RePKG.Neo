@@ -121,7 +121,7 @@
     <value>Copy project.json and preview.jpg from beside PKG into output directory</value>
   </data>
   <data name="Main_InputFile" xml:space="preserve">
-    <value>Input File (.pkg/.tex):</value>
+    <value>Input File: </value>
   </data>
   <data name="Main_NoCvt" xml:space="preserve">
     <value>Don't convert TEX files into images while extracting PKG</value>
@@ -130,7 +130,7 @@
     <value>Open</value>
   </data>
   <data name="Main_OutputDir" xml:space="preserve">
-    <value>Output Directory:</value>
+    <value>Output Directory: </value>
   </data>
   <data name="Main_Tip" xml:space="preserve">
     <value>Tip: You can drop a file / folder here.</value>
@@ -164,7 +164,7 @@
 Please check the input filename.</value>
   </data>
   <data name="Msg_FileFilter" xml:space="preserve">
-    <value>PKG File|*.pkg|TEX File|*.tex|All Files|*.*</value>
+    <value>PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.*</value>
   </data>
   <data name="Msg_Confirm" xml:space="preserve">
     <value>Confirm</value>

@@ -97,7 +97,7 @@ namespace RePKG.Neo.Res {
         }
         
         /// <summary>
-        ///   查找类似 Input File (.pkg/.tex): 的本地化字符串。
+        ///   查找类似 Input File:  的本地化字符串。
         /// </summary>
         public static string Main_InputFile {
             get {
@@ -124,7 +124,7 @@ namespace RePKG.Neo.Res {
         }
         
         /// <summary>
-        ///   查找类似 Output Directory: 的本地化字符串。
+        ///   查找类似 Output Directory:  的本地化字符串。
         /// </summary>
         public static string Main_OutputDir {
             get {
@@ -208,7 +208,7 @@ namespace RePKG.Neo.Res {
         }
         
         /// <summary>
-        ///   查找类似 PKG File|*.pkg|TEX File|*.tex|All Files|*.* 的本地化字符串。
+        ///   查找类似 PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.* 的本地化字符串。
         /// </summary>
         public static string Msg_FileFilter {
             get {
