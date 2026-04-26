@@ -11,7 +11,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using RePKG.Command;
 using RePKG.Neo.Res;
@@ -50,9 +49,11 @@ namespace RePKG.Neo {
         }
 
         public MainWindow() {
-            AvaloniaXamlLoader.Load(this);
             DataContext = this;
             Options = Options.Load() ?? new();
+            
+            // Initialize dialog service
+            DialogService.Initialize(this);
             
             // Setup drag and drop
             AddHandler(DragDrop.DropEvent, OnDrop);
@@ -72,7 +73,7 @@ namespace RePKG.Neo {
             }
         }
 
-        private void HandleDrop(string? droppedFile) {
+        private async void HandleDrop(string? droppedFile) {
             if (string.IsNullOrEmpty(droppedFile)) return;
 
             var tbInput = this.FindControl<TextBox>("TbInput");
@@ -86,7 +87,7 @@ namespace RePKG.Neo {
             MakeOutputDir();
             
             if (!File.Exists(droppedFile)) {
-                ShowErrorAsync(string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
+                await ShowErrorAsync(string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
                     Lang.Msg_FileNotFound);
             } else if (Options.AutoExtract) {
                 DoExtract();
@@ -203,7 +204,7 @@ namespace RePKG.Neo {
         }
 
         // Drop file onto window
-        private void OnDrop(object? sender, DragEventArgs e) {
+        private async void OnDrop(object? sender, DragEventArgs e) {
             if (e.Data.Contains(DataFormats.Files)) {
                 var files = e.Data.GetFiles();
                 if (files != null) {
@@ -213,31 +214,25 @@ namespace RePKG.Neo {
                         HandleDrop(filePath);
                         
                         if (fileList.Count > 1) {
-                            ShowInfoAsync(Lang.Msg_MultiDrop, Lang.Msg_Info);
+                            await ShowInfoAsync(Lang.Msg_MultiDrop, Lang.Msg_Info);
                         }
                     }
                 }
             } else {
-                ShowErrorAsync(Lang.Msg_InvalidDrop, Lang.Msg_Error);
+                await ShowErrorAsync(Lang.Msg_InvalidDrop, Lang.Msg_Error);
             }
         }
 
         private async Task ShowInfoAsync(string content, string title) {
-            await Task.Delay(100); // Brief delay to ensure window is ready
-            System.Diagnostics.Debug.WriteLine($"{title}: {content}");
+            await DialogService.ShowInfoAsync(title, content);
         }
 
         private async Task ShowErrorAsync(string content, string title) {
-            await Task.Delay(100);
-            System.Diagnostics.Debug.WriteLine($"ERROR - {title}: {content}");
+            await DialogService.ShowErrorAsync(title, content);
         }
 
         private async Task<bool> ShowConfirmationAsync(string content, string title) {
-            // For now, always return true (default behavior)
-            // In production, would show actual dialog
-            await Task.Delay(100);
-            System.Diagnostics.Debug.WriteLine($"CONFIRM - {title}: {content}");
-            return true;
+            return await DialogService.ShowConfirmationAsync(title, content);
         }
 
         public static void ChangeLanguage(string culture) {
