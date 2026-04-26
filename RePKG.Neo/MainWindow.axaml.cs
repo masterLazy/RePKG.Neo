@@ -49,7 +49,7 @@ namespace RePKG.Neo {
         }
 
         public MainWindow() {
-            Avalonia.Markup.Xaml.AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             DataContext = this;
             Options = Options.Load() ?? new();
             

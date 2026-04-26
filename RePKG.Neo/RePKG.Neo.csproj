@@ -7,17 +7,17 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Res\icon.ico</ApplicationIcon>
 		<Version>1.0.0</Version>
+		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.0.0" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<AvaloniaResource Include="**\*.xaml" />
-	</ItemGroup>
+
 
 	<ItemGroup>
 	  <None Remove="Res\icon.png" />
