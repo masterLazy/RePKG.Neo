@@ -1,4 +1,4 @@
-﻿/**
+/**
    Copyright 2025 masterLazy
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,7 @@ namespace RePKG.Neo {
         }
 
         public MainWindow() {
+            Avalonia.Markup.Xaml.AvaloniaXamlLoader.Load(this);
             DataContext = this;
             Options = Options.Load() ?? new();
             

@@ -1,4 +1,4 @@
-﻿/**
+/**
    Copyright 2025 masterLazy
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -10,7 +10,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -24,10 +23,13 @@ namespace RePKG.Neo {
         public static string droppedFile = "";
 
         public override void Initialize() {
-            AvaloniaXamlLoader.Load(this);
+            Avalonia.Markup.Xaml.AvaloniaXamlLoader.Load(this);
         }
 
         public override void OnFrameworkInitializationCompleted() {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                desktop.MainWindow = new MainWindow();
+            }
             base.OnFrameworkInitializationCompleted();
         }
 
