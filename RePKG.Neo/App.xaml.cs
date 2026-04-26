@@ -8,6 +8,7 @@
        http://www.apache.org/licenses/LICENSE-2.0
  */
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System.Text.Encodings.Web;
@@ -19,7 +20,7 @@ namespace RePKG.Neo {
     /// <summary>
     /// Interaction logic for App
     /// </summary>
-    public partial class App : Application {
+    public partial class App : Avalonia.Application {
         public static string droppedFile = "";
 
         public override void Initialize() {
@@ -27,16 +28,6 @@ namespace RePKG.Neo {
         }
 
         public override void OnFrameworkInitializationCompleted() {
-            if (ApplicationLifetime is IClassicDesktopApplicationLifetime desktop) {
-                // Get command line arguments
-                var args = desktop.Args ?? Array.Empty<string>();
-                if (args.Length > 0) {
-                    droppedFile = args[0];
-                }
-
-                desktop.MainWindow = new MainWindow();
-            }
-
             base.OnFrameworkInitializationCompleted();
         }
 
