@@ -7,18 +7,20 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media.Imaging;
 using RePKG.Command;
 using RePKG.Neo.Res;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace RePKG.Neo {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainWindow
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -48,147 +50,196 @@ namespace RePKG.Neo {
 
         public MainWindow() {
             InitializeComponent();
+            DataContext = this;
             Options = Options.Load() ?? new();
+            
+            // Setup drag and drop
+            AddHandler(DragDrop.DropEvent, OnDrop);
+            
             HandleDrop(App.droppedFile);
         }
 
         private void MakeOutputDir() {
-            int i = TbInput.Text.LastIndexOf('.');
-            TbOutput.Text = string.Concat(TbInput.Text.AsSpan(0, i), "-repkg\\");
-        }
-
-        private void HandleDrop(string droppedFile) {
-            if (!string.IsNullOrEmpty(droppedFile)) {
-                if (!File.Exists(droppedFile)) {
-                    droppedFile += "\\scene.pkg";
-                }
-                TbInput.Text = droppedFile;
-                MakeOutputDir();
-                if (!File.Exists(droppedFile)) {
-                    MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
-                        Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
-                } else if (Options.AutoExtract) {
-                    DoExtract();
+            var tbInput = this.FindControl<TextBox>("TbInput");
+            var tbOutput = this.FindControl<TextBox>("TbOutput");
+            
+            if (tbInput?.Text != null) {
+                int i = tbInput.Text.LastIndexOf('.');
+                if (i > 0) {
+                    tbOutput!.Text = string.Concat(tbInput.Text.AsSpan(0, i), "-repkg\\");
                 }
             }
         }
 
+        private void HandleDrop(string? droppedFile) {
+            if (string.IsNullOrEmpty(droppedFile)) return;
+
+            var tbInput = this.FindControl<TextBox>("TbInput");
+            var tbOutput = this.FindControl<TextBox>("TbOutput");
+
+            if (!File.Exists(droppedFile)) {
+                droppedFile += "\\scene.pkg";
+            }
+            
+            tbInput!.Text = droppedFile;
+            MakeOutputDir();
+            
+            if (!File.Exists(droppedFile)) {
+                ShowError(string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
+                    Lang.Msg_FileNotFound);
+            } else if (Options.AutoExtract) {
+                DoExtract();
+            }
+        }
+
         // Open input file
-        private void BtnBrowseIn_Click(object sender, RoutedEventArgs e) {
-            var dialog = new Microsoft.Win32.OpenFileDialog {
-                FileName = "scene",
-                DefaultExt = ".pkg",
-                Filter = Lang.Msg_FileFilter
+        private async void BtnBrowseIn_Click(object? sender, RoutedEventArgs e) {
+            var dialog = new OpenFileDialog {
+                Title = Lang.Msg_FileFilter,
+                AllowMultiple = false,
+                Filters = new[] {
+                    new FileDialogFilter { 
+                        Name = "Package files", 
+                        Extensions = new[] { "pkg", "mpkg", "tex" } 
+                    },
+                    new FileDialogFilter { 
+                        Name = "All files", 
+                        Extensions = new[] { "*" } 
+                    }
+                }
             };
-            bool? result = dialog.ShowDialog();
-            if (result == true) {
-                TbInput.Text = dialog.FileName;
+
+            var result = await dialog.ShowAsync(this);
+            if (result != null && result.Length > 0) {
+                var tbInput = this.FindControl<TextBox>("TbInput");
+                tbInput!.Text = result[0];
                 MakeOutputDir();
             }
         }
 
         // Select output folder
-        private void BtnBrowseOut_Click(object sender, RoutedEventArgs e) {
-            Microsoft.Win32.OpenFolderDialog dialog = new() {
-                Multiselect = false,
+        private async void BtnBrowseOut_Click(object? sender, RoutedEventArgs e) {
+            var dialog = new OpenFolderDialog {
                 Title = Lang.Msg_SelectOutputDir
             };
-            bool? result = dialog.ShowDialog();
-            if (result == true) {
-                TbOutput.Text = dialog.FolderName;
+
+            var result = await dialog.ShowAsync(this);
+            if (!string.IsNullOrEmpty(result)) {
+                var tbOutput = this.FindControl<TextBox>("TbOutput");
+                tbOutput!.Text = result;
             }
         }
 
         // Start extraction
-        private void BtnExtract_Click(object sender, RoutedEventArgs e) {
-            if (string.IsNullOrEmpty(TbInput.Text)) {
-                MessageBox.Show(this, Lang.Msg_SpecifyInput,
-                        Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
+        private async void BtnExtract_Click(object? sender, RoutedEventArgs e) {
+            var tbInput = this.FindControl<TextBox>("TbInput");
+            var tbOutput = this.FindControl<TextBox>("TbOutput");
+
+            if (string.IsNullOrEmpty(tbInput?.Text)) {
+                ShowInfo(Lang.Msg_SpecifyInput, Lang.Msg_Info);
                 return;
             }
-            if (Path.Exists(TbOutput.Text)) {
-                if (MessageBox.Show(this, string.Format(Lang.Msg_FolderExisted, TbOutput.Text),
-                    Lang.Msg_Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) {
+
+            if (Path.Exists(tbOutput?.Text)) {
+                var confirmed = await ShowConfirmation(
+                    string.Format(Lang.Msg_FolderExisted, tbOutput.Text),
+                    Lang.Msg_Confirm);
+                
+                if (!confirmed) {
                     IsInputEnabled = true;
-                    MessageBox.Show(this, Lang.Msg_CanceledContent,
-                    Lang.Msg_Canceled, MessageBoxButton.OK, MessageBoxImage.Information);
+                    ShowInfo(Lang.Msg_CanceledContent, Lang.Msg_Canceled);
                     return;
                 }
             }
+
             DoExtract();
         }
 
-        // ProgressBar animation
-        private DoubleAnimation _smoothAnimation = new DoubleAnimation {
-            Duration = TimeSpan.FromMilliseconds(300),
-            EasingFunction = new QuadraticEase()
-        };
-
         private async void DoExtract() {
+            var tbInput = this.FindControl<TextBox>("TbInput");
+            var tbOutput = this.FindControl<TextBox>("TbOutput");
+            var progressBar = this.FindControl<ProgressBar>("ProgressBar");
+            var btnExtractText = this.FindControl<TextBlock>("BtnExtractText");
+            var tipText = this.FindControl<TextBlock>("Text_Tip");
+
             IsInputEnabled = false;
-            ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extracting;
+            btnExtractText!.Text = Lang.Main_Extracting;
+
             var progress = new Progress<double>(percent => {
-                _smoothAnimation.To = percent * 100;
-                ProgressBar.BeginAnimation(ProgressBar.ValueProperty, _smoothAnimation);
+                if (progressBar != null) {
+                    progressBar.Value = percent * 100;
+                }
             });
+
             ExtractOptions extractOptions = new() {
-                Input = TbInput.Text,
-                OutputDirectory = TbOutput.Text,
+                Input = tbInput!.Text,
+                OutputDirectory = tbOutput!.Text,
                 Overwrite = true,
                 NoTexConvert = Options.NoTexConvert,
                 CopyProject = Options.CopyProject,
             };
+
             bool result = false;
             try {
                 result = await Task.Run(() => Extract.Action(extractOptions, progress));
             }
             catch (Exception ex) {
-                MessageBox.Show(this, string.Format(Lang.Msg_ErrorContent, ex.Message),
-                    Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowError(string.Format(Lang.Msg_ErrorContent, ex.Message), Lang.Msg_Error);
             }
             finally {
                 IsInputEnabled = true;
-                ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extract;
+                btnExtractText!.Text = Lang.Main_Extract;
                 if (result) {
-                    Text_Tip.Text = string.Format(Lang.Msg_Extracted, TbOutput.Text);
+                    tipText!.Text = string.Format(Lang.Msg_Extracted, tbOutput.Text);
                 } else {
-                    MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, TbInput.Text),
-                        Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
+                    ShowError(string.Format(Lang.Msg_FileNotFoundContent, tbInput.Text),
+                        Lang.Msg_FileNotFound);
                 }
             }
         }
 
         // Drop file onto window
-        private void root_Drop(object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                HandleDrop(files[0]);
-                if (files.Length > 1) {
-                    MessageBox.Show(this, Lang.Msg_MultiDrop,
-                            Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
+        private void OnDrop(object? sender, DragEventArgs e) {
+            if (e.Data.Contains(DataFormats.Files)) {
+                var files = e.Data.GetFiles();
+                if (files != null && files.Count > 0) {
+                    var filePath = files[0].Path.LocalPath;
+                    HandleDrop(filePath);
+                    
+                    if (files.Count > 1) {
+                        ShowInfo(Lang.Msg_MultiDrop, Lang.Msg_Info);
+                    }
                 }
             } else {
-                MessageBox.Show(this, Lang.Msg_InvalidDrop,
-                    Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowError(Lang.Msg_InvalidDrop, Lang.Msg_Error);
             }
+        }
+
+        private void ShowInfo(string content, string title) {
+            var msgBox = MessageBoxManager.GetMessageBoxStandard(title, content);
+            msgBox.ShowAsync();
+        }
+
+        private void ShowError(string content, string title) {
+            var msgBox = MessageBoxManager.GetMessageBoxStandard(title, content);
+            msgBox.ShowAsync();
+        }
+
+        private async Task<bool> ShowConfirmation(string content, string title) {
+            var msgBox = MessageBoxManager.GetMessageBoxStandard(title, content,
+                MessageBoxButtons.YesNo);
+            var result = await msgBox.ShowAsync();
+            return result == ButtonResult.Yes;
         }
 
         public static void ChangeLanguage(string culture) {
             Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
-
-            // Update all windows
-            foreach (Window window in System.Windows.Application.Current.Windows) {
-                if (window.IsLoaded) {
-                    var oldDataContext = window.DataContext;
-                    window.DataContext = null;
-                    window.DataContext = oldDataContext;
-                }
-            }
         }
 
-        private void root_Closed(object sender, EventArgs e) {
+        protected override void OnClosing(WindowClosingEventArgs e) {
             Options.Save();
+            base.OnClosing(e);
         }
     }
 }

@@ -1,20 +1,22 @@
-﻿<Application x:Class="RePKG.Neo.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RePKG.Neo"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-        <ResourceDictionary>
-            <!--Fluent-->
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+             x:Class="RePKG.Neo.App"
+             RequestedThemeVariant="Light">
+    <Application.Styles>
+        <FluentTheme PreferSystemTheme="False" />
+    </Application.Styles>
 
-            <!--画刷-->
-            <SolidColorBrush x:Key="BhLight" Color="#fdfdfd"/>
-            <SolidColorBrush x:Key="BhDefault" Color="#f3f3f3"/>
-            <SolidColorBrush x:Key="BhGray" Color="#e6e6e6"/>
-            <SolidColorBrush x:Key="BhBorder" Color="#d0d0d0"/>
-        </ResourceDictionary>
+    <Application.Resources>
+        <!-- Colors -->
+        <Color x:Key="BhLight">#fdfdfd</Color>
+        <Color x:Key="BhDefault">#f3f3f3</Color>
+        <Color x:Key="BhGray">#e6e6e6</Color>
+        <Color x:Key="BhBorder">#d0d0d0</Color>
+        
+        <!-- Brushes -->
+        <SolidColorBrush x:Key="BhLightBrush" Color="{StaticResource BhLight}"/>
+        <SolidColorBrush x:Key="BhDefaultBrush" Color="{StaticResource BhDefault}"/>
+        <SolidColorBrush x:Key="BhGrayBrush" Color="{StaticResource BhGray}"/>
+        <SolidColorBrush x:Key="BhBorderBrush" Color="{StaticResource BhBorder}"/>
     </Application.Resources>
 </Application>

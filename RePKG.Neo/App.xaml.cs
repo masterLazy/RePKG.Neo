@@ -7,26 +7,37 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using System.Windows;
 
 namespace RePKG.Neo {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for App
     /// </summary>
-    public partial class App : System.Windows.Application {
+    public partial class App : Application {
         public static string droppedFile = "";
 
-        protected override void OnStartup(StartupEventArgs e) {
-            base.OnStartup(e);
-            // handle file-dropping
-            string[] args = e.Args;
-            if (args.Length > 0) {
-                droppedFile = args[0];
+        public override void Initialize() {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        public override void OnFrameworkInitializationCompleted() {
+            if (ApplicationLifetime is IClassicDesktopApplicationLifetime desktop) {
+                // Get command line arguments
+                var args = desktop.Args ?? Array.Empty<string>();
+                if (args.Length > 0) {
+                    droppedFile = args[0];
+                }
+
+                desktop.MainWindow = new MainWindow();
             }
+
+            base.OnFrameworkInitializationCompleted();
         }
 
         public static readonly JsonSerializerOptions JsonOptions = new() {

@@ -1,73 +1,83 @@
-﻿<Window x:Class="RePKG.Neo.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:loc="clr-namespace:RePKG.Neo.Res"
         mc:Ignorable="d"
-        Title="RePKG.Neo" 
-        SizeToContent="Height" Width="640"
-        ResizeMode="NoResize"
-        Background="{StaticResource BhDefault}" ThemeMode="Light"
+        x:Class="RePKG.Neo.MainWindow"
+        Title="RePKG.Neo"
+        Width="640"
+        SizeToContent="Height"
+        CanResize="False"
         WindowStartupLocation="CenterScreen"
-        RenderOptions.BitmapScalingMode="HighQuality"
         x:Name="root"
-        AllowDrop="True" Drop="root_Drop"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Closed="root_Closed">
-    <StackPanel>
-        <!--Header-->
-        <DockPanel Margin="10 10 10 5">
-            <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" DockPanel.Dock="Left" />
-            <TextBlock VerticalAlignment="Center" FontSize="13">
-                <Run FontWeight="Bold">RePKG.Neo</Run>
-                <Run>1.0.1 with RePKG 3f573fa</Run>
-            </TextBlock>
-        </DockPanel>
-        <Separator BorderBrush="{StaticResource BhBorder}"/>
-        <!--Body-->
-        <DockPanel Margin="20 20 20 5">
-            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
-                       Text="{x:Static loc:Lang.Main_InputFile}"/>
-            <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
-                    x:Name="BtnBrowseIn" Click="BtnBrowseIn_Click"
-                     Content="{x:Static loc:Lang.Main_Open}"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
-            <TextBox Margin="10 0 5 0" x:Name="TbInput"  VerticalAlignment="Center" FontSize="13"
-                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}" AllowDrop="False"
-                     ToolTip=".pkg/.mpkg/.tex" ToolTipService.InitialShowDelay="100"/>
-        </DockPanel>
-        <DockPanel Margin="20 5 20 10">
-            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
-                       Text="{x:Static loc:Lang.Main_OutputDir}"/>
-            <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
-                    x:Name="BtnBrowseOut" Click="BtnBrowseOut_Click"
-                    Content="{x:Static loc:Lang.Main_Select}"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
-            <TextBox Margin="10 0 5 0" x:Name="TbOutput" VerticalAlignment="Center" Text="repkg\" FontSize="13"
-                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
-        </DockPanel>
-        <CheckBox Margin="20 10 20 0" FontSize="13" Height="32"
-                  Content="{x:Static loc:Lang.Main_NoCvt}" IsChecked="{Binding Options.NoTexConvert, Mode=TwoWay}"/>
-        <CheckBox Margin="20 0 20 0" FontSize="13" Height="32"
-                  Content="{x:Static loc:Lang.Main_Copy}" IsChecked="{Binding Options.CopyProject, Mode=TwoWay}"/>
-        <CheckBox Margin="20 0 20 10" FontSize="13" Height="32"
-          Content="{x:Static loc:Lang.Main_Auto}" IsChecked="{Binding Options.AutoExtract, Mode=TwoWay}"/>
-        <ProgressBar x:Name="ProgressBar" Background="Transparent" Minimum="0" Maximum="100"/>
-        <Separator BorderBrush="{StaticResource BhBorder}"/>
-        <!--Footer-->
-        <DockPanel LastChildFill="False"  Background="{StaticResource BhGray}">
-            <Button DockPanel.Dock="Right" Margin="20 10 20 10" MinWidth="70" Height="36"
-                    Style="{DynamicResource AccentButtonStyle}" FontSize="13"
-                    x:Name="BtnExtract" Click="BtnExtract_Click"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}" Text="&#xF78C;" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                    <TextBlock Text="{x:Static loc:Lang.Main_Extract}"/>
+        d:DesignHeight="450" d:DesignWidth="640">
+    
+    <Grid Background="{StaticResource BhDefaultBrush}" RowDefinitions="Auto,Auto,*">
+        <StackPanel Spacing="0">
+            <!-- Header -->
+            <DockPanel Margin="10 10 10 5" LastChildFill="True">
+                <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" 
+                       Source="avares://RePKG.Neo/Res/icon.png" DockPanel.Dock="Left" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock FontSize="13" FontWeight="Bold">RePKG.Neo</TextBlock>
+                    <TextBlock FontSize="13">1.0.1 with RePKG 3f573fa</TextBlock>
                 </StackPanel>
-            </Button>
-            <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10"
-                       Text="{x:Static loc:Lang.Main_Tip}" x:Name="Text_Tip"/>
-        </DockPanel>
-    </StackPanel>
+            </DockPanel>
+            <Separator BorderBrush="{StaticResource BhBorderBrush}" Height="1" Margin="0"/>
+            
+            <!-- Body -->
+            <DockPanel Margin="20 20 20 5" LastChildFill="True">
+                <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
+                           Text="{x:Static loc:Lang.Main_InputFile}"/>
+                <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
+                        x:Name="BtnBrowseIn" Click="BtnBrowseIn_Click"
+                        Content="{x:Static loc:Lang.Main_Open}"
+                        IsEnabled="{Binding IsInputEnabled}"/>
+                <TextBox Margin="10 0 5 0" x:Name="TbInput" VerticalAlignment="Center" FontSize="13"
+                         IsEnabled="{Binding IsInputEnabled}"
+                         ToolTip.Tip=".pkg/.mpkg/.tex"/>
+            </DockPanel>
+            
+            <DockPanel Margin="20 5 20 10" LastChildFill="True">
+                <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
+                           Text="{x:Static loc:Lang.Main_OutputDir}"/>
+                <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
+                        x:Name="BtnBrowseOut" Click="BtnBrowseOut_Click"
+                        Content="{x:Static loc:Lang.Main_Select}"
+                        IsEnabled="{Binding IsInputEnabled}"/>
+                <TextBox Margin="10 0 5 0" x:Name="TbOutput" VerticalAlignment="Center" 
+                         Text="repkg\" FontSize="13"
+                         IsEnabled="{Binding IsInputEnabled}"/>
+            </DockPanel>
+            
+            <CheckBox Margin="20 10 20 0" FontSize="13" Height="32" Padding="10 0"
+                      Content="{x:Static loc:Lang.Main_NoCvt}" 
+                      IsChecked="{Binding Options.NoTexConvert}"/>
+            <CheckBox Margin="20 0 20 0" FontSize="13" Height="32" Padding="10 0"
+                      Content="{x:Static loc:Lang.Main_Copy}" 
+                      IsChecked="{Binding Options.CopyProject}"/>
+            <CheckBox Margin="20 0 20 10" FontSize="13" Height="32" Padding="10 0"
+                      Content="{x:Static loc:Lang.Main_Auto}" 
+                      IsChecked="{Binding Options.AutoExtract}"/>
+            
+            <ProgressBar x:Name="ProgressBar" Background="Transparent" Minimum="0" Maximum="100" Height="3"/>
+            <Separator BorderBrush="{StaticResource BhBorderBrush}" Height="1" Margin="0"/>
+            
+            <!-- Footer -->
+            <DockPanel Background="{StaticResource BhGrayBrush}" LastChildFill="False">
+                <Button DockPanel.Dock="Right" Margin="20 10 20 10" MinWidth="70" Height="36"
+                        x:Name="BtnExtract" Click="BtnExtract_Click"
+                        IsEnabled="{Binding IsInputEnabled}"
+                        Classes="accent">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock VerticalAlignment="Center">⚙️</TextBlock>
+                        <TextBlock x:Name="BtnExtractText" Text="{x:Static loc:Lang.Main_Extract}"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10"
+                           Text="{x:Static loc:Lang.Main_Tip}" x:Name="Text_Tip"/>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
 </Window>
