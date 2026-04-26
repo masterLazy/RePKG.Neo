@@ -8,6 +8,7 @@
 		<ApplicationIcon>Res\icon.ico</ApplicationIcon>
 		<Version>1.0.0</Version>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
 	<ItemGroup>
