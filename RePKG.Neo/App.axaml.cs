@@ -1,4 +1,4 @@
-﻿/**
+/**
    Copyright 2025 masterLazy
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -7,26 +7,30 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using System.Windows;
 
 namespace RePKG.Neo {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for App
     /// </summary>
-    public partial class App : System.Windows.Application {
+    public partial class App : Avalonia.Application {
         public static string droppedFile = "";
 
-        protected override void OnStartup(StartupEventArgs e) {
-            base.OnStartup(e);
-            // handle file-dropping
-            string[] args = e.Args;
-            if (args.Length > 0) {
-                droppedFile = args[0];
+        public override void Initialize() {
+            Avalonia.Markup.Xaml.AvaloniaXamlLoader.Load(this);
+        }
+
+        public override void OnFrameworkInitializationCompleted() {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                desktop.MainWindow = new MainWindow();
             }
+            base.OnFrameworkInitializationCompleted();
         }
 
         public static readonly JsonSerializerOptions JsonOptions = new() {

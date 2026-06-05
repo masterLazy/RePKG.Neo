@@ -1,14 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net10.0-windows</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UseWPF>true</UseWPF>
 		<ApplicationIcon>Res\icon.ico</ApplicationIcon>
 		<Version>1.0.0</Version>
+		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.0.0" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0" />
+	</ItemGroup>
+
+
 
 	<ItemGroup>
 	  <None Remove="Res\icon.png" />
@@ -23,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Res\icon.png" />
+	  <AvaloniaResource Include="Res\icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>

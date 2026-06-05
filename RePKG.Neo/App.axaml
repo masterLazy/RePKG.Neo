@@ -1,0 +1,22 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RePKG.Neo.App"
+             RequestedThemeVariant="Light">
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <!-- Colors -->
+        <Color x:Key="BhLight">#fdfdfd</Color>
+        <Color x:Key="BhDefault">#f3f3f3</Color>
+        <Color x:Key="BhGray">#e6e6e6</Color>
+        <Color x:Key="BhBorder">#d0d0d0</Color>
+        
+        <!-- Brushes -->
+        <SolidColorBrush x:Key="BhLightBrush" Color="{StaticResource BhLight}"/>
+        <SolidColorBrush x:Key="BhDefaultBrush" Color="{StaticResource BhDefault}"/>
+        <SolidColorBrush x:Key="BhGrayBrush" Color="{StaticResource BhGray}"/>
+        <SolidColorBrush x:Key="BhBorderBrush" Color="{StaticResource BhBorder}"/>
+    </Application.Resources>
+</Application>

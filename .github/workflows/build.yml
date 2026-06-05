@@ -1,0 +1,94 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+            artifact_name: RePKG.Neo
+            artifact_path: RePKG.Neo/bin/Release/net10.0/linux-x64/publish/
+          - os: windows-latest
+            rid: win-x64
+            artifact_name: RePKG.Neo.exe
+            artifact_path: RePKG.Neo/bin/Release/net10.0/win-x64/publish/
+          - os: macos-latest
+            rid: osx-x64
+            artifact_name: RePKG.Neo
+            artifact_path: RePKG.Neo/bin/Release/net10.0/osx-x64/publish/
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release --no-restore
+
+      - name: Publish for ${{ matrix.rid }}
+        run: dotnet publish -c Release -r ${{ matrix.rid }} --no-build RePKG.Neo/RePKG.Neo.csproj
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: RePKG.Neo-${{ matrix.rid }}
+          path: ${{ matrix.artifact_path }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: RePKG.Neo-linux-x64
+          path: ./release/linux-x64
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: RePKG.Neo-win-x64
+          path: ./release/win-x64
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: RePKG.Neo-osx-x64
+          path: ./release/osx-x64
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./release/linux-x64/*
+            ./release/win-x64/*
+            ./release/osx-x64/*
+          draft: false
+          prerelease: false
