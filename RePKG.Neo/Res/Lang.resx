@@ -120,4 +120,80 @@
   <data name="Msg_FileFilter" xml:space="preserve">
     <value>PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.*</value>
   </data>
+  <data name="Window_Title" xml:space="preserve">
+    <value>RePKG.Neo</value>
+  </data>
+  <data name="Btn_AddFile" xml:space="preserve">
+    <value>Add File</value>
+  </data>
+  <data name="Btn_AddFolder" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="Btn_AddFolder_ToolTip" xml:space="preserve">
+    <value>Recursively find supported files (.pkg, .mpkg, .tex)</value>
+  </data>
+  <data name="Btn_Clear_ToolTip" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Btn_StartExtract" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="Btn_Stop_ToolTip" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Btn_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Chk_AutoExtract" xml:space="preserve">
+    <value>Auto start extraction</value>
+  </data>
+  <data name="Chk_CopyProject" xml:space="preserve">
+    <value>Copy project.json and preview.jpg to output directory</value>
+  </data>
+  <data name="Chk_NoTexConvert" xml:space="preserve">
+    <value>Don't convert TEX to images</value>
+  </data>
+  <data name="Chk_SingleDir" xml:space="preserve">
+    <value>Place all output files in the same directory</value>
+  </data>
+  <data name="Lbl_OutputSuffix" xml:space="preserve">
+    <value>Output-dir Suffix</value>
+  </data>
+  <data name="EmptyState_Text" xml:space="preserve">
+    <value>Drag files / folders here</value>
+  </data>
+  <data name="Btn_Remove_ToolTip" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Btn_Reveal_ToolTip" xml:space="preserve">
+    <value>Open in File Explorer</value>
+  </data>
+  <data name="FolderDialog_Title" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="Msg_InvalidDrop" xml:space="preserve">
+    <value>Invalid drop. Please drag a file or folder.</value>
+  </data>
+  <data name="Msg_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Item_FileNotFound" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="Msg_ExtractError" xml:space="preserve">
+    <value>An error occurred during extraction:
+
+{0}
+
+Please check if the input file is valid.</value>
+  </data>
+  <data name="Msg_ExtractFailed_Title" xml:space="preserve">
+    <value>Extraction Failed</value>
+  </data>
+  <data name="Item_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Item_ExtractFailed" xml:space="preserve">
+    <value>Extraction failed</value>
+  </data>
 </root>

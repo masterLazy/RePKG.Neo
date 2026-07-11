@@ -61,11 +61,231 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   查找类似 Add File 的本地化字符串。
+        /// </summary>
+        public static string Btn_AddFile {
+            get {
+                return ResourceManager.GetString("Btn_AddFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Add Folder 的本地化字符串。
+        /// </summary>
+        public static string Btn_AddFolder {
+            get {
+                return ResourceManager.GetString("Btn_AddFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Recursively find supported files (.pkg, .mpkg, .tex) 的本地化字符串。
+        /// </summary>
+        public static string Btn_AddFolder_ToolTip {
+            get {
+                return ResourceManager.GetString("Btn_AddFolder_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Clear 的本地化字符串。
+        /// </summary>
+        public static string Btn_Clear_ToolTip {
+            get {
+                return ResourceManager.GetString("Btn_Clear_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Options 的本地化字符串。
+        /// </summary>
+        public static string Btn_Options {
+            get {
+                return ResourceManager.GetString("Btn_Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Remove 的本地化字符串。
+        /// </summary>
+        public static string Btn_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Btn_Remove_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Open in File Explorer 的本地化字符串。
+        /// </summary>
+        public static string Btn_Reveal_ToolTip {
+            get {
+                return ResourceManager.GetString("Btn_Reveal_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Extract 的本地化字符串。
+        /// </summary>
+        public static string Btn_StartExtract {
+            get {
+                return ResourceManager.GetString("Btn_StartExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Stop 的本地化字符串。
+        /// </summary>
+        public static string Btn_Stop_ToolTip {
+            get {
+                return ResourceManager.GetString("Btn_Stop_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Auto start extraction 的本地化字符串。
+        /// </summary>
+        public static string Chk_AutoExtract {
+            get {
+                return ResourceManager.GetString("Chk_AutoExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Copy project.json and preview.jpg to output directory 的本地化字符串。
+        /// </summary>
+        public static string Chk_CopyProject {
+            get {
+                return ResourceManager.GetString("Chk_CopyProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Don&apos;t convert TEX to images 的本地化字符串。
+        /// </summary>
+        public static string Chk_NoTexConvert {
+            get {
+                return ResourceManager.GetString("Chk_NoTexConvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Place all output files in the same directory 的本地化字符串。
+        /// </summary>
+        public static string Chk_SingleDir {
+            get {
+                return ResourceManager.GetString("Chk_SingleDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Drag files / folders here 的本地化字符串。
+        /// </summary>
+        public static string EmptyState_Text {
+            get {
+                return ResourceManager.GetString("EmptyState_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Add Folder 的本地化字符串。
+        /// </summary>
+        public static string FolderDialog_Title {
+            get {
+                return ResourceManager.GetString("FolderDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Complete 的本地化字符串。
+        /// </summary>
+        public static string Item_Complete {
+            get {
+                return ResourceManager.GetString("Item_Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Extraction failed 的本地化字符串。
+        /// </summary>
+        public static string Item_ExtractFailed {
+            get {
+                return ResourceManager.GetString("Item_ExtractFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 File not found 的本地化字符串。
+        /// </summary>
+        public static string Item_FileNotFound {
+            get {
+                return ResourceManager.GetString("Item_FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Output-dir Suffix 的本地化字符串。
+        /// </summary>
+        public static string Lbl_OutputSuffix {
+            get {
+                return ResourceManager.GetString("Lbl_OutputSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 An error occurred during extraction:
+        ///
+        ///{0}
+        ///
+        ///Please check if the input file is valid. 的本地化字符串。
+        /// </summary>
+        public static string Msg_ExtractError {
+            get {
+                return ResourceManager.GetString("Msg_ExtractError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Extraction Failed 的本地化字符串。
+        /// </summary>
+        public static string Msg_ExtractFailed_Title {
+            get {
+                return ResourceManager.GetString("Msg_ExtractFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.* 的本地化字符串。
         /// </summary>
         public static string Msg_FileFilter {
             get {
                 return ResourceManager.GetString("Msg_FileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Info 的本地化字符串。
+        /// </summary>
+        public static string Msg_Info {
+            get {
+                return ResourceManager.GetString("Msg_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Invalid drop. Please drag a file or folder. 的本地化字符串。
+        /// </summary>
+        public static string Msg_InvalidDrop {
+            get {
+                return ResourceManager.GetString("Msg_InvalidDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 RePKG.Neo 的本地化字符串。
+        /// </summary>
+        public static string Window_Title {
+            get {
+                return ResourceManager.GetString("Window_Title", resourceCulture);
             }
         }
     }

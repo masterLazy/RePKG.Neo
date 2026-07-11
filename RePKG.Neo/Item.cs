@@ -10,6 +10,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using LazyWpf;
 using RePKG.Command;
+using RePKG.Neo.res;
 using System.IO;
 using System.Windows.Media;
 
@@ -47,7 +48,7 @@ namespace RePKG.Neo {
         public async Task Extract(Options options) {
             if (!File.Exists(FilePath)) {
                 State = EState.Fail;
-                Text = "未找到文件";
+                Text = Lang.Item_FileNotFound;
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
                 return;
             }
@@ -70,21 +71,21 @@ namespace RePKG.Neo {
                 result = await Task.Run(() => Command.Extract.Action(extractOptions, progress));
             }
             catch (Exception ex) {
-                var msg = string.Format("提取时发生了错误：\n\n{0}\n\n请检查输入文件是否有效。", ex.Message);
-                new MsgBox(msg, "提取失败",
+                var msg = string.Format(Lang.Msg_ExtractError, ex.Message);
+                new MsgBox(msg, Lang.Msg_ExtractFailed_Title,
                     MbOpt.OK, MbIco.Error) { Owner = App.Current.MainWindow }.ShowDialog();
-                Text = "提取失败";
+                Text = Lang.Item_ExtractFailed;
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
             }
             // Post logic
             if (Helper.GetDirectorySize(SavePath) == 0) result = false;
             if (result) {
                 State = EState.Success;
-                Text = "完成";
+                Text = Lang.Item_Complete;
                 TextBrush = System.Windows.Application.Current.FindResource("BhSuccess") as SolidColorBrush;
             } else {
                 State = EState.Fail;
-                Text = "提取失败";
+                Text = Lang.Item_ExtractFailed;
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
             }
             Percent = 100;

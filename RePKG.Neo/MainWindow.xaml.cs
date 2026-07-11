@@ -55,7 +55,7 @@ namespace RePKG.Neo {
 
         private void BtnAddFolder_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFolderDialog dialog = new() {
-                Title = "添加文件夹",
+                Title = Lang.FolderDialog_Title,
                 Multiselect = true
             };
             bool? result = dialog.ShowDialog();
@@ -69,7 +69,7 @@ namespace RePKG.Neo {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 DataCtx.AddPath(files);
             } else {
-                new MsgBox("拖拽无效。请拖拽一个文件 / 文件夹。", "信息", MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
+                new MsgBox(Lang.Msg_InvalidDrop, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
             }
         }
 

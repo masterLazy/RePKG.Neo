@@ -10,9 +10,9 @@
         xmlns:local="clr-namespace:RePKG.Neo"
         d:DataContext="{d:DesignInstance Type=local:MainWindowVM}"
         mc:Ignorable="d"
-        Title="RePKG.Neo" 
-        Height="500" Width="800" FontSize="13"
-        MinHeight="500" MinWidth="800"
+        Title="{x:Static res:Lang.Window_Title}" 
+        Height="550" Width="800" FontSize="13"
+        MinHeight="550" MinWidth="800"
         Background="#eaeaea" ThemeMode="Light"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
@@ -63,17 +63,17 @@
                             </Style>
                         </ResourceDictionary>
                     </DockPanel.Resources>
-                    <lazy:Button Icon="&#xE8E5;" Text="添加文件" IsEnabled="{Binding NotRunning}"
+                    <lazy:Button Icon="&#xE8E5;" Text="{x:Static res:Lang.Btn_AddFile}" IsEnabled="{Binding NotRunning}"
                                  x:Name="BtnAddFile" Click="BtnAddFile_Click" />
 
-                    <lazy:Button Icon="&#xE8DA;" Text="添加文件夹" IsEnabled="{Binding NotRunning}"
+                    <lazy:Button Icon="&#xE8DA;" Text="{x:Static res:Lang.Btn_AddFolder}" IsEnabled="{Binding NotRunning}"
                                  x:Name="BtnAddFolder" Click="BtnAddFolder_Click"
-                                 ToolTipService.ToolTip="递归查找受支持的文件 (.pkg, .mpkg, .tex)" 
+                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_AddFolder_ToolTip}" 
                                  Margin="5 0 0 0"/>
 
                     <lazy:Button Icon="&#xE74D;" IsEnabled="{Binding NotRunning}"
                                  x:Name="BtnClear" Click="BtnClear_Click"
-                                 ToolTipService.ToolTip="清空" Margin="5 0 0 0"/>
+                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Clear_ToolTip}" Margin="5 0 0 0"/>
 
                     <Separator Margin="0 10" BorderBrush="{StaticResource BhBorder}">
                         <Separator.LayoutTransform>
@@ -81,15 +81,15 @@
                         </Separator.LayoutTransform>
                     </Separator>
 
-                    <lazy:Button Icon="&#xE768;" Text="开始提取" IsEnabled="{Binding CanStart}"
+                    <lazy:Button Icon="&#xE768;" Text="{x:Static res:Lang.Btn_StartExtract}" IsEnabled="{Binding CanStart}"
                                  x:Name="BtnStart" Click="BtnStart_Click"
                                  IsAccented="True"/>
 
                     <lazy:Button Icon="&#xE769;" IsEnabled="{Binding IsRunning}"
                                  x:Name="BtnStop" Click="BtnStop_Click"
-                                 ToolTipService.ToolTip="停止" Margin="5 0 0 0"/>
+                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Stop_ToolTip}" Margin="5 0 0 0"/>
 
-                    <lazy:Button Icon="&#xE9E9;" Text="选项" DockPanel.Dock="Right"
+                    <lazy:Button Icon="&#xE9E9;" Text="{x:Static res:Lang.Btn_Options}" DockPanel.Dock="Right"
                                  x:Name="BtnOptions" Click="BtnOptions_Click"/>
                     <Popup x:Name="PopupOptions"
                            MouseLeave="PopupOptions_MouseLeave"
@@ -111,21 +111,21 @@
                                     </StackPanel.Resources>
                                     
                                     <CheckBox IsChecked="{Binding Options.AutoExtract}">
-                                        <TextBlock Text="自动开始提取"/>
+                                        <TextBlock Text="{x:Static res:Lang.Chk_AutoExtract}"/>
                                     </CheckBox>
 
                                     <Separator Margin="5 0 5 0"/>
                                     
                                     <CheckBox IsChecked="{Binding Options.CopyProject}">
-                                        <TextBlock Text="复制 project.json 和 preview.jpg 到输出目录"/>
+                                        <TextBlock Text="{x:Static res:Lang.Chk_CopyProject}"/>
                                     </CheckBox>
 
                                     <CheckBox IsChecked="{Binding Options.NoTexConvert}">
-                                        <TextBlock Text="不将 TEX 转换为图像"/>
+                                        <TextBlock Text="{x:Static res:Lang.Chk_NoTexConvert}"/>
                                     </CheckBox>
                                     
                                     <CheckBox IsChecked="{Binding Options.SingleDir}">
-                                        <TextBlock Text="将所有输出文件置于同一目录"/>
+                                        <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}"/>
                                     </CheckBox>
                                 </StackPanel>
                             </Border>
@@ -138,9 +138,9 @@
                         </Separator.LayoutTransform>
                     </Separator>
 
-                    <TextBlock Text="输出目录后缀" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static res:Lang.Lbl_OutputSuffix}" VerticalAlignment="Center"/>
                     <TextBox Text="{Binding Options.OutputSuffix, Mode=TwoWay}" Margin="8 0 0 -3"
-                             Height="30" Width="150" VerticalAlignment="Center"/>
+                             Height="30" Width="120" VerticalAlignment="Center"/>
                 </DockPanel>
                 <Border CornerRadius="8" BorderThickness="1" AllowDrop="True" Drop="Border_Drop"
                         Background="{StaticResource BhLight}" BorderBrush="{StaticResource BhBorder}">
@@ -166,7 +166,7 @@
                                                                 Visibility="Collapsed">
                                                         <TextBlock Text="&#xE7B8;" FontFamily="{StaticResource SymbolThemeFontFamily}"
                                                                    FontSize="50" Foreground="{StaticResource BhBorder}"/>
-                                                        <TextBlock Margin="20 0 0 0" Text="拖拽文件 / 文件夹至此处" VerticalAlignment="Center"
+                                                        <TextBlock Margin="20 0 0 0" Text="{x:Static res:Lang.EmptyState_Text}" VerticalAlignment="Center"
                                                                    FontSize="28" Foreground="{StaticResource BhBorder}"/>
                                                     </StackPanel>
                                                 </Grid>
@@ -209,11 +209,11 @@
                                         </ToolTipService.ToolTip>
                                     </Image>
                                     <!--按钮-->
-                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;" ToolTipService.ToolTip="移除"
+                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;" ToolTipService.ToolTip="{x:Static res:Lang.Btn_Remove_ToolTip}"
                                                  x:Name="BtnRemove" Click="BtnRemove_Click"
                                                  Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
 
-                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;" ToolTipService.ToolTip="在文件资源管理器中打开"
+                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;" ToolTipService.ToolTip="{x:Static res:Lang.Btn_Reveal_ToolTip}"
                                                  x:Name="BtnReveal" Click="BtnReveal_Click" Margin="5 0"
                                                  Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
                                     <!--信息文本-->
