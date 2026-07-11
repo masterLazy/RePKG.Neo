@@ -7,188 +7,116 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
-using RePKG.Command;
-using RePKG.Neo.Res;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
+using LazyWpf;
+using RePKG.Neo.res;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace RePKG.Neo {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private Options _options = new();
-        public Options Options {
-            get { return _options; }
-            set {
-                if (_options == value) return;
-                _options = value;
-                OnPropertyChanged(nameof(Options));
-            }
-        }
-
-        private bool _isInputEnabled = true;
-        public bool IsInputEnabled {
-            get { return _isInputEnabled; }
-            set {
-                if (value == _isInputEnabled) return;
-                _isInputEnabled = value;
-                OnPropertyChanged(nameof(IsInputEnabled));
-            }
-        }
+    public partial class MainWindow : Window {
+        private MainWindowVM DataCtx => (MainWindowVM)DataContext;
 
         public MainWindow() {
+            DataContext = new MainWindowVM();
             InitializeComponent();
-            Options = Options.Load() ?? new();
-            HandleDrop(App.droppedFile);
-        }
-
-        private void MakeOutputDir() {
-            int i = TbInput.Text.LastIndexOf('.');
-            TbOutput.Text = string.Concat(TbInput.Text.AsSpan(0, i), "-repkg\\");
-        }
-
-        private void HandleDrop(string droppedFile) {
-            if (!string.IsNullOrEmpty(droppedFile)) {
-                if (!File.Exists(droppedFile)) {
-                    droppedFile += "\\scene.pkg";
-                }
-                TbInput.Text = droppedFile;
-                MakeOutputDir();
-                if (!File.Exists(droppedFile)) {
-                    MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, droppedFile),
-                        Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
-                } else if (Options.AutoExtract) {
-                    DoExtract();
-                }
+            if (App.DroppedFiles.Length > 0) {
+                DataCtx.AddPath(App.DroppedFiles);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             }
         }
 
-        // Open input file
-        private void BtnBrowseIn_Click(object sender, RoutedEventArgs e) {
+        private void Window_StateChanged(object sender, EventArgs e) {
+            switch (WindowState) {
+                case WindowState.Maximized:
+                    double left = SystemParameters.ResizeFrameVerticalBorderWidth + SystemParameters.FixedFrameVerticalBorderWidth + SystemParameters.BorderWidth;
+                    double top = SystemParameters.ResizeFrameHorizontalBorderHeight + SystemParameters.FixedFrameHorizontalBorderHeight + SystemParameters.BorderWidth;
+                    LayoutRoot.Margin = new Thickness(left, top, left, top);
+                    break;
+                default:
+                    LayoutRoot.Margin = new Thickness(0);
+                    break;
+            }
+        }
+
+        private void Window_Closed(object sender, EventArgs e) {
+            DataCtx.Options.Save();
+        }
+
+        private void BtnAddFile_Click(object sender, RoutedEventArgs e) {
             var dialog = new Microsoft.Win32.OpenFileDialog {
-                FileName = "scene",
                 DefaultExt = ".pkg",
-                Filter = Lang.Msg_FileFilter
+                Filter = Lang.Msg_FileFilter,
+                Multiselect = true,
             };
             bool? result = dialog.ShowDialog();
             if (result == true) {
-                TbInput.Text = dialog.FileName;
-                MakeOutputDir();
+                DataCtx.AddPath(dialog.FileNames);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             }
         }
 
-        // Select output folder
-        private void BtnBrowseOut_Click(object sender, RoutedEventArgs e) {
+        private void BtnAddFolder_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFolderDialog dialog = new() {
-                Multiselect = false,
-                Title = Lang.Msg_SelectOutputDir
+                Title = Lang.FolderDialog_Title,
+                Multiselect = true
             };
             bool? result = dialog.ShowDialog();
             if (result == true) {
-                TbOutput.Text = dialog.FolderName;
+                DataCtx.AddPath(dialog.FolderNames);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             }
         }
 
-        // Start extraction
-        private void BtnExtract_Click(object sender, RoutedEventArgs e) {
-            if (string.IsNullOrEmpty(TbInput.Text)) {
-                MessageBox.Show(this, Lang.Msg_SpecifyInput,
-                        Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
+        private void Border_Drop(object sender, DragEventArgs e) {
+            if (DataCtx.IsRunning) {
+                new MsgBox(Lang.Msg_DropWhenRunning, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
                 return;
             }
-            if (Path.Exists(TbOutput.Text)) {
-                if (MessageBox.Show(this, string.Format(Lang.Msg_FolderExisted, TbOutput.Text),
-                    Lang.Msg_Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) {
-                    IsInputEnabled = true;
-                    MessageBox.Show(this, Lang.Msg_CanceledContent,
-                    Lang.Msg_Canceled, MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-            }
-            DoExtract();
-        }
-
-        // ProgressBar animation
-        private DoubleAnimation _smoothAnimation = new DoubleAnimation {
-            Duration = TimeSpan.FromMilliseconds(300),
-            EasingFunction = new QuadraticEase()
-        };
-
-        private async void DoExtract() {
-            IsInputEnabled = false;
-            ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extracting;
-            var progress = new Progress<double>(percent => {
-                _smoothAnimation.To = percent * 100;
-                ProgressBar.BeginAnimation(ProgressBar.ValueProperty, _smoothAnimation);
-            });
-            ExtractOptions extractOptions = new() {
-                Input = TbInput.Text,
-                OutputDirectory = TbOutput.Text,
-                Overwrite = true,
-                NoTexConvert = Options.NoTexConvert,
-                CopyProject = Options.CopyProject,
-            };
-            bool result = false;
-            try {
-                result = await Task.Run(() => Extract.Action(extractOptions, progress));
-            }
-            catch (Exception ex) {
-                MessageBox.Show(this, string.Format(Lang.Msg_ErrorContent, ex.Message),
-                    Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally {
-                IsInputEnabled = true;
-                ((BtnExtract.Content as StackPanel)?.Children[1] as TextBlock)?.Text = Lang.Main_Extract;
-                if (result) {
-                    Text_Tip.Text = string.Format(Lang.Msg_Extracted, TbOutput.Text);
-                } else {
-                    MessageBox.Show(this, string.Format(Lang.Msg_FileNotFoundContent, TbInput.Text),
-                        Lang.Msg_FileNotFound, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        // Drop file onto window
-        private void root_Drop(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                HandleDrop(files[0]);
-                if (files.Length > 1) {
-                    MessageBox.Show(this, Lang.Msg_MultiDrop,
-                            Lang.Msg_Info, MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                DataCtx.AddPath(files);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             } else {
-                MessageBox.Show(this, Lang.Msg_InvalidDrop,
-                    Lang.Msg_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                new MsgBox(Lang.Msg_InvalidDrop, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
             }
         }
 
-        public static void ChangeLanguage(string culture) {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
+        private void BtnClear_Click(object sender, RoutedEventArgs e) {
+            DataCtx.ClearItems();
+        }
 
-            // Update all windows
-            foreach (Window window in System.Windows.Application.Current.Windows) {
-                if (window.IsLoaded) {
-                    var oldDataContext = window.DataContext;
-                    window.DataContext = null;
-                    window.DataContext = oldDataContext;
-                }
+        private void BtnStart_Click(object sender, RoutedEventArgs e) {
+            DataCtx.StartExtract();
+        }
+
+        private void BtnStop_Click(object sender, RoutedEventArgs e) {
+            DataCtx.Stopping = true;
+        }
+
+        private void BtnRemove_Click(object sender, RoutedEventArgs e) {
+            if (sender is not LazyWpf.Button btn) return;
+            if (btn.DataContext is not Item item) return;
+            DataCtx.RemoveItem(item);
+        }
+
+        private void BtnReveal_Click(object sender, RoutedEventArgs e) {
+            if (sender is not LazyWpf.Button btn) return;
+            if (btn.DataContext is not Item item) return;
+            if (item.SavePath != null) {
+                System.Diagnostics.Process.Start("explorer.exe", $"\"{item.SavePath}\"");
+            } else {
+                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{item.FilePath}\"");
             }
         }
 
-        private void root_Closed(object sender, EventArgs e) {
-            Options.Save();
+        private void BtnOptions_Click(object sender, RoutedEventArgs e) {
+            PopupOptions.IsOpen = !PopupOptions.IsOpen;
+        }
+
+        private void PopupOptions_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
+            PopupOptions.IsOpen = false;
         }
     }
 }

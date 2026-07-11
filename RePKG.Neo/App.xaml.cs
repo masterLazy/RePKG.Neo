@@ -7,6 +7,7 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -18,22 +19,26 @@ namespace RePKG.Neo {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : System.Windows.Application {
-        public static string droppedFile = "";
+        public static string[] DroppedFiles { get; set; }
 
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
-            // handle file-dropping
-            string[] args = e.Args;
-            if (args.Length > 0) {
-                droppedFile = args[0];
+            DroppedFiles = e.Args;
+            if (!Path.Exists(AppDataPath)) {
+                Directory.CreateDirectory(AppDataPath);
             }
         }
 
+        // "User/.../AppData/Roaming/RePKG.Neo/"
+        public static readonly string AppDataPath =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RePKG.Neo");
+
+        // Json Options
         public static readonly JsonSerializerOptions JsonOptions = new() {
-            // serialization
+            // Serialization
             WriteIndented = true,
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs),
-            // deserialization
+            // Deserialization
             PropertyNameCaseInsensitive = true,
             UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
             UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement,

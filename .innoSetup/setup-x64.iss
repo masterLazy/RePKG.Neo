@@ -6,17 +6,18 @@
 #define RepoDir "..\"
 
 #define MyAppName "RePKG.Neo"
-#define MyAppVersion "1.0.1"
+#define MyAppVersion "2.0.0"
 #define MyAppPublisher "masterLazy"
 #define MyAppURL "https://github.com/masterLazy/RePKG.Neo"
 #define MyAppExeName "RePKG.Neo.exe"
 #define MyAppAssocName "Wallpaper Package File"
-#define MyAppAssocExt ".pkg"
-#define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
-#define MyAppAssocExt2 ".mpkg"
-#define MyAppAssocKey2 StringChange(MyAppAssocName, " ", "") + MyAppAssocExt2
-#define MyAppAssocExt3 ".tex"
-#define MyAppAssocKey3 StringChange(MyAppAssocName, " ", "") + MyAppAssocExt3
+; Exts
+#define MyAppAssocExt_pkg ".pkg"
+#define MyAppAssocKey_pkg StringChange(MyAppAssocName, " ", "") + MyAppAssocExt_pkg
+#define MyAppAssocExt_mpkg ".mpkg"
+#define MyAppAssocKey_mpkg StringChange(MyAppAssocName, " ", "") + MyAppAssocExt_mpkg
+#define MyAppAssocExt_tex ".tex"
+#define MyAppAssocKey_tex StringChange(MyAppAssocName, " ", "") + MyAppAssocExt_tex
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -46,7 +47,7 @@ LicenseFile={#RepoDir}LICENSE
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir={#RepoDir}.innoSetup
-OutputBaseFilename=RePKG.Neo-Setup
+OutputBaseFilename=RePKG.Neo-x64-Setup
 SolidCompression=yes
 WizardStyle=modern windows11
 
@@ -68,15 +69,21 @@ Source: "{#RepoDir}README_zh.md"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\Res\file-icon.ico,0"
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
-
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt2}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey2}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey2}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\Res\file-icon.ico,0"
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey2}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+; .pkg
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt_pkg}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey_pkg}"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_pkg}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_pkg}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\file-pkg.ico,0"
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_pkg}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+; .mpkg
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt_mpkg}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey_mpkg}"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_mpkg}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_mpkg}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\file-mpkg.ico,0"
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_mpkg}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+; .tex
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt_tex}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey_tex}"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_tex}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_tex}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\file-tex.ico,0"
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey_tex}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

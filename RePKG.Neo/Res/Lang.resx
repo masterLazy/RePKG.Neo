@@ -117,87 +117,83 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Main_Copy" xml:space="preserve">
-    <value>Copy project.json and preview.jpg from beside PKG into output directory</value>
+  <data name="Msg_FileFilter" xml:space="preserve">
+    <value>PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.*</value>
   </data>
-  <data name="Main_InputFile" xml:space="preserve">
-    <value>Input File: </value>
+  <data name="Btn_AddFile" xml:space="preserve">
+    <value>Add file</value>
   </data>
-  <data name="Main_NoCvt" xml:space="preserve">
-    <value>Don't convert TEX files into images while extracting PKG</value>
+  <data name="Btn_AddFolder" xml:space="preserve">
+    <value>Add folder</value>
   </data>
-  <data name="Main_Open" xml:space="preserve">
-    <value>Open</value>
+  <data name="Btn_AddFolder_ToolTip" xml:space="preserve">
+    <value>Recursively search supported files (.pkg, .mpkg, .tex)</value>
   </data>
-  <data name="Main_OutputDir" xml:space="preserve">
-    <value>Output Directory: </value>
+  <data name="Btn_Clear_ToolTip" xml:space="preserve">
+    <value>Clear</value>
   </data>
-  <data name="Main_Tip" xml:space="preserve">
-    <value>Tip: You can drop a file / folder here.</value>
-  </data>
-  <data name="Main_Select" xml:space="preserve">
-    <value>Select</value>
-  </data>
-  <data name="Main_Extract" xml:space="preserve">
+  <data name="Btn_StartExtract" xml:space="preserve">
     <value>Extract</value>
   </data>
-  <data name="Main_Extracting" xml:space="preserve">
-    <value>Extracting...</value>
+  <data name="Btn_Stop_ToolTip" xml:space="preserve">
+    <value>Stop</value>
   </data>
-  <data name="Msg_Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="Btn_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Chk_AutoExtract" xml:space="preserve">
+    <value>Auto start extraction</value>
+  </data>
+  <data name="Chk_CopyProject" xml:space="preserve">
+    <value>Copy project.json and preview.jpg to output directory</value>
+  </data>
+  <data name="Chk_NoTexConvert" xml:space="preserve">
+    <value>Don't convert TEX to images</value>
+  </data>
+  <data name="Chk_SingleDir" xml:space="preserve">
+    <value>Put all output files in single directory</value>
+  </data>
+  <data name="Lbl_OutputSuffix" xml:space="preserve">
+    <value>Output dir suffix</value>
+  </data>
+  <data name="EmptyState_Text" xml:space="preserve">
+    <value>Drag files / folders here</value>
+  </data>
+  <data name="Btn_Remove_ToolTip" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Btn_Reveal_ToolTip" xml:space="preserve">
+    <value>Reveal in File Explorer</value>
+  </data>
+  <data name="FolderDialog_Title" xml:space="preserve">
+    <value>Add folder</value>
+  </data>
+  <data name="Msg_InvalidDrop" xml:space="preserve">
+    <value>Invalid drop. Please drag a file or folder.</value>
   </data>
   <data name="Msg_Info" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="Msg_FileNotFound" xml:space="preserve">
+  <data name="Item_FileNotFound" xml:space="preserve">
     <value>File not found</value>
   </data>
-  <data name="Msg_SelectOutputDir" xml:space="preserve">
-    <value>Select an Output Folder</value>
-  </data>
-  <data name="Msg_SpecifyInput" xml:space="preserve">
-    <value>Please specify an input file first.</value>
-  </data>
-  <data name="Msg_FileNotFoundContent" xml:space="preserve">
-    <value>File "{0}" not found.
-Please check the input filename.</value>
-  </data>
-  <data name="Msg_FileFilter" xml:space="preserve">
-    <value>PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.*</value>
-  </data>
-  <data name="Msg_Confirm" xml:space="preserve">
-    <value>Confirm</value>
-  </data>
-  <data name="Msg_Success" xml:space="preserve">
-    <value>Success</value>
-  </data>
-  <data name="Msg_Canceled" xml:space="preserve">
-    <value>Canceled</value>
-  </data>
-  <data name="Msg_CanceledContent" xml:space="preserve">
-    <value>Extraction canceled.</value>
-  </data>
-  <data name="Msg_FolderExisted" xml:space="preserve">
-    <value>Folder "{0}" has existed.
-Do you want to overwrite it?</value>
-  </data>
-  <data name="Msg_Extracted" xml:space="preserve">
-    <value>The package has been extracted to: "{0}"</value>
-  </data>
-  <data name="Msg_ErrorContent" xml:space="preserve">
+  <data name="Msg_ExtractError" xml:space="preserve">
     <value>An error occurred during extraction:
+
 {0}
 
 Please check if the input file is valid.</value>
   </data>
-  <data name="Msg_MultiDrop" xml:space="preserve">
-    <value>Only the first file / folder will be input.</value>
+  <data name="Msg_ExtractFailed_Title" xml:space="preserve">
+    <value>Extraction failed</value>
   </data>
-  <data name="Msg_InvalidDrop" xml:space="preserve">
-    <value>Invalid dropping. Please drop a file / folder.</value>
+  <data name="Item_Complete" xml:space="preserve">
+    <value>Completed</value>
   </data>
-  <data name="Main_Auto" xml:space="preserve">
-    <value>Automatically extract upon double-click or file drop</value>
+  <data name="Item_ExtractFailed" xml:space="preserve">
+    <value>Extraction failed</value>
+  </data>
+  <data name="Msg_DropWhenRunning" xml:space="preserve">
+    <value>Please drop after current tasks are completed.</value>
   </data>
 </root>

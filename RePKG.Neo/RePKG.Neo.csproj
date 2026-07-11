@@ -6,16 +6,31 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
-		<ApplicationIcon>Res\icon.ico</ApplicationIcon>
-		<Version>1.0.0</Version>
+		<ApplicationIcon>res\repkg-neo.ico</ApplicationIcon>
+		<Version>2.0.0</Version>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>portable</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Res\icon.png" />
+	  <None Remove="res\icon.png" />
+	  <None Remove="res\thumb.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Res\icon.ico" />
+	  <Content Include="res\repkg-neo.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+	  <PackageReference Include="LazyWpf" Version="1.1.3" />
+	  <PackageReference Include="SuGarToolkit.WPF.Controls.CaptionButtons" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -23,11 +38,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Res\icon.png" />
+	  <Resource Include="res\icon.png" />
+	  <Resource Include="res\thumb.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Res\Lang.Designer.cs">
+	  <Compile Update="res\Lang.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Lang.resx</DependentUpon>
@@ -35,15 +51,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Res\Lang.resx">
+	  <EmbeddedResource Update="res\Lang.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Lang.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Res\file-icon.ico">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <None Update="res\file-mpkg.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="res\file-pkg.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="res\file-tex.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 
