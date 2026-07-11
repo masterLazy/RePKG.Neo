@@ -3,71 +3,242 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:loc="clr-namespace:RePKG.Neo.Res"
+        xmlns:CaptionButtons="clr-namespace:SuGarToolkit.WPF.Controls.CaptionButtons;assembly=SuGarToolkit.WPF.Controls.CaptionButtons"
+        xmlns:system="clr-namespace:System;assembly=netstandard"
+        xmlns:lazy="clr-namespace:LazyWpf;assembly=LazyWpf"
+        xmlns:res="clr-namespace:RePKG.Neo.res"
+        xmlns:local="clr-namespace:RePKG.Neo"
+        d:DataContext="{d:DesignInstance Type=local:MainWindowVM}"
         mc:Ignorable="d"
         Title="RePKG.Neo" 
-        SizeToContent="Height" Width="640"
-        ResizeMode="NoResize"
-        Background="{StaticResource BhDefault}" ThemeMode="Light"
+        Height="500" Width="800" FontSize="13"
+        MinHeight="500" MinWidth="800"
+        Background="#eaeaea" ThemeMode="Light"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
-        x:Name="root"
-        AllowDrop="True" Drop="root_Drop"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Closed="root_Closed">
-    <StackPanel>
-        <!--Header-->
-        <DockPanel Margin="10 10 10 5">
-            <Image Height="36" Margin="0 0 5 0" VerticalAlignment="Center" Source="Res/icon.png" DockPanel.Dock="Left" />
-            <TextBlock VerticalAlignment="Center" FontSize="13">
-                <Run FontWeight="Bold">RePKG.Neo</Run>
-                <Run>1.0.1 with RePKG 3f573fa</Run>
-            </TextBlock>
-        </DockPanel>
-        <Separator BorderBrush="{StaticResource BhBorder}"/>
-        <!--Body-->
-        <DockPanel Margin="20 20 20 5">
-            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
-                       Text="{x:Static loc:Lang.Main_InputFile}"/>
-            <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
-                    x:Name="BtnBrowseIn" Click="BtnBrowseIn_Click"
-                     Content="{x:Static loc:Lang.Main_Open}"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
-            <TextBox Margin="10 0 5 0" x:Name="TbInput"  VerticalAlignment="Center" FontSize="13"
-                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}" AllowDrop="False"
-                     ToolTip=".pkg/.mpkg/.tex" ToolTipService.InitialShowDelay="100"/>
-        </DockPanel>
-        <DockPanel Margin="20 5 20 10">
-            <TextBlock FontSize="13" DockPanel.Dock="Left" VerticalAlignment="Center"
-                       Text="{x:Static loc:Lang.Main_OutputDir}"/>
-            <Button DockPanel.Dock="Right" FontSize="13" Width="70" Height="32"
-                    x:Name="BtnBrowseOut" Click="BtnBrowseOut_Click"
-                    Content="{x:Static loc:Lang.Main_Select}"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
-            <TextBox Margin="10 0 5 0" x:Name="TbOutput" VerticalAlignment="Center" Text="repkg\" FontSize="13"
-                     IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}"/>
-        </DockPanel>
-        <CheckBox Margin="20 10 20 0" FontSize="13" Height="32"
-                  Content="{x:Static loc:Lang.Main_NoCvt}" IsChecked="{Binding Options.NoTexConvert, Mode=TwoWay}"/>
-        <CheckBox Margin="20 0 20 0" FontSize="13" Height="32"
-                  Content="{x:Static loc:Lang.Main_Copy}" IsChecked="{Binding Options.CopyProject, Mode=TwoWay}"/>
-        <CheckBox Margin="20 0 20 10" FontSize="13" Height="32"
-          Content="{x:Static loc:Lang.Main_Auto}" IsChecked="{Binding Options.AutoExtract, Mode=TwoWay}"/>
-        <ProgressBar x:Name="ProgressBar" Background="Transparent" Minimum="0" Maximum="100"/>
-        <Separator BorderBrush="{StaticResource BhBorder}"/>
-        <!--Footer-->
-        <DockPanel LastChildFill="False"  Background="{StaticResource BhGray}">
-            <Button DockPanel.Dock="Right" Margin="20 10 20 10" MinWidth="70" Height="36"
-                    Style="{DynamicResource AccentButtonStyle}" FontSize="13"
-                    x:Name="BtnExtract" Click="BtnExtract_Click"
-                    IsEnabled="{Binding ElementName=root, Path=IsInputEnabled}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}" Text="&#xF78C;" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                    <TextBlock Text="{x:Static loc:Lang.Main_Extract}"/>
-                </StackPanel>
-            </Button>
-            <TextBlock DockPanel.Dock="Left" FontSize="13" VerticalAlignment="Center" Margin="20 10 20 10"
-                       Text="{x:Static loc:Lang.Main_Tip}" x:Name="Text_Tip"/>
-        </DockPanel>
-    </StackPanel>
+        StateChanged="Window_StateChanged" Closed="Window_Closed">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+        x:Name="WindowChrome"
+        CaptionHeight="36"
+        UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+    <Border BorderThickness="1" BorderBrush="{StaticResource BhPrimary}" x:Name="LayoutRoot">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="TitleBarArea" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <CaptionButtons:CaptionButtonBar
+                    Grid.Column="1"
+                    Height="36"/>
+            </Grid>
+
+            <Grid Height="36">
+                <Image Height="18" Margin="16 8" Source="/res/icon.png" 
+               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock Margin="45 8" FontSize="12"
+                   VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Run>RePKG.Neo</Run>
+                    <Run/>
+                    <Run Foreground="#888">2.0.0</Run>
+                </TextBlock>
+            </Grid>
+            <DockPanel Grid.Row="1" Margin="10 5 10 8">
+                <DockPanel DockPanel.Dock="Top" Margin="0 0 0 5" LastChildFill="False">
+                    <DockPanel.Resources>
+                        <ResourceDictionary>
+                            <Style TargetType="lazy:Button">
+                                <Setter Property="DockPanel.Dock" Value="Left"/>
+                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
+                                <Setter Property="DockPanel.Dock" Value="Left"/>
+                            </Style>
+                        </ResourceDictionary>
+                    </DockPanel.Resources>
+                    <lazy:Button Icon="&#xE8E5;" Text="添加文件" IsEnabled="{Binding NotRunning}"
+                                 x:Name="BtnAddFile" Click="BtnAddFile_Click" />
+
+                    <lazy:Button Icon="&#xE8DA;" Text="添加文件夹" IsEnabled="{Binding NotRunning}"
+                                 x:Name="BtnAddFolder" Click="BtnAddFolder_Click"
+                                 ToolTipService.ToolTip="递归查找受支持的文件 (.pkg, .mpkg, .tex)" 
+                                 Margin="5 0 0 0"/>
+
+                    <lazy:Button Icon="&#xE74D;" IsEnabled="{Binding NotRunning}"
+                                 x:Name="BtnClear" Click="BtnClear_Click"
+                                 ToolTipService.ToolTip="清空" Margin="5 0 0 0"/>
+
+                    <Separator Margin="0 10" BorderBrush="{StaticResource BhBorder}">
+                        <Separator.LayoutTransform>
+                            <RotateTransform Angle="90" />
+                        </Separator.LayoutTransform>
+                    </Separator>
+
+                    <lazy:Button Icon="&#xE768;" Text="开始提取" IsEnabled="{Binding CanStart}"
+                                 x:Name="BtnStart" Click="BtnStart_Click"
+                                 IsAccented="True"/>
+
+                    <lazy:Button Icon="&#xE769;" IsEnabled="{Binding IsRunning}"
+                                 x:Name="BtnStop" Click="BtnStop_Click"
+                                 ToolTipService.ToolTip="停止" Margin="5 0 0 0"/>
+
+                    <lazy:Button Icon="&#xE9E9;" Text="选项" DockPanel.Dock="Right"
+                                 x:Name="BtnOptions" Click="BtnOptions_Click"/>
+                    <Popup x:Name="PopupOptions"
+                           MouseLeave="PopupOptions_MouseLeave"
+                           PlacementTarget="{Binding ElementName=BtnOptions}"
+                           Placement="Bottom">
+                        <Border Background="{StaticResource BhBorder}">
+                            <Border Background="#f9f9f9" 
+                                BorderBrush="{StaticResource BhBorder}" 
+                                BorderThickness="1" CornerRadius="4"
+                                Padding="10">
+                                <StackPanel MaxWidth="220">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                        <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
+                                            <Setter Property="Margin" Value="5"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    
+                                    <CheckBox IsChecked="{Binding Options.AutoExtract}">
+                                        <TextBlock Text="自动开始提取"/>
+                                    </CheckBox>
+
+                                    <Separator Margin="5 0 5 0"/>
+                                    
+                                    <CheckBox IsChecked="{Binding Options.CopyProject}">
+                                        <TextBlock Text="复制 project.json 和 preview.jpg 到输出目录"/>
+                                    </CheckBox>
+
+                                    <CheckBox IsChecked="{Binding Options.NoTexConvert}">
+                                        <TextBlock Text="不将 TEX 转换为图像"/>
+                                    </CheckBox>
+                                    
+                                    <CheckBox IsChecked="{Binding Options.SingleDir}">
+                                        <TextBlock Text="将所有输出文件置于同一目录"/>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Border>
+                        </Border>
+                    </Popup>
+
+                    <Separator Margin="0 10" BorderBrush="{StaticResource BhBorder}">
+                        <Separator.LayoutTransform>
+                            <RotateTransform Angle="90" />
+                        </Separator.LayoutTransform>
+                    </Separator>
+
+                    <TextBlock Text="输出目录后缀" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Options.OutputSuffix, Mode=TwoWay}" Margin="8 0 0 -3"
+                             Height="30" Width="150" VerticalAlignment="Center"/>
+                </DockPanel>
+                <Border CornerRadius="8" BorderThickness="1" AllowDrop="True" Drop="Border_Drop"
+                        Background="{StaticResource BhLight}" BorderBrush="{StaticResource BhBorder}">
+                    <ListView ItemsSource="{Binding Items}" x:Name="ListView"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.Style>
+                            <Style TargetType="ListView">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListView">
+                                            <Border>
+                                                <Grid>
+                                                    <!-- 滚动视图区域 -->
+                                                    <ScrollViewer>
+                                                        <ItemsPresenter/>
+                                                    </ScrollViewer>
+
+                                                    <!-- 空状态显示层（默认隐藏） -->
+                                                    <StackPanel x:Name="EmptyStateImage"
+                                                                Orientation="Horizontal"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Visibility="Collapsed">
+                                                        <TextBlock Text="&#xE7B8;" FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                                                   FontSize="50" Foreground="{StaticResource BhBorder}"/>
+                                                        <TextBlock Margin="20 0 0 0" Text="拖拽文件 / 文件夹至此处" VerticalAlignment="Center"
+                                                                   FontSize="28" Foreground="{StaticResource BhBorder}"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <!-- 当没有数据项时，显示图片 -->
+                                                <Trigger Property="HasItems" Value="False">
+                                                    <Setter TargetName="EmptyStateImage" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.Style>
+
+                        <!--列表中的项目-->
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                                    <DockPanel.Resources>
+                                        <Style TargetType="lazy:Button">
+                                            <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
+                                            <Setter Property="ToolTipService.Placement" Value="Bottom" />
+                                        </Style>
+                                    </DockPanel.Resources>
+                                    <!--进度条-->
+                                    <lazy:ProgBar DockPanel.Dock="Bottom" Height="4" Margin="-5 0"
+                                                  Maximum="100" Value="{Binding Percent}"
+                                                  FadeOutWhenComplete="True"/>
+                                    <!--缩略图-->
+                                    <Image Source="{Binding Thumb}" DockPanel.Dock="Left" Width="48" Height="48" Margin="-5 5 5 5"
+                                           ToolTipService.InitialShowDelay="300" ToolTipService.HorizontalOffset="180">
+                                        <Image.Clip>
+                                            <RectangleGeometry RadiusX="4" RadiusY="4" Rect="0,0,48,48"/>
+                                        </Image.Clip>
+                                        <ToolTipService.ToolTip>
+                                            <Image VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0"
+                                                   MaxHeight="180" MaxWidth="180"  Source="{Binding Thumb}" />
+                                        </ToolTipService.ToolTip>
+                                    </Image>
+                                    <!--按钮-->
+                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;" ToolTipService.ToolTip="移除"
+                                                 x:Name="BtnRemove" Click="BtnRemove_Click"
+                                                 Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
+
+                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;" ToolTipService.ToolTip="在文件资源管理器中打开"
+                                                 x:Name="BtnReveal" Click="BtnReveal_Click" Margin="5 0"
+                                                 Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
+                                    <!--信息文本-->
+                                    <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5 2.5 2.5 2.5" HorizontalAlignment="Stretch">
+                                        <TextBlock Text="{Binding FileName}" Margin="2.5"
+                                                   HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"/>
+                                        <StackPanel Orientation="Horizontal" Margin="2.5">
+                                            <TextBlock Text="{Binding FileDirDisplay}" FontSize="12" Foreground="#888"/>
+                                            <TextBlock Text="{Binding FileSize}" Margin="10 0 0 0" FontSize="12" Foreground="#888"/>
+                                            <TextBlock Margin="10 0 0 0" FontSize="12" Text="{Binding Text}" Foreground="{Binding TextBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DockPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsMouseOver}"
+                                     Value="True">
+                                        <Setter TargetName="BtnRemove" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="BtnReveal" Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Border>
+            </DockPanel>
+        </Grid>
+    </Border>
 </Window>

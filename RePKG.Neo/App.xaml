@@ -5,16 +5,11 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <!--Fluent-->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml" />
+                <ResourceDictionary Source="/LazyWpf;component/res/Dict.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <!--画刷-->
-            <SolidColorBrush x:Key="BhLight" Color="#fdfdfd"/>
-            <SolidColorBrush x:Key="BhDefault" Color="#f3f3f3"/>
-            <SolidColorBrush x:Key="BhGray" Color="#e6e6e6"/>
-            <SolidColorBrush x:Key="BhBorder" Color="#d0d0d0"/>
+            <SolidColorBrush x:Key="BhPrimary" Color="#13387b"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

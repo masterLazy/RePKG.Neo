@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RePKG.Neo.Res {
+namespace RePKG.Neo.res {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace RePKG.Neo.Res {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RePKG.Neo.Res.Lang", typeof(Lang).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RePKG.Neo.res.Lang", typeof(Lang).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,241 +61,11 @@ namespace RePKG.Neo.Res {
         }
         
         /// <summary>
-        ///   查找类似 Automatically extract upon double-click or file drop 的本地化字符串。
-        /// </summary>
-        public static string Main_Auto {
-            get {
-                return ResourceManager.GetString("Main_Auto", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Copy project.json and preview.jpg from beside PKG into output directory 的本地化字符串。
-        /// </summary>
-        public static string Main_Copy {
-            get {
-                return ResourceManager.GetString("Main_Copy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Extract 的本地化字符串。
-        /// </summary>
-        public static string Main_Extract {
-            get {
-                return ResourceManager.GetString("Main_Extract", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Extracting... 的本地化字符串。
-        /// </summary>
-        public static string Main_Extracting {
-            get {
-                return ResourceManager.GetString("Main_Extracting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Input File:  的本地化字符串。
-        /// </summary>
-        public static string Main_InputFile {
-            get {
-                return ResourceManager.GetString("Main_InputFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Don&apos;t convert TEX files into images while extracting PKG 的本地化字符串。
-        /// </summary>
-        public static string Main_NoCvt {
-            get {
-                return ResourceManager.GetString("Main_NoCvt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Open 的本地化字符串。
-        /// </summary>
-        public static string Main_Open {
-            get {
-                return ResourceManager.GetString("Main_Open", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Output Directory:  的本地化字符串。
-        /// </summary>
-        public static string Main_OutputDir {
-            get {
-                return ResourceManager.GetString("Main_OutputDir", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Select 的本地化字符串。
-        /// </summary>
-        public static string Main_Select {
-            get {
-                return ResourceManager.GetString("Main_Select", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Tip: You can drop a file / folder here. 的本地化字符串。
-        /// </summary>
-        public static string Main_Tip {
-            get {
-                return ResourceManager.GetString("Main_Tip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Canceled 的本地化字符串。
-        /// </summary>
-        public static string Msg_Canceled {
-            get {
-                return ResourceManager.GetString("Msg_Canceled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Extraction canceled. 的本地化字符串。
-        /// </summary>
-        public static string Msg_CanceledContent {
-            get {
-                return ResourceManager.GetString("Msg_CanceledContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Confirm 的本地化字符串。
-        /// </summary>
-        public static string Msg_Confirm {
-            get {
-                return ResourceManager.GetString("Msg_Confirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Error 的本地化字符串。
-        /// </summary>
-        public static string Msg_Error {
-            get {
-                return ResourceManager.GetString("Msg_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 An error occurred during extraction:
-        ///{0}
-        ///
-        ///Please check if the input file is valid. 的本地化字符串。
-        /// </summary>
-        public static string Msg_ErrorContent {
-            get {
-                return ResourceManager.GetString("Msg_ErrorContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 The package has been extracted to: &quot;{0}&quot; 的本地化字符串。
-        /// </summary>
-        public static string Msg_Extracted {
-            get {
-                return ResourceManager.GetString("Msg_Extracted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.* 的本地化字符串。
         /// </summary>
         public static string Msg_FileFilter {
             get {
                 return ResourceManager.GetString("Msg_FileFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 File not found 的本地化字符串。
-        /// </summary>
-        public static string Msg_FileNotFound {
-            get {
-                return ResourceManager.GetString("Msg_FileNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 File &quot;{0}&quot; not found.
-        ///Please check the input filename. 的本地化字符串。
-        /// </summary>
-        public static string Msg_FileNotFoundContent {
-            get {
-                return ResourceManager.GetString("Msg_FileNotFoundContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Folder &quot;{0}&quot; has existed.
-        ///Do you want to overwrite it? 的本地化字符串。
-        /// </summary>
-        public static string Msg_FolderExisted {
-            get {
-                return ResourceManager.GetString("Msg_FolderExisted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Info 的本地化字符串。
-        /// </summary>
-        public static string Msg_Info {
-            get {
-                return ResourceManager.GetString("Msg_Info", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Invalid dropping. Please drop a file / folder. 的本地化字符串。
-        /// </summary>
-        public static string Msg_InvalidDrop {
-            get {
-                return ResourceManager.GetString("Msg_InvalidDrop", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Only the first file / folder will be input. 的本地化字符串。
-        /// </summary>
-        public static string Msg_MultiDrop {
-            get {
-                return ResourceManager.GetString("Msg_MultiDrop", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Select an Output Folder 的本地化字符串。
-        /// </summary>
-        public static string Msg_SelectOutputDir {
-            get {
-                return ResourceManager.GetString("Msg_SelectOutputDir", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please specify an input file first. 的本地化字符串。
-        /// </summary>
-        public static string Msg_SpecifyInput {
-            get {
-                return ResourceManager.GetString("Msg_SpecifyInput", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Success 的本地化字符串。
-        /// </summary>
-        public static string Msg_Success {
-            get {
-                return ResourceManager.GetString("Msg_Success", resourceCulture);
             }
         }
     }
