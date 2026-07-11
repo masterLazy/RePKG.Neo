@@ -61,7 +61,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Add File 的本地化字符串。
+        ///   查找类似 Add file 的本地化字符串。
         /// </summary>
         public static string Btn_AddFile {
             get {
@@ -70,7 +70,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Add Folder 的本地化字符串。
+        ///   查找类似 Add folder 的本地化字符串。
         /// </summary>
         public static string Btn_AddFolder {
             get {
@@ -79,7 +79,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Recursively find supported files (.pkg, .mpkg, .tex) 的本地化字符串。
+        ///   查找类似 Recursively search supported files (.pkg, .mpkg, .tex) 的本地化字符串。
         /// </summary>
         public static string Btn_AddFolder_ToolTip {
             get {
@@ -115,7 +115,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Open in File Explorer 的本地化字符串。
+        ///   查找类似 Reveal in File Explorer 的本地化字符串。
         /// </summary>
         public static string Btn_Reveal_ToolTip {
             get {
@@ -169,7 +169,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Place all output files in the same directory 的本地化字符串。
+        ///   查找类似 Put all output files in single directory 的本地化字符串。
         /// </summary>
         public static string Chk_SingleDir {
             get {
@@ -187,7 +187,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Add Folder 的本地化字符串。
+        ///   查找类似 Add folder 的本地化字符串。
         /// </summary>
         public static string FolderDialog_Title {
             get {
@@ -196,7 +196,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Complete 的本地化字符串。
+        ///   查找类似 Completed 的本地化字符串。
         /// </summary>
         public static string Item_Complete {
             get {
@@ -223,11 +223,20 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Output-dir Suffix 的本地化字符串。
+        ///   查找类似 Output dir suffix 的本地化字符串。
         /// </summary>
         public static string Lbl_OutputSuffix {
             get {
                 return ResourceManager.GetString("Lbl_OutputSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Please drop after current tasks are completed. 的本地化字符串。
+        /// </summary>
+        public static string Msg_DropWhenRunning {
+            get {
+                return ResourceManager.GetString("Msg_DropWhenRunning", resourceCulture);
             }
         }
         
@@ -245,7 +254,7 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
-        ///   查找类似 Extraction Failed 的本地化字符串。
+        ///   查找类似 Extraction failed 的本地化字符串。
         /// </summary>
         public static string Msg_ExtractFailed_Title {
             get {
@@ -277,15 +286,6 @@ namespace RePKG.Neo.res {
         public static string Msg_InvalidDrop {
             get {
                 return ResourceManager.GetString("Msg_InvalidDrop", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 RePKG.Neo 的本地化字符串。
-        /// </summary>
-        public static string Window_Title {
-            get {
-                return ResourceManager.GetString("Window_Title", resourceCulture);
             }
         }
     }

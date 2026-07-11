@@ -47,7 +47,7 @@ LicenseFile={#RepoDir}LICENSE
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir={#RepoDir}.innoSetup
-OutputBaseFilename=RePKG.Neo-Setup
+OutputBaseFilename=RePKG.Neo-x64-Setup
 SolidCompression=yes
 WizardStyle=modern windows11
 

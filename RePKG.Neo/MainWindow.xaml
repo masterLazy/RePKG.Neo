@@ -10,7 +10,7 @@
         xmlns:local="clr-namespace:RePKG.Neo"
         d:DataContext="{d:DesignInstance Type=local:MainWindowVM}"
         mc:Ignorable="d"
-        Title="{x:Static res:Lang.Window_Title}" 
+        Title="RePKG.Neo" 
         Height="550" Width="800" FontSize="13"
         MinHeight="550" MinWidth="800"
         Background="#eaeaea" ThemeMode="Light"
@@ -48,9 +48,10 @@
                    VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Run>RePKG.Neo</Run>
                     <Run/>
-                    <Run Foreground="#888">2.0.0</Run>
+                    <Run Foreground="#999">2.0.0</Run>
                 </TextBlock>
             </Grid>
+            <!--Top panel-->
             <DockPanel Grid.Row="1" Margin="10 5 10 8">
                 <DockPanel DockPanel.Dock="Top" Margin="0 0 0 5" LastChildFill="False">
                     <DockPanel.Resources>
@@ -91,6 +92,7 @@
 
                     <lazy:Button Icon="&#xE9E9;" Text="{x:Static res:Lang.Btn_Options}" DockPanel.Dock="Right"
                                  x:Name="BtnOptions" Click="BtnOptions_Click"/>
+                    <!--Options panel-->
                     <Popup x:Name="PopupOptions"
                            MouseLeave="PopupOptions_MouseLeave"
                            PlacementTarget="{Binding ElementName=BtnOptions}"
@@ -100,7 +102,7 @@
                                 BorderBrush="{StaticResource BhBorder}" 
                                 BorderThickness="1" CornerRadius="4"
                                 Padding="10">
-                                <StackPanel MaxWidth="220">
+                                <StackPanel MaxWidth="220" IsEnabled="{Binding NotRunning}">
                                     <StackPanel.Resources>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -153,12 +155,12 @@
                                         <ControlTemplate TargetType="ListView">
                                             <Border>
                                                 <Grid>
-                                                    <!-- 滚动视图区域 -->
+                                                    <!-- Scroll-view area -->
                                                     <ScrollViewer>
                                                         <ItemsPresenter/>
                                                     </ScrollViewer>
 
-                                                    <!-- 空状态显示层（默认隐藏） -->
+                                                    <!-- Empty hint layer (invisible for default) -->
                                                     <StackPanel x:Name="EmptyStateImage"
                                                                 Orientation="Horizontal"
                                                                 HorizontalAlignment="Center"
@@ -172,7 +174,7 @@
                                                 </Grid>
                                             </Border>
                                             <ControlTemplate.Triggers>
-                                                <!-- 当没有数据项时，显示图片 -->
+                                                <!-- Show hint when list is empty -->
                                                 <Trigger Property="HasItems" Value="False">
                                                     <Setter TargetName="EmptyStateImage" Property="Visibility" Value="Visible"/>
                                                 </Trigger>
@@ -183,7 +185,7 @@
                             </Style>
                         </ListView.Style>
 
-                        <!--列表中的项目-->
+                        <!--Item list-->
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
@@ -193,11 +195,11 @@
                                             <Setter Property="ToolTipService.Placement" Value="Bottom" />
                                         </Style>
                                     </DockPanel.Resources>
-                                    <!--进度条-->
+                                    <!--Progressbar-->
                                     <lazy:ProgBar DockPanel.Dock="Bottom" Height="4" Margin="-5 0"
                                                   Maximum="100" Value="{Binding Percent}"
                                                   FadeOutWhenComplete="True"/>
-                                    <!--缩略图-->
+                                    <!--Thumbnail-->
                                     <Image Source="{Binding Thumb}" DockPanel.Dock="Left" Width="48" Height="48" Margin="-5 5 5 5"
                                            ToolTipService.InitialShowDelay="300" ToolTipService.HorizontalOffset="180">
                                         <Image.Clip>
@@ -205,10 +207,10 @@
                                         </Image.Clip>
                                         <ToolTipService.ToolTip>
                                             <Image VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0"
-                                                   MaxHeight="180" MaxWidth="180"  Source="{Binding Thumb}" />
+                                                   MaxHeight="100" MaxWidth="100"  Source="{Binding Thumb}" />
                                         </ToolTipService.ToolTip>
                                     </Image>
-                                    <!--按钮-->
+                                    <!--Buttons at right-->
                                     <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;" ToolTipService.ToolTip="{x:Static res:Lang.Btn_Remove_ToolTip}"
                                                  x:Name="BtnRemove" Click="BtnRemove_Click"
                                                  Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
@@ -216,14 +218,16 @@
                                     <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;" ToolTipService.ToolTip="{x:Static res:Lang.Btn_Reveal_ToolTip}"
                                                  x:Name="BtnReveal" Click="BtnReveal_Click" Margin="5 0"
                                                  Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
-                                    <!--信息文本-->
+                                    <!--Infos-->
                                     <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5 2.5 2.5 2.5" HorizontalAlignment="Stretch">
-                                        <TextBlock Text="{Binding FileName}" Margin="2.5"
-                                                   HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"/>
                                         <StackPanel Orientation="Horizontal" Margin="2.5">
-                                            <TextBlock Text="{Binding FileDirDisplay}" FontSize="12" Foreground="#888"/>
-                                            <TextBlock Text="{Binding FileSize}" Margin="10 0 0 0" FontSize="12" Foreground="#888"/>
-                                            <TextBlock Margin="10 0 0 0" FontSize="12" Text="{Binding Text}" Foreground="{Binding TextBrush}"/>
+                                            <TextBlock Text="{Binding FileName}"/>
+                                            <TextBlock Text="{Binding Title}" Margin="10 0 0 0" FontStyle="Oblique" Foreground="#355590"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="2.5">
+                                            <TextBlock Text="{Binding DisplayDir}" FontSize="12" Foreground="#999"/>
+                                            <TextBlock Text="{Binding FileSize}" Margin="10 0 0 0" FontSize="12" Foreground="#999"/>
+                                            <TextBlock Text="{Binding Text}" Margin="10 0 0 0" FontSize="12" Foreground="{Binding TextBrush}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DockPanel>

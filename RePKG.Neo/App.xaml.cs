@@ -35,10 +35,10 @@ namespace RePKG.Neo {
 
         // Json Options
         public static readonly JsonSerializerOptions JsonOptions = new() {
-            // serialization
+            // Serialization
             WriteIndented = true,
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs),
-            // deserialization
+            // Deserialization
             PropertyNameCaseInsensitive = true,
             UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
             UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement,

@@ -21,7 +21,10 @@ namespace RePKG.Neo {
         public MainWindow() {
             DataContext = new MainWindowVM();
             InitializeComponent();
-            if(App.DroppedFiles.Length > 0) DataCtx.AddPath(App.DroppedFiles);
+            if (App.DroppedFiles.Length > 0) {
+                DataCtx.AddPath(App.DroppedFiles);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
+            }
         }
 
         private void Window_StateChanged(object sender, EventArgs e) {
@@ -50,6 +53,7 @@ namespace RePKG.Neo {
             bool? result = dialog.ShowDialog();
             if (result == true) {
                 DataCtx.AddPath(dialog.FileNames);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             }
         }
 
@@ -61,13 +65,19 @@ namespace RePKG.Neo {
             bool? result = dialog.ShowDialog();
             if (result == true) {
                 DataCtx.AddPath(dialog.FolderNames);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             }
         }
 
         private void Border_Drop(object sender, DragEventArgs e) {
+            if (DataCtx.IsRunning) {
+                new MsgBox(Lang.Msg_DropWhenRunning, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
+                return;
+            }
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 DataCtx.AddPath(files);
+                if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             } else {
                 new MsgBox(Lang.Msg_InvalidDrop, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
             }

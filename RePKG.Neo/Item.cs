@@ -20,12 +20,14 @@ namespace RePKG.Neo {
 
         public string FilePath { get; private set; }
         public string FileDir { get; private set; }
-        public string FileDirDisplay { get; private set; }
         public string FileName { get; private set; }
         public string FileSize { get; private set; }
-        public string Thumb { get; private set; } = "/res/thumb.png";
         public EState State { get; private set; } = EState.Pending;
         public string? SavePath { get; set; } = null;
+
+        public string Thumb { get; private set; } = "/res/thumb.png";
+        public string Title { get; private set; }
+        public string DisplayDir { get; private set; }
 
         [ObservableProperty] string _text = "";
         [ObservableProperty] Brush? _textBrush = null;
@@ -33,16 +35,23 @@ namespace RePKG.Neo {
 
         // This method believes that filePath always exsists
         public Item(string filePath) {
+            // Basic infos
             FilePath = filePath;
             FileDir = Path.GetDirectoryName(filePath) ?? "";
             FileName = Path.GetFileName(filePath) ?? "";
             FileSize = Helper.ByteToString(new FileInfo(filePath).Length);
-            var preview = Helper.FindFileIgnoreExt(FileDir, "preview");
-            if (preview != null) Thumb = Path.Combine(FileDir, preview);
-            //
-            if (FileDir.Length < 40) FileDirDisplay = FileDir;
-            else FileDirDisplay = FileDir[..19] + "…" + FileDir[^20..];
-            FileDirDisplay += Path.DirectorySeparatorChar;
+            // Infos associated with project.json
+            var jsonPath = Path.Combine(FileDir, "project.json");
+            if (File.Exists(jsonPath)) {
+                var json = ProjectJson.ReadFrom(jsonPath);
+                if (json == null) return;
+                if (json.preview != null) Thumb = Path.Combine(FileDir, json.preview);
+                if (json.title != null) Title = json.title;
+            } 
+            // For display
+            if (FileDir.Length < 40) DisplayDir = FileDir;
+            else DisplayDir = FileDir[..19] + "…" + FileDir[^20..];
+            DisplayDir += Path.DirectorySeparatorChar;
         }
 
         public async Task Extract(Options options) {

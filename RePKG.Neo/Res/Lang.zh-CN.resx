@@ -120,9 +120,6 @@
   <data name="Msg_FileFilter" xml:space="preserve">
     <value>PKG 文件|*.pkg|MPKG 文件|*.mpkg|TEX 文件|*.tex|所有文件|*.*</value>
   </data>
-  <data name="Window_Title" xml:space="preserve">
-    <value>RePKG.Neo</value>
-  </data>
   <data name="Btn_AddFile" xml:space="preserve">
     <value>添加文件</value>
   </data>
@@ -195,5 +192,8 @@
   </data>
   <data name="Item_ExtractFailed" xml:space="preserve">
     <value>提取失败</value>
+  </data>
+  <data name="Msg_DropWhenRunning" xml:space="preserve">
+    <value>请等待当前任务完成后拖拽。</value>
   </data>
 </root>
