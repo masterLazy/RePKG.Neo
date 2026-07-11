@@ -1,5 +1,5 @@
 # RePKG.Neo
-<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/Res/icon.png" width="162px" align="right"/>
+<img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/res/repkg-neo.png" width="162px" align="right"/>
 
 <p>
     <a href="https://github.com/masterLazy/RePKG.Neo/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/masterLazy/RePKG.Neo"/></a>
