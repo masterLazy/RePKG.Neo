@@ -26,16 +26,23 @@ An enhanced Wallpaper Engine PKG extractor and TEX converter, built upon the ori
 >
 > To use RePKG.Neo, you need to install [.NET 10 Desktop Runtime](https://get.dot.net/10).
 
-- **Modern Graphical Interface (GUI)**: Built with WPF, providing an intuitive and user-friendly desktop application experience.
+- **Modern Graphical Interface (GUI)**: Built with WPF + MVVM architecture, providing an intuitive and user-friendly desktop application experience.
 - **Upgraded to .NET 10**: Leverage the latest performance optimizations and framework features.
+- **Batch Processing**: Add multiple files and folders at once — extract them all in sequence with a single click.
+- **Per-item Progress & Status**: Each file shows its own progress bar, status (Pending/Success/Fail), and preview thumbnail.
 - **Flexible File Input Methods**:
   - Right-click and select "Open with RePKG.Neo"
   - Drag and drop files onto the program icon
-  - Select files directly within the application
+  - Select files or folders directly within the application (supports multi-select)
   - Drag and drop files or folders directly into the program window
-  - **Smart Folder Recognition**: Automatically detects the `scene.pkg` file when a folder is dragged in
+  - **Smart Folder Recognition**: Recursively scans folders for all supported files (.pkg, .mpkg, .tex)
+- **File Operations**: Remove individual items from the list, or reveal extracted files in File Explorer with one click.
 
 ## Screenshot
+
+> [!tip]
+>
+> RePKG.Neo supports internationalization. If your system language is set to `zh-CN`, the UI will be displayed in Chinese.
 
 ![screenshot](https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/img/screenshot.webp)
 
