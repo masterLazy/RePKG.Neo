@@ -94,44 +94,52 @@
                     <lazy:Button Icon="&#xE9E9;" Text="{x:Static res:Lang.Btn_Options}" DockPanel.Dock="Right"
                                  x:Name="BtnOptions" Click="BtnOptions_Click"/>
                     <!--Options panel-->
-                    <Popup x:Name="PopupOptions"
-                           MouseLeave="PopupOptions_MouseLeave"
+                    <Popup x:Name="PopupOptions" AllowsTransparency="True"
                            PlacementTarget="{Binding ElementName=BtnOptions}"
-                           Placement="Bottom">
-                        <Border Background="{StaticResource BhBorder}">
-                            <Border Background="#f9f9f9" 
-                                BorderBrush="{StaticResource BhBorder}" 
-                                BorderThickness="1" CornerRadius="4"
-                                Padding="10">
-                                <StackPanel MaxWidth="220" IsEnabled="{Binding NotRunning}">
-                                    <StackPanel.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="TextWrapping" Value="Wrap"/>
-                                        </Style>
-                                        <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
-                                            <Setter Property="Margin" Value="5"/>
-                                        </Style>
-                                    </StackPanel.Resources>
-                                    
-                                    <CheckBox IsChecked="{Binding Options.AutoExtract}">
-                                        <TextBlock Text="{x:Static res:Lang.Chk_AutoExtract}"/>
-                                    </CheckBox>
+                           Placement="Bottom"
+                           MouseLeave="PopupOptions_MouseLeave">
+                        <Popup.Resources>
+                            <Storyboard x:Key="FadeInStoryboard">
+                                <DoubleAnimation Storyboard.TargetName="PopupBorder"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 From="0" To="1" Duration="0:0:0.07" />
+                            </Storyboard>
+                            <Storyboard x:Key="FadeOutStoryboard">
+                                <DoubleAnimation Storyboard.TargetName="PopupBorder"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 From="1" To="0" Duration="0:0:0.07" />
+                            </Storyboard>
+                        </Popup.Resources>
+                        <Border x:Name="PopupBorder" Background="#f9f9f9" BorderBrush="{StaticResource BhBorder}" 
+                                BorderThickness="1" CornerRadius="8" Padding="8" Opacity="0">
+                            <StackPanel MaxWidth="220" IsEnabled="{Binding NotRunning}">
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                    </Style>
+                                    <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
+                                        <Setter Property="Margin" Value="5"/>
+                                    </Style>
+                                </StackPanel.Resources>
 
-                                    <Separator Margin="5 0 5 0"/>
-                                    
-                                    <CheckBox IsChecked="{Binding Options.CopyProject}">
-                                        <TextBlock Text="{x:Static res:Lang.Chk_CopyProject}"/>
-                                    </CheckBox>
+                                <CheckBox IsChecked="{Binding Options.AutoExtract}">
+                                    <TextBlock Text="{x:Static res:Lang.Chk_AutoExtract}"/>
+                                </CheckBox>
 
-                                    <CheckBox IsChecked="{Binding Options.NoTexConvert}">
-                                        <TextBlock Text="{x:Static res:Lang.Chk_NoTexConvert}"/>
-                                    </CheckBox>
-                                    
-                                    <CheckBox IsChecked="{Binding Options.SingleDir}">
-                                        <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}"/>
-                                    </CheckBox>
-                                </StackPanel>
-                            </Border>
+                                <Separator Margin="5 0 5 0"/>
+
+                                <CheckBox IsChecked="{Binding Options.CopyProject}">
+                                    <TextBlock Text="{x:Static res:Lang.Chk_CopyProject}"/>
+                                </CheckBox>
+
+                                <CheckBox IsChecked="{Binding Options.NoTexConvert}">
+                                    <TextBlock Text="{x:Static res:Lang.Chk_NoTexConvert}"/>
+                                </CheckBox>
+
+                                <CheckBox IsChecked="{Binding Options.SingleDir}">
+                                    <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}"/>
+                                </CheckBox>
+                            </StackPanel>
                         </Border>
                     </Popup>
 

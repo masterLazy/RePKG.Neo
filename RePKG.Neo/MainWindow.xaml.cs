@@ -1,16 +1,17 @@
 ﻿/**
-   Copyright 2025 masterLazy
+  Copyright 2025 masterLazy
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
- */
+      http://www.apache.org/licenses/LICENSE-2.0
+*/
 using LazyWpf;
 using RePKG.Neo.res;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace RePKG.Neo {
     /// <summary>
@@ -18,6 +19,7 @@ namespace RePKG.Neo {
     /// </summary>
     public partial class MainWindow : Window {
         private MainWindowVM DataCtx => (MainWindowVM)DataContext;
+        private bool _isPopupAnimating = false;
 
         public MainWindow() {
             DataContext = new MainWindowVM();
@@ -113,11 +115,16 @@ namespace RePKG.Neo {
         }
 
         private void BtnOptions_Click(object sender, RoutedEventArgs e) {
-            PopupOptions.IsOpen = !PopupOptions.IsOpen;
+            if (_isPopupAnimating) return;
+            if (PopupOptions.IsOpen)
+                ClosePopupWithAnimation();
+            else
+                OpenPopupWithAnimation();
         }
 
         private void PopupOptions_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
-            PopupOptions.IsOpen = false;
+            if (PopupOptions.IsOpen && !PopupOptions.IsMouseOver)
+                ClosePopupWithAnimation();
         }
 
         private void Window_Activated(object sender, EventArgs e) {
@@ -126,6 +133,35 @@ namespace RePKG.Neo {
 
         private void Window_Deactivated(object sender, EventArgs e) {
             LayoutRoot.BorderBrush = new SolidColorBrush(Color.FromRgb(0x87, 0x87, 0x87));
+        }
+
+        private void OpenPopupWithAnimation() {
+            if (_isPopupAnimating) return;
+            _isPopupAnimating = true;
+            PopupBorder.Opacity = 0;
+            PopupOptions.IsOpen = true;
+            var fadeIn = (Storyboard)PopupOptions.Resources["FadeInStoryboard"];
+            EventHandler handler = null;
+            handler = (s, _) => {
+                _isPopupAnimating = false;
+                fadeIn.Completed -= handler;
+            };
+            fadeIn.Completed += handler;
+            fadeIn.Begin(PopupBorder);
+        }
+
+        private void ClosePopupWithAnimation() {
+            if (_isPopupAnimating || !PopupOptions.IsOpen) return;
+            _isPopupAnimating = true;
+            var fadeOut = (Storyboard)PopupOptions.Resources["FadeOutStoryboard"];
+            EventHandler handler = null;
+            handler = (s, _) => {
+                PopupOptions.IsOpen = false;
+                _isPopupAnimating = false;
+                fadeOut.Completed -= handler;
+            };
+            fadeOut.Completed += handler;
+            fadeOut.Begin(PopupBorder);
         }
     }
 }
