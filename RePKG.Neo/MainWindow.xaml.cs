@@ -10,6 +10,7 @@
 using LazyWpf;
 using RePKG.Neo.res;
 using System.Windows;
+using System.Windows.Media;
 
 namespace RePKG.Neo {
     /// <summary>
@@ -117,6 +118,14 @@ namespace RePKG.Neo {
 
         private void PopupOptions_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
             PopupOptions.IsOpen = false;
+        }
+
+        private void Window_Activated(object sender, EventArgs e) {
+            LayoutRoot.BorderBrush = FindResource("BhPrimary") as SolidColorBrush;
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e) {
+            LayoutRoot.BorderBrush = new SolidColorBrush(Color.FromRgb(0x87, 0x87, 0x87));
         }
     }
 }

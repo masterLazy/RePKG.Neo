@@ -16,7 +16,8 @@
         Background="#eaeaea" ThemeMode="Light"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
-        StateChanged="Window_StateChanged" Closed="Window_Closed">
+        StateChanged="Window_StateChanged" Closed="Window_Closed"
+        Activated="Window_Activated" Deactivated="Window_Deactivated">
     <WindowChrome.WindowChrome>
         <WindowChrome
         x:Name="WindowChrome"

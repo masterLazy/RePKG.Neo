@@ -4,6 +4,9 @@
 		<Version>0.4.0</Version>
 		<Copyright>Copyright © NotScuffed 2025</Copyright>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\RePKG.Core\RePKG.Core.csproj" />
