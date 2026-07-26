@@ -1,30 +1,27 @@
-using System;
-using System.IO;
-using System.Text;
 using RePKG.Application.Texture.Helpers;
 using RePKG.Core.Texture;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Gif;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
-namespace RePKG.Application.Texture
-{
-    public class TexToImageConverter
-    {
-        public ImageResult ConvertToImage(ITex tex)
-        {
+namespace RePKG.Application.Texture {
+    public class TexToImageConverter {
+        public ImageResult ConvertToImage(ITex tex, MipmapFormat format, string path) {
             if (tex == null) throw new ArgumentNullException(nameof(tex));
 
-            if (tex.IsGif)
-                return ConvertToGif(tex);
-            
+            if (tex.IsMultiple)
+                return ConvertMultiple(tex, path);
+
             var sourceMipmap = tex.FirstImage.FirstMipmap;
 
-            if (tex.IsVideoTexture)
-            {
-                if (sourceMipmap.Bytes.Length < 12)
-                {
+            if (tex.IsVideoTexture) {
+                if (sourceMipmap.Bytes.Length < 12) {
                     throw new InvalidOperationException("Expected mp4 magic header");
                 }
 
@@ -32,25 +29,20 @@ namespace RePKG.Application.Texture
 
                 if (!mp4magic.Equals("ftypisom", StringComparison.OrdinalIgnoreCase)
                     && !mp4magic.Equals("ftypmsnv", StringComparison.OrdinalIgnoreCase)
-                    && !mp4magic.Equals("ftypmp42", StringComparison.OrdinalIgnoreCase))
-                {
+                    && !mp4magic.Equals("ftypmp42", StringComparison.OrdinalIgnoreCase)) {
                     throw new InvalidOperationException("Expected mp4 magic header");
                 }
-                
-                return new ImageResult
-                {
+
+                return new ImageResult {
                     Bytes = sourceMipmap.Bytes,
                     Format = MipmapFormat.VideoMp4
                 };
             }
 
-            var format = sourceMipmap.Format;
-
             if (format.IsCompressed())
                 throw new InvalidOperationException("Raw mipmap format must be uncompressed");
 
-            if (format.IsRawFormat())
-            {
+            if (format.IsRawFormat()) {
                 var image = ImageFromRawFormat(format, sourceMipmap.Bytes, sourceMipmap.Width, sourceMipmap.Height);
 
                 if (sourceMipmap.Width > tex.Header.ImageWidth ||
@@ -60,31 +52,26 @@ namespace RePKG.Application.Texture
                     sourceMipmap.Height < tex.Header.ImageHeight)
                     image.Mutate(x => x.Resize(tex.Header.ImageWidth, tex.Header.ImageHeight));
 
-                using (var memoryStream = new MemoryStream())
-                {
+                using (var memoryStream = new MemoryStream()) {
                     image.SaveAsPng(memoryStream);
 
-                    return new ImageResult
-                    {
+                    return new ImageResult {
                         Bytes = memoryStream.ToArray(),
                         Format = MipmapFormat.ImagePNG
                     };
                 }
             }
 
-            return new ImageResult
-            {
+            return new ImageResult {
                 Bytes = sourceMipmap.Bytes,
                 Format = format
             };
         }
 
-        public MipmapFormat GetConvertedFormat(ITex tex)
-        {
+        public static MipmapFormat GetConvertedFormat(ITex tex) {
             if (tex == null) throw new ArgumentNullException(nameof(tex));
 
-            if (tex.IsVideoTexture)
-            {
+            if (tex.IsVideoTexture) {
                 return MipmapFormat.VideoMp4;
             }
 
@@ -96,28 +83,22 @@ namespace RePKG.Application.Texture
             return format.IsRawFormat() ? MipmapFormat.ImagePNG : format;
         }
 
-        private static ImageResult ConvertToGif(ITex tex)
-        {
+        private static ImageResult ConvertMultiple(ITex tex, string path) {
             var frameFormat = tex.FirstImage.FirstMipmap.Format;
-
             if (!frameFormat.IsRawFormat())
                 throw new InvalidOperationException(
-                    "Only raw mipmap formats are supported right now while converting gif");
+                    "Only raw mipmap formats are supported right now while converting multi-frame image");
 
-            var image = ImageFromRawFormat(frameFormat, null,
-                tex.FrameInfoContainer.GifWidth,
-                tex.FrameInfoContainer.GifHeight);
-            
+            // Extract all frames
             var sequenceImages = new Image[tex.ImagesContainer.Images.Count];
+            var frames = new List<Image>(tex.FrameInfoContainer.Frames.Count);
 
-            for (var i = 0; i < sequenceImages.Length; i++)
-            {
+            for (var i = 0; i < sequenceImages.Length; i++) {
                 var mipmap = tex.ImagesContainer.Images[i].FirstMipmap;
                 sequenceImages[i] = ImageFromRawFormat(frameFormat, mipmap.Bytes, mipmap.Width, mipmap.Height);
             }
 
-            foreach (var frameInfo in tex.FrameInfoContainer.Frames)
-            {
+            foreach (var frameInfo in tex.FrameInfoContainer.Frames) {
                 // Frames can be turned to fit into the map so we need to compute cropping coordinates first
                 // We're keeping width and height signed for the rotation angle calculation
                 var width = frameInfo.Width != 0 ? frameInfo.Width : frameInfo.HeightX;
@@ -131,37 +112,59 @@ namespace RePKG.Application.Texture
 
                 var frame = sequenceImages[frameInfo.ImageId].Clone(
                     context => context.Crop(new Rectangle(
-                        (int) x,
-                        (int) y,
-                        (int) Math.Abs(width),
-                        (int) Math.Abs(height))
-                    ).Rotate((float) Math.Round(rotationAngle * 180 / Math.PI)));
+                        (int)x,
+                        (int)y,
+                        (int)Math.Abs(width),
+                        (int)Math.Abs(height))
+                    ).Rotate((float)Math.Round(rotationAngle * 180 / Math.PI)));
 
                 var metadata = frame.Frames.RootFrame.Metadata.GetFormatMetadata(GifFormat.Instance);
-                metadata.FrameDelay = (int) Math.Round(frameInfo.Frametime * 100.0f);
+                metadata.FrameDelay = (int)Math.Round(frameInfo.Frametime * 100.0f);
 
+                frames.Add(frame);
+            }
+
+            // Check format
+            if (frameFormat == MipmapFormat.ImageGIF) {
+                return ConvertGif(tex, frames, frameFormat);
+            }
+
+            using (var memoryStream = new MemoryStream()) {
+                var format = GetConvertedFormat(tex);
+                for (var i = 0; i < frames.Count; i++) {
+                    var outputPath = $"{path}_{i}.{format.GetFileExtension()}";
+                    frames[i].SaveAsPng(outputPath);
+                }
+            }
+            return new ImageResult {
+                Bytes = null,
+                Format = MipmapFormat.ImagePNG
+            };
+        }
+
+        private static ImageResult ConvertGif(ITex tex, List<Image> frames, MipmapFormat format) {
+            // Remove first black frame
+            frames.RemoveAt(0);
+
+            var image = ImageFromRawFormat(format, null,
+                tex.FrameInfoContainer.Width,
+                tex.FrameInfoContainer.Height);
+
+            foreach (var frame in frames) {
                 image.Frames.AddFrame(frame.Frames[0]);
             }
 
-            // Remove first black frame
-            image.Frames.RemoveFrame(0);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                image.SaveAsGif(memoryStream, new GifEncoder {ColorTableMode = GifColorTableMode.Local});
-
-                return new ImageResult
-                {
+            using (var memoryStream = new MemoryStream()) {
+                image.SaveAsGif(memoryStream, new GifEncoder { ColorTableMode = GifColorTableMode.Local });
+                return new ImageResult {
                     Bytes = memoryStream.ToArray(),
                     Format = MipmapFormat.ImageGIF
                 };
             }
         }
 
-        private static Image ImageFromRawFormat(MipmapFormat format, byte[] bytes, int width, int height)
-        {
-            switch (format)
-            {
+        private static Image ImageFromRawFormat(MipmapFormat format, byte[] bytes, int width, int height) {
+            switch (format) {
                 case MipmapFormat.R8:
                     return bytes == null
                         ? new Image<L8>(width, height)
@@ -183,9 +186,8 @@ namespace RePKG.Application.Texture
         }
     }
 
-    public class ImageResult
-    {
-        public byte[] Bytes { get; set; }
+    public class ImageResult {
+        public byte[]? Bytes { get; set; }
         public MipmapFormat Format { get; set; }
     }
 }

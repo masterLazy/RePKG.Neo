@@ -51,7 +51,7 @@ namespace RePKG.Application.Texture
             _texHeaderWriter.WriteTo(writer, tex.Header);
             _texImageContainerWriter.WriteTo(writer, tex.ImagesContainer);
 
-            if (tex.IsGif)
+            if (tex.IsMultiple)
                 _texFrameInfoContainerWriter.WriteTo(writer, tex.FrameInfoContainer);
         }
     }

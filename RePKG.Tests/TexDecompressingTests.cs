@@ -34,12 +34,12 @@ namespace RePKG.Tests
         [TestCase("V2_R8", true, null)]
         [TestCase("V2_RG88", true, null)]
         [TestCase("V2_RGBA8888N", true, null)]
-        [TestCase("V2_GIF_ROTATED_FRAMES_TEXS0001", true, TexFlags.IsGif)]
+        [TestCase("V2_GIF_ROTATED_FRAMES_TEXS0001", true, TexFlags.IsMultiple)]
         [TestCase("V3_RGBA8888_JPEG", true, null)]
         [TestCase("V3_DXT1", true, null)]
         [TestCase("V3_DXT3", true, null)]
         [TestCase("V3_DXT5", true, null)]
-        [TestCase("V3_RGBA8888_GIF_TEXS0003", true, TexFlags.IsGif)]
+        [TestCase("V3_RGBA8888_GIF_TEXS0003", true, TexFlags.IsMultiple)]
         [TestCase("V3_VIDEOTEXTURE_MP4", true, TexFlags.IsVideoTexture)]
         [TestCase("V4_PNG_FILE", true, null)]
         [TestCase("V4_DXT5", true, null)]
@@ -70,8 +70,9 @@ namespace RePKG.Tests
 
         private void ConvertToImageAndSave(ITex tex, string name)
         {
-            var resultImage = _texToImageConverter.ConvertToImage(tex);
-            
+            var resultImage = _texToImageConverter.ConvertToImage(tex, TexToImageConverter.GetConvertedFormat(tex), $"{TestHelper.BasePath}\\{OutputDirectoryName}\\{name}");
+
+
             var path = $"{TestHelper.BasePath}\\{OutputDirectoryName}\\{name}.{resultImage.Format.GetFileExtension()}";
             
             File.WriteAllBytes(path, resultImage.Bytes);

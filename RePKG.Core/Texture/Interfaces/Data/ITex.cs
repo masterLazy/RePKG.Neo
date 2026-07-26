@@ -8,7 +8,7 @@ namespace RePKG.Core.Texture
         ITexImageContainer ImagesContainer { get; set; }
         ITexFrameInfoContainer FrameInfoContainer { get; set; }
 
-        bool IsGif { get; }
+        bool IsMultiple { get; }
         bool IsVideoTexture { get; }
         ITexImage FirstImage { get; }
 

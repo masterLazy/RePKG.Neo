@@ -22,7 +22,7 @@ namespace RePKG.Application.Texture
                                      !NumberIsPowerOfTwo(tex.Header.ImageHeight)).ToString().ToLower()
             };
 
-            if (tex.IsGif)
+            if (tex.IsMultiple)
             {
                 if (tex.FrameInfoContainer == null)
                     throw new InvalidOperationException("TEX is animated but doesn't have frame info container");
@@ -33,8 +33,8 @@ namespace RePKG.Application.Texture
                     {
                         ["duration"] = 1, // not sure what this value is used for
                         ["frames"] = tex.FrameInfoContainer.Frames.Count,
-                        ["width"] = tex.FrameInfoContainer.GifWidth,
-                        ["height"] = tex.FrameInfoContainer.GifHeight
+                        ["width"] = tex.FrameInfoContainer.Width,
+                        ["height"] = tex.FrameInfoContainer.Height
                     }
                 };
             }

@@ -6,7 +6,7 @@ namespace RePKG.Core.Texture
     {
         public string Magic { get; set; }
         public IList<ITexFrameInfo> Frames { get; } = new List<ITexFrameInfo>();
-        public int GifWidth { get; set; }
-        public int GifHeight { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
     }
 }
