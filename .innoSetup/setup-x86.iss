@@ -6,7 +6,7 @@
 #define RepoDir "..\"
 
 #define MyAppName "RePKG.Neo"
-#define MyAppVersion "2.0.0"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "masterLazy"
 #define MyAppURL "https://github.com/masterLazy/RePKG.Neo"
 #define MyAppExeName "RePKG.Neo.exe"
@@ -39,7 +39,7 @@ LicenseFile={#RepoDir}LICENSE
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir={#RepoDir}.innoSetup
-OutputBaseFilename=RePKG.Neo-x86-Setup
+OutputBaseFilename=RePKG.Neo-{#MyAppVersion}-x86-Setup
 SolidCompression=yes
 WizardStyle=modern windows11
 
