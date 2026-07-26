@@ -7,7 +7,6 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace RePKG.Application.Texture {
@@ -129,13 +128,12 @@ namespace RePKG.Application.Texture {
                 return ConvertGif(tex, frames, frameFormat);
             }
 
-            using (var memoryStream = new MemoryStream()) {
-                var format = GetConvertedFormat(tex);
-                for (var i = 0; i < frames.Count; i++) {
-                    var outputPath = $"{path}_{i}.{format.GetFileExtension()}";
-                    frames[i].SaveAsPng(outputPath);
-                }
+            var format = GetConvertedFormat(tex);
+            for (var i = 0; i < frames.Count; i++) {
+                var outputPath = $"{path}_{i}.{format.GetFileExtension()}";
+                frames[i].SaveAsPng(outputPath);
             }
+
             return new ImageResult {
                 Bytes = null,
                 Format = MipmapFormat.ImagePNG

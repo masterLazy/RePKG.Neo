@@ -196,4 +196,7 @@
   <data name="Msg_DropWhenRunning" xml:space="preserve">
     <value>请等待当前任务完成后拖拽。</value>
   </data>
+  <data name="Chk_NoRawTex" xml:space="preserve">
+    <value>不保存原始 TEX 文件</value>
+  </data>
 </root>

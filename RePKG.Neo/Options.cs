@@ -16,6 +16,7 @@ namespace RePKG.Neo {
         public string Version { get; set; } = CurrentVersion;
 
         public bool NoTexConvert { get; set; } = false;
+        public bool NoRawTex { get; set; } = true;
         public bool CopyProject { get; set; } = false;
         public bool AutoExtract { get; set; } = false;
         public bool SingleDir { get; set; } = false;

@@ -71,9 +71,11 @@ namespace RePKG.Neo {
                 OutputDirectory = SavePath,
                 Overwrite = true,
                 NoTexConvert = options.NoTexConvert,
+                NoRawTex = options.NoRawTex,
                 CopyProject = options.CopyProject,
                 SingleDir = options.SingleDir,
             };
+
             // Start extractoion
             bool result = false;
             try {
@@ -86,6 +88,7 @@ namespace RePKG.Neo {
                 Text = Lang.Item_ExtractFailed;
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
             }
+
             // Post logic
             if (Helper.GetDirectorySize(SavePath) == 0) result = false;
             if (result) {

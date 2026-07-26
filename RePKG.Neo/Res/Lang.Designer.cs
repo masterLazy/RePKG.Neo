@@ -160,6 +160,15 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   查找类似 Don&apos;t save TEX files 的本地化字符串。
+        /// </summary>
+        public static string Chk_NoRawTex {
+            get {
+                return ResourceManager.GetString("Chk_NoRawTex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Don&apos;t convert TEX to images 的本地化字符串。
         /// </summary>
         public static string Chk_NoTexConvert {

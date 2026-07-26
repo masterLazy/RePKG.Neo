@@ -136,6 +136,10 @@
                                     <TextBlock Text="{x:Static res:Lang.Chk_NoTexConvert}"/>
                                 </CheckBox>
 
+                                <CheckBox IsChecked="{Binding Options.NoRawTex}">
+                                    <TextBlock Text="{x:Static res:Lang.Chk_NoRawTex}"/>
+                                </CheckBox>
+
                                 <CheckBox IsChecked="{Binding Options.SingleDir}">
                                     <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}"/>
                                 </CheckBox>

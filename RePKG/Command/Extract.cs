@@ -304,24 +304,26 @@ namespace RePKG.Command {
             if (Program.Closing)
                 Environment.Exit(0);
 
-            // save raw
+            // Prepare directory
             var filePathWithoutExtension = _options.SingleDir
                 ? Path.Combine(outputDirectory, entry.Name)
                 : Path.Combine(outputDirectory, entry.DirectoryPath, entry.Name);
 
-            var filePath = filePathWithoutExtension + entry.Extension;
-
             Directory.CreateDirectory(Path.GetDirectoryName(filePathWithoutExtension));
 
-            if (!_options.Overwrite && File.Exists(filePath))
-                Console.WriteLine($"* Skipping, already exists: {filePath}");
-            else {
-                Console.WriteLine($"* Extracting: {entry.FullPath}");
+            // Save raw
+            if (!_options.NoRawTex) {
+                var filePath = filePathWithoutExtension + entry.Extension;
+                if (!_options.Overwrite && File.Exists(filePath))
+                    Console.WriteLine($"* Skipping, already exists: {filePath}");
+                else {
+                    Console.WriteLine($"* Extracting: {entry.FullPath}");
 
-                File.WriteAllBytes(filePath, entry.Bytes);
+                    File.WriteAllBytes(filePath, entry.Bytes);
+                }
             }
 
-            // convert and save
+            // Convert and save
             if (_options.NoTexConvert || entry.Type != EntryType.Tex)
                 return;
 
@@ -444,5 +446,8 @@ namespace RePKG.Command {
 
         [Value(0, Required = true, HelpText = "Path to file/directory", MetaName = "Input")]
         public string Input { get; set; }
+
+        [Option("no-raw-tex", HelpText = "Don't save raw TEX files while extracting PKG")]
+        public bool NoRawTex { get; set; }
     }
 }

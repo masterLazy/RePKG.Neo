@@ -196,4 +196,7 @@ Please check if the input file is valid.</value>
   <data name="Msg_DropWhenRunning" xml:space="preserve">
     <value>Please drop after current tasks are completed.</value>
   </data>
+  <data name="Chk_NoRawTex" xml:space="preserve">
+    <value>Don't save TEX files</value>
+  </data>
 </root>
