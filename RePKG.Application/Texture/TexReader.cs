@@ -52,7 +52,7 @@ namespace RePKG.Application.Texture
             tex.Header = _texHeaderReader.ReadFrom(reader);
             tex.ImagesContainer = _texImageContainerReader.ReadFrom(reader, tex.Header.Format);
 
-            if (tex.IsGif)
+            if (tex.IsMultiple)
                 tex.FrameInfoContainer = _texFrameInfoContainerReader.ReadFrom(reader);
 
             return tex;

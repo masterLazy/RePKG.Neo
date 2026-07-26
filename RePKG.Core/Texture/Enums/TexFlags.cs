@@ -8,7 +8,7 @@ namespace RePKG.Core.Texture
         None = 0,
         NoInterpolation = 1,
         ClampUVs = 2,
-        IsGif = 4,
+        IsMultiple = 4,
         // Placeholders
         Unk3 = 8,
         Unk4 = 16,

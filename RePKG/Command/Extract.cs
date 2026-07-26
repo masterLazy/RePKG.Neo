@@ -13,10 +13,8 @@ using RePKG.Core.Package.Enums;
 using RePKG.Core.Package.Interfaces;
 using RePKG.Core.Texture;
 
-namespace RePKG.Command
-{
-    public static class Extract
-    {
+namespace RePKG.Command {
+    public static class Extract {
         // *
         private static IProgress<double> _progress;
         private static int _totalWork;
@@ -25,15 +23,14 @@ namespace RePKG.Command
         private static ExtractOptions _options;
         private static string[] _skipExtArray;
         private static string[] _onlyExtArray;
-        private static readonly string[] ProjectFiles = {"project.json"};
+        private static readonly string[] ProjectFiles = { "project.json" };
 
         private static readonly ITexReader _texReader;
         private static readonly ITexJsonInfoGenerator _texJsonInfoGenerator;
         private static readonly IPackageReader _packageReader;
         private static readonly TexToImageConverter _texToImageConverter;
 
-        static Extract()
-        {
+        static Extract() {
             _texReader = TexReader.Default;
             _texJsonInfoGenerator = new TexJsonInfoGenerator();
             _texToImageConverter = new TexToImageConverter();
@@ -44,15 +41,13 @@ namespace RePKG.Command
         // *
         public static bool Action(ExtractOptions options) => Action(options, null);
 
-        public static bool Action(ExtractOptions options, IProgress<double> progress)
-        {
+        public static bool Action(ExtractOptions options, IProgress<double> progress) {
             _options = options;
             _progress = progress;
             _processed = 0;
             _totalWork = CountTotalWork();
 
-            if (string.IsNullOrEmpty(options.OutputDirectory))
-            {
+            if (string.IsNullOrEmpty(options.OutputDirectory)) {
                 options.OutputDirectory = Directory.GetCurrentDirectory();
             }
 
@@ -65,10 +60,8 @@ namespace RePKG.Command
             var fileInfo = new FileInfo(options.Input);
             var directoryInfo = new DirectoryInfo(options.Input);
 
-            if (!fileInfo.Exists)
-            {
-                if (directoryInfo.Exists)
-                {
+            if (!fileInfo.Exists) {
+                if (directoryInfo.Exists) {
                     if (_options.TexDirectory)
                         ExtractTexDirectory(directoryInfo);
                     else
@@ -96,33 +89,25 @@ namespace RePKG.Command
         }
 
         // * 
-        private static int CountTotalWork()
-        {
+        private static int CountTotalWork() {
             int total = 0;
             var input = _options.Input;
             var fileInfo = new FileInfo(input);
             var directoryInfo = new DirectoryInfo(input);
 
-            if (!fileInfo.Exists)
-            {
-                if (directoryInfo.Exists)
-                {
-                    if (_options.TexDirectory)
-                    {
+            if (!fileInfo.Exists) {
+                if (directoryInfo.Exists) {
+                    if (_options.TexDirectory) {
                         // TEX
                         var flags = _options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
                         total = directoryInfo.EnumerateFiles("*.tex", flags).Count();
-                    }
-                    else
-                    {
+                    } else {
                         // PKG
                         var flags = _options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
                         var pkgFiles = directoryInfo.EnumerateFiles("*.pkg", flags).ToList();
 
-                        foreach (var pkgFile in pkgFiles)
-                        {
-                            using (var reader = new BinaryReader(pkgFile.Open(FileMode.Open, FileAccess.Read, FileShare.Read)))
-                            {
+                        foreach (var pkgFile in pkgFiles) {
+                            using (var reader = new BinaryReader(pkgFile.Open(FileMode.Open, FileAccess.Read, FileShare.Read))) {
                                 var package = _packageReader.ReadFrom(reader);
                                 var entries = FilterEntries(package.Entries);
                                 total += entries.Count();
@@ -134,27 +119,21 @@ namespace RePKG.Command
             }
 
             // Single file
-            if (fileInfo.Extension.Equals(".pkg", StringComparison.OrdinalIgnoreCase))
-            {
-                using (var reader = new BinaryReader(fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read)))
-                {
+            if (fileInfo.Extension.Equals(".pkg", StringComparison.OrdinalIgnoreCase)) {
+                using (var reader = new BinaryReader(fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read))) {
                     var package = _packageReader.ReadFrom(reader);
                     var entries = FilterEntries(package.Entries);
                     total = entries.Count();
                 }
-            }
-            else if (fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase))
-            {
+            } else if (fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase)) {
                 total = 1; // * Report progress
             }
 
             return total;
         }
 
-        private static string[] NormalizeExtensions(string[] array)
-        {
-            for (int i = 0; i < array.Length; i++)
-            {
+        private static string[] NormalizeExtensions(string[] array) {
+            for (int i = 0; i < array.Length; i++) {
                 if (array[i].StartsWith("."))
                     continue;
                 array[i] = '.' + array[i];
@@ -163,8 +142,7 @@ namespace RePKG.Command
             return array;
         }
 
-        private static void ExtractTexDirectory(DirectoryInfo directoryInfo)
-        {
+        private static void ExtractTexDirectory(DirectoryInfo directoryInfo) {
             var flags = SearchOption.TopDirectoryOnly;
 
             if (_options.Recursive)
@@ -172,13 +150,11 @@ namespace RePKG.Command
 
             Directory.CreateDirectory(_options.OutputDirectory);
 
-            foreach (var fileInfo in directoryInfo.EnumerateFiles("*.tex", flags))
-            {
+            foreach (var fileInfo in directoryInfo.EnumerateFiles("*.tex", flags)) {
                 if (!fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                try
-                {
+                try {
                     var tex = LoadTex(File.ReadAllBytes(fileInfo.FullName), fileInfo.FullName);
 
                     if (tex == null)
@@ -191,8 +167,7 @@ namespace RePKG.Command
                     var jsonInfo = _texJsonInfoGenerator.GenerateInfo(tex);
                     File.WriteAllText($"{filePath}.tex-json", jsonInfo);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Console.WriteLine("Failed to write texture");
                     Console.WriteLine(e);
                 }
@@ -203,15 +178,12 @@ namespace RePKG.Command
             }
         }
 
-        private static void ExtractPkgDirectory(DirectoryInfo directoryInfo)
-        {
+        private static void ExtractPkgDirectory(DirectoryInfo directoryInfo) {
             var rootDirectoryLength = directoryInfo.FullName.Length + 1;
 
-            if (_options.Recursive)
-            {
+            if (_options.Recursive) {
                 foreach (var file in directoryInfo.EnumerateFiles("*.pkg", SearchOption.AllDirectories)
-                    .Concat(directoryInfo.EnumerateFiles("*.mpkg", SearchOption.AllDirectories)))
-                {
+                    .Concat(directoryInfo.EnumerateFiles("*.mpkg", SearchOption.AllDirectories))) {
                     if (file.Directory == null || file.Directory.FullName.Length < rootDirectoryLength)
                         ExtractPkg(file);
                     else
@@ -221,32 +193,27 @@ namespace RePKG.Command
                 return;
             }
 
-            foreach (var directory in directoryInfo.EnumerateDirectories())
-            {
+            foreach (var directory in directoryInfo.EnumerateDirectories()) {
                 foreach (var file in directory.EnumerateFiles("*.pkg")
-                    .Concat(directory.EnumerateFiles("*.mpkg")))
-                {
+                    .Concat(directory.EnumerateFiles("*.mpkg"))) {
                     ExtractPkg(file, true, directory.FullName.Substring(rootDirectoryLength));
                 }
             }
         }
 
-        private static void ExtractFile(FileInfo fileInfo)
-        {
+        private static void ExtractFile(FileInfo fileInfo) {
             Directory.CreateDirectory(_options.OutputDirectory);
 
-            if (fileInfo.Extension.Equals(".pkg", StringComparison.OrdinalIgnoreCase) || 
+            if (fileInfo.Extension.Equals(".pkg", StringComparison.OrdinalIgnoreCase) ||
                 fileInfo.Extension.Equals(".mpkg", StringComparison.OrdinalIgnoreCase))
                 ExtractPkg(fileInfo);
-            else if (fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase))
-            {
+            else if (fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase)) {
                 var tex = LoadTex(File.ReadAllBytes(fileInfo.FullName), fileInfo.FullName);
 
                 if (tex == null)
                     return;
 
-                try
-                {
+                try {
                     var filePath = Path.Combine(_options.OutputDirectory,
                         Path.GetFileNameWithoutExtension(fileInfo.Name));
 
@@ -254,28 +221,24 @@ namespace RePKG.Command
                     var jsonInfo = _texJsonInfoGenerator.GenerateInfo(tex);
                     File.WriteAllText($"{filePath}.tex-json", jsonInfo);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Console.WriteLine(e);
                 }
 
                 // * Report progress
                 _processed++;
                 _progress?.Report((double)_processed / _totalWork);
-            }
-            else
+            } else
                 Console.WriteLine($"Unrecognized file extension: {fileInfo.Extension}");
         }
 
-        private static void ExtractPkg(FileInfo file, bool appendFolderName = false, string defaultProjectName = "")
-        {
+        private static void ExtractPkg(FileInfo file, bool appendFolderName = false, string defaultProjectName = "") {
             Console.WriteLine($"\r\n### Extracting package: {file.FullName}");
 
             // Load package
             Package package;
 
-            using (var reader = new BinaryReader(file.Open(FileMode.Open, FileAccess.Read, FileShare.Read)))
-            {
+            using (var reader = new BinaryReader(file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))) {
                 package = _packageReader.ReadFrom(reader);
             }
 
@@ -289,8 +252,7 @@ namespace RePKG.Command
 
             // Extract package entries
             var entries = FilterEntries(package.Entries);
-            foreach (var entry in entries)
-            {
+            foreach (var entry in entries) {
                 ExtractEntry(entry, ref outputDirectory);
                 // * Report progress
                 _processed++;
@@ -308,33 +270,27 @@ namespace RePKG.Command
             CopyFiles(files, outputDirectory);
         }
 
-        private static void CopyFiles(IEnumerable<FileInfo> files, string outputDirectory)
-        {
-            foreach (var file in files)
-            {
+        private static void CopyFiles(IEnumerable<FileInfo> files, string outputDirectory) {
+            foreach (var file in files) {
                 var outputPath = Path.Combine(outputDirectory, file.Name);
 
                 if (!_options.Overwrite && File.Exists(outputPath))
                     Console.WriteLine($"* Skipping, already exists: {outputPath}");
-                else
-                {
+                else {
                     File.Copy(file.FullName, outputPath, true);
                     Console.WriteLine($"* Copying: {file.FullName}");
                 }
             }
         }
 
-        private static IEnumerable<PackageEntry> FilterEntries(IEnumerable<PackageEntry> entries)
-        {
-            if (!string.IsNullOrEmpty(_options.IgnoreExts))
-            {
+        private static IEnumerable<PackageEntry> FilterEntries(IEnumerable<PackageEntry> entries) {
+            if (!string.IsNullOrEmpty(_options.IgnoreExts)) {
                 return from entry in entries
                        where !_skipExtArray.Any(s => entry.FullPath.EndsWith(s, StringComparison.OrdinalIgnoreCase))
                        select entry;
             }
 
-            if (!string.IsNullOrEmpty(_options.OnlyExts))
-            {
+            if (!string.IsNullOrEmpty(_options.OnlyExts)) {
                 return from entry in entries
                        where _onlyExtArray.Any(s => entry.FullPath.EndsWith(s, StringComparison.OrdinalIgnoreCase))
                        select entry;
@@ -344,8 +300,7 @@ namespace RePKG.Command
         }
 
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        private static void ExtractEntry(PackageEntry entry, ref string outputDirectory)
-        {
+        private static void ExtractEntry(PackageEntry entry, ref string outputDirectory) {
             if (Program.Closing)
                 Environment.Exit(0);
 
@@ -360,8 +315,7 @@ namespace RePKG.Command
 
             if (!_options.Overwrite && File.Exists(filePath))
                 Console.WriteLine($"* Skipping, already exists: {filePath}");
-            else
-            {
+            else {
                 Console.WriteLine($"* Extracting: {entry.FullPath}");
 
                 File.WriteAllBytes(filePath, entry.Bytes);
@@ -376,21 +330,18 @@ namespace RePKG.Command
             if (tex == null)
                 return;
 
-            try
-            {
+            try {
                 ConvertToImageAndSave(tex, filePathWithoutExtension, _options.Overwrite);
                 var jsonInfo = _texJsonInfoGenerator.GenerateInfo(tex);
                 File.WriteAllText($"{filePathWithoutExtension}.tex-json", jsonInfo);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine("Failed to write texture");
                 Console.WriteLine(e);
             }
         }
 
-        private static void GetProjectInfo(FileInfo packageFile, ref string title, ref string preview)
-        {
+        private static void GetProjectInfo(FileInfo packageFile, ref string title, ref string preview) {
             var directory = packageFile.Directory;
             if (directory == null)
                 return;
@@ -405,18 +356,15 @@ namespace RePKG.Command
         }
 
         private static void GetProjectFolderNameAndPreviewImage(FileInfo packageFile, string defaultProjectName,
-            out string outputDirectory, out string preview)
-        {
+            out string outputDirectory, out string preview) {
             preview = string.Empty;
 
-            if (_options.SingleDir)
-            {
+            if (_options.SingleDir) {
                 outputDirectory = _options.OutputDirectory;
                 return;
             }
 
-            if (_options.UseName)
-            {
+            if (_options.UseName) {
                 var name = defaultProjectName;
                 GetProjectInfo(packageFile, ref name, ref preview);
                 outputDirectory = Path.Combine(_options.OutputDirectory, name.GetSafeFilename());
@@ -426,22 +374,18 @@ namespace RePKG.Command
             outputDirectory = Path.Combine(_options.OutputDirectory, defaultProjectName);
         }
 
-        private static ITex LoadTex(byte[] bytes, string name)
-        {
+        private static ITex LoadTex(byte[] bytes, string name) {
             if (Program.Closing)
                 Environment.Exit(0);
 
             Console.WriteLine("* Reading: {0}", name);
 
-            try
-            {
-                using (var reader = new BinaryReader(new MemoryStream(bytes), Encoding.UTF8))
-                {
+            try {
+                using (var reader = new BinaryReader(new MemoryStream(bytes), Encoding.UTF8)) {
                     return _texReader.ReadFrom(reader);
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine("Failed to read texture");
                 Console.WriteLine(e);
             }
@@ -449,23 +393,22 @@ namespace RePKG.Command
             return null;
         }
 
-        private static void ConvertToImageAndSave(ITex tex, string path, bool overwrite)
-        {
-            var format = _texToImageConverter.GetConvertedFormat(tex);
+        private static void ConvertToImageAndSave(ITex tex, string path, bool overwrite) {
+            var format = TexToImageConverter.GetConvertedFormat(tex);
             var outputPath = $"{path}.{format.GetFileExtension()}";
 
             if (!overwrite && File.Exists(outputPath))
                 return;
 
-            var resultImage = _texToImageConverter.ConvertToImage(tex);
+            var resultImage = _texToImageConverter.ConvertToImage(tex, format, path);
 
-            File.WriteAllBytes(outputPath, resultImage.Bytes);
+            if (resultImage.Bytes != null)
+                File.WriteAllBytes(outputPath, resultImage.Bytes);
         }
     }
 
     [Verb("extract", HelpText = "Extract PKG/Convert TEX into image.")]
-    public class ExtractOptions
-    {
+    public class ExtractOptions {
         [Option('o', "output", Required = false, HelpText = "Output directory", Default = "./output")]
         public string OutputDirectory { get; set; }
 
