@@ -39,7 +39,7 @@ namespace RePKG.Application.Package
 
             for (var i = 1; i <= entryCount; i++)
             {
-                var fullPath = reader.ReadStringI32Size(maxLength: 255);
+                var fullPath = reader.ReadStringI32Size();
 
                 list.Add(new PackageEntry
                 {
