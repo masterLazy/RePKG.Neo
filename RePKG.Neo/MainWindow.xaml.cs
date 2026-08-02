@@ -129,14 +129,6 @@ namespace RePKG.Neo {
                 ClosePopupWithAnimation();
         }
 
-        private void Window_Activated(object sender, EventArgs e) {
-            LayoutRoot.BorderBrush = FindResource("BhPrimary") as SolidColorBrush;
-        }
-
-        private void Window_Deactivated(object sender, EventArgs e) {
-            LayoutRoot.BorderBrush = new SolidColorBrush(Color.FromRgb(0x87, 0x87, 0x87));
-        }
-
         private void OpenPopupWithAnimation() {
             if (_isPopupAnimating) return;
             _isPopupAnimating = true;

@@ -13,18 +13,17 @@
         Title="RePKG.Neo" 
         Height="550" Width="800" FontSize="13"
         MinHeight="550" MinWidth="800"
-        Background="#eaeaea" ThemeMode="Light"
+        Background="#f0f0f0" ThemeMode="Light"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
-        StateChanged="Window_StateChanged" Closed="Window_Closed"
-        Activated="Window_Activated" Deactivated="Window_Deactivated">
+        StateChanged="Window_StateChanged" Closed="Window_Closed">
     <WindowChrome.WindowChrome>
         <WindowChrome
         x:Name="WindowChrome"
         CaptionHeight="36"
         UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
-    <Border BorderThickness="1" BorderBrush="{StaticResource BhPrimary}" x:Name="LayoutRoot">
+    <Border BorderThickness="1" BorderBrush="#878787" x:Name="LayoutRoot">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -53,8 +52,8 @@
                 </TextBlock>
             </Grid>
             <!--Top panel-->
-            <DockPanel Grid.Row="1" Margin="10 5 10 8">
-                <DockPanel DockPanel.Dock="Top" Margin="0 0 0 5" LastChildFill="False">
+            <DockPanel Grid.Row="1" Margin="12 6 12 12">
+                <DockPanel DockPanel.Dock="Top" Margin="0 0 0 12" LastChildFill="False">
                     <DockPanel.Resources>
                         <ResourceDictionary>
                             <Style TargetType="lazy:Button">
