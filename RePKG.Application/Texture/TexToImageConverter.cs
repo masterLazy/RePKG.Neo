@@ -8,14 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace RePKG.Application.Texture {
     public class TexToImageConverter {
-        public ImageResult[] ConvertToImage(ITex tex, MipmapFormat format, IExtractProgress ep) {
+        public ImageResult[] ConvertToImage(ITex tex, MipmapFormat format, IExtractProgress ep, CancellationToken cancellationToken = default) {
             ArgumentNullException.ThrowIfNull(tex);
 
             if (tex.IsMultiple)
-                return ConvertMultiple(tex, ep);
+                return ConvertMultiple(tex, ep, cancellationToken);
 
             var sourceMipmap = tex.FirstImage.FirstMipmap;
 
@@ -59,6 +60,8 @@ namespace RePKG.Application.Texture {
                     sourceMipmap.Height < tex.Header.ImageHeight)
                     image.Mutate(x => x.Resize(tex.Header.ImageWidth, tex.Header.ImageHeight));
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 using var memoryStream = new MemoryStream();
                 if (!ep.IsDryRunning) image.SaveAsPng(memoryStream);
 
@@ -91,7 +94,7 @@ namespace RePKG.Application.Texture {
             return format.IsRawFormat() ? MipmapFormat.ImagePNG : format;
         }
 
-        private static ImageResult[] ConvertMultiple(ITex tex, IExtractProgress ep) {
+        private static ImageResult[] ConvertMultiple(ITex tex, IExtractProgress ep, CancellationToken cancellationToken) {
             var frameFormat = tex.FirstImage.FirstMipmap.Format;
             if (!frameFormat.IsRawFormat())
                 throw new InvalidOperationException(
@@ -109,11 +112,13 @@ namespace RePKG.Application.Texture {
             var frames = new List<Image>(tex.FrameInfoContainer.Frames.Count);
 
             for (var i = 0; i < sequenceImages.Length; i++) {
+                cancellationToken.ThrowIfCancellationRequested();
                 var mipmap = tex.ImagesContainer.Images[i].FirstMipmap;
                 sequenceImages[i] = ImageFromRawFormat(frameFormat, mipmap.Bytes, mipmap.Width, mipmap.Height);
             }
 
             foreach (var frameInfo in tex.FrameInfoContainer.Frames) {
+                cancellationToken.ThrowIfCancellationRequested();
                 // Frames can be turned to fit into the map so we need to compute cropping coordinates first
                 // We're keeping width and height signed for the rotation angle calculation
                 var width = frameInfo.Width != 0 ? frameInfo.Width : frameInfo.HeightX;
@@ -141,11 +146,12 @@ namespace RePKG.Application.Texture {
 
             // Check format
             if (frameFormat == MipmapFormat.ImageGIF) {
-                return ConvertGif(tex, frames, frameFormat, ep);
+                return ConvertGif(tex, frames, frameFormat, ep, cancellationToken);
             }
 
             var result = new ImageResult[frames.Count];
             for (var i = 0; i < frames.Count; i++) {
+                cancellationToken.ThrowIfCancellationRequested();
                 using var memoryStream = new MemoryStream();
                 frames[i].SaveAsPng(memoryStream);
                 result[i] = new ImageResult() {
@@ -158,7 +164,7 @@ namespace RePKG.Application.Texture {
             return result;
         }
 
-        private static ImageResult[] ConvertGif(ITex tex, List<Image> frames, MipmapFormat format, IExtractProgress ep) {
+        private static ImageResult[] ConvertGif(ITex tex, List<Image> frames, MipmapFormat format, IExtractProgress ep, CancellationToken cancellationToken) {
             // Remove first black frame
             frames.RemoveAt(0);
 
@@ -167,6 +173,7 @@ namespace RePKG.Application.Texture {
                 tex.FrameInfoContainer.Height);
 
             foreach (var frame in frames) {
+                cancellationToken.ThrowIfCancellationRequested();
                 image.Frames.AddFrame(frame.Frames[0]);
             }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using CommandLine;
 using RePKG.Command;
 
@@ -7,6 +8,8 @@ namespace RePKG
     internal class Program
     {
         public static bool Closing;
+
+        private static readonly CancellationTokenSource _cts = new();
 
         private static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace RePKG
             }
 
             Parser.Default.ParseArguments<ExtractOptions, InfoOptions>(args)
-                .WithParsed<ExtractOptions>(o => Extract.Action(o))
+                .WithParsed<ExtractOptions>(o => RunExtract(o))
                 .WithParsed<InfoOptions>(o => Info.Action(o));
         }
 
@@ -27,7 +30,20 @@ namespace RePKG
         {
             Closing = true;
             e.Cancel = true;
-            Console.WriteLine("Terminating...");
+            _cts.Cancel();
+            Console.WriteLine("Cancelling...");
+        }
+
+        private static void RunExtract(ExtractOptions o)
+        {
+            try
+            {
+                Extract.Action(o, null, _cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Extraction cancelled.");
+            }
         }
 
         private static void InteractiveConsole()
@@ -42,7 +58,7 @@ namespace RePKG
                 var interactiveArgs = line.SplitArguments();
 
                 Parser.Default.ParseArguments<ExtractOptions, InfoOptions>(interactiveArgs)
-                    .WithParsed<ExtractOptions>(o => Extract.Action(o))
+                    .WithParsed<ExtractOptions>(o => RunExtract(o))
                     .WithParsed<InfoOptions>(o => Info.Action(o));
             }
         }

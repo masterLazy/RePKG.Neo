@@ -97,7 +97,7 @@ namespace RePKG.Neo {
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e) {
-            DataCtx.Stopping = true;
+            DataCtx.Cancel();
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e) {

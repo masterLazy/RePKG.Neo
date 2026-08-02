@@ -24,7 +24,7 @@ namespace RePKG.Neo {
         [ObservableProperty] bool _notRunning = true;
 
         private HashSet<string> _itemPaths = [];
-        public bool Stopping { get; set; }
+        private CancellationTokenSource? _cts;
 
         private readonly MbService _mbService;
 
@@ -77,28 +77,39 @@ namespace RePKG.Neo {
             _itemPaths.Clear();
         }
 
-        public async void StartExtract() {
+        public void StartExtract() {
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+            StartExtract(_cts.Token);
+        }
+
+        public void Cancel() {
+            _cts?.Cancel();
+        }
+
+        public async void StartExtract(CancellationToken token) {
             bool retrySuccess = false;
-            if (HasSuccess()) {
+            if (HasSuccess(token)) {
                 var result = _mbService.ShowDialog(Lang.Msg_ExtractSucceeded, Lang.Msg_Confirm, option: MbOpt.YesNo, icon: MbIco.Info);
                 if (result == MbBtn.Yes) retrySuccess = true;
                 else if (result == MbBtn.No) retrySuccess = false;
                 else return;
             }
             IsRunning = true;
-            Stopping = false;
             foreach (var item in Items) {
-                if (Stopping) break;
+                if (token.IsCancellationRequested) break;
                 if (item.State == Item.EState.Success && !retrySuccess) continue;
-                await item.Extract(Options, _mbService);
+                await item.Extract(Options, _mbService, token);
             }
             IsRunning = false;
-            Stopping = false;
+
+            _cts?.Dispose();
+            _cts = null;
         }
 
-        public bool HasSuccess() {
+        public bool HasSuccess(CancellationToken token) {
             foreach (var item in Items) {
-                if (Stopping) break;
+                if (token.IsCancellationRequested) break;
                 if (item.State == Item.EState.Success) return true;
             }
             return false;

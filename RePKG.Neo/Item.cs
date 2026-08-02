@@ -60,7 +60,7 @@ namespace RePKG.Neo {
             return $"Item{{path={FilePath}, title={Title}}}";
         }
 
-        public async Task Extract(Options options, MbService mbService) {
+        public async Task Extract(Options options, MbService mbService, CancellationToken token) {
             Log.Info($"======== Extracting {this} ========");
             if (!File.Exists(FilePath)) {
                 State = EState.Fail;
@@ -100,7 +100,11 @@ namespace RePKG.Neo {
             // Dry running
             isDryRunning = true;
             Log.Info("Dry running");
-            bool result = await TryExtractAsync(extractOptions, mbService, true);
+            bool result = await TryExtractAsync(extractOptions, mbService, token, true);
+            if (token.IsCancellationRequested) {
+                ResetToPending();
+                return;
+            }
             if (!result) {
                 State = EState.Fail;
                 Text = Lang.Item_ExtractFailed;
@@ -113,8 +117,13 @@ namespace RePKG.Neo {
             _progress.Report(0);
             isDryRunning = false;
             Log.Info("Wet running");
-            result = await TryExtractAsync(extractOptions, mbService);
+            result = await TryExtractAsync(extractOptions, mbService, token);
             if (Helper.GetDirectorySize(SavePath) == 0) result = false;
+
+            if (token.IsCancellationRequested) {
+                ResetToPending();
+                return;
+            }
 
             // Post logic
             if (result) {
@@ -130,10 +139,22 @@ namespace RePKG.Neo {
             _progress = null;
         }
 
-        private async Task<bool> TryExtractAsync(ExtractOptions extractOptions, MbService mbService, bool isDryRunning = false) {
+        private void ResetToPending() {
+            State = EState.Pending;
+            Text = "";
+            TextBrush = null;
+            Percent = 0;
+            _progress = null;
+        }
+
+        private async Task<bool> TryExtractAsync(ExtractOptions extractOptions, MbService mbService, CancellationToken token, bool isDryRunning = false) {
             bool result = false;
             try {
-                result = await Task.Run(() => Command.Extract.Action(extractOptions, _progress, isDryRunning));
+                result = await Task.Run(() => Command.Extract.Action(extractOptions, _progress, token, isDryRunning), token);
+            }
+            catch (OperationCanceledException) {
+                Log.Info($"Extraction cancelled: {this}");
+                result = false;
             }
             catch (Exception e) {
                 var msg = string.Format(Lang.Msg_ExtractError, e.Message);

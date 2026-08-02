@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using CommandLine;
 using Newtonsoft.Json;
 using RePKG.Application.Package;
@@ -21,6 +22,13 @@ namespace RePKG.Command {
         public static bool IsDryRunning { get; private set; }
         public static void Forward(int count = 1) {
             _processed += count; _progress?.Report(_processed);
+        }
+
+        private static CancellationToken? _token;
+
+        private static void ThrowIfCancellationRequested() {
+            if (_token is { IsCancellationRequested: true })
+                _token.Value.ThrowIfCancellationRequested();
         }
 
         private static ExtractOptions _options;
@@ -42,51 +50,55 @@ namespace RePKG.Command {
         }
 
         // *
-        public static bool Action(ExtractOptions options) => Action(options, null);
+        public static bool Action(ExtractOptions options) => Action(options, null, null);
 
-        public static bool Action(ExtractOptions options, IProgress<int> progress, bool isDryRunning = false) {
+        public static bool Action(ExtractOptions options, IProgress<int> progress, CancellationToken? token, bool isDryRunning = false) {
             _options = options;
             _progress = progress;
-            IsDryRunning = isDryRunning;
             _processed = 0;
+            _token = token;
+            IsDryRunning = isDryRunning;
 
-            if (string.IsNullOrEmpty(options.OutputDirectory)) {
-                options.OutputDirectory = Directory.GetCurrentDirectory();
-            }
-
-            if (!string.IsNullOrEmpty(_options.IgnoreExts))
-                _skipExtArray = NormalizeExtensions(_options.IgnoreExts.Split(','));
-
-            if (!string.IsNullOrEmpty(_options.OnlyExts))
-                _onlyExtArray = NormalizeExtensions(_options.OnlyExts.Split(','));
-
-            var fileInfo = new FileInfo(options.Input);
-            var directoryInfo = new DirectoryInfo(options.Input);
-
-            if (!fileInfo.Exists) {
-                if (directoryInfo.Exists) {
-                    if (_options.TexDirectory)
-                        ExtractTexDirectory(directoryInfo);
-                    else
-                        ExtractPkgDirectory(directoryInfo);
-
-                    Console.WriteLine("Done");
-                    
-                    _progress = null;
-                    return true;
+            try {
+                if (string.IsNullOrEmpty(options.OutputDirectory)) {
+                    options.OutputDirectory = Directory.GetCurrentDirectory();
                 }
 
-                Console.WriteLine("Input file not found");
-                Console.WriteLine(options.Input);
-                _progress = null;
-                return false;
-            }
+                if (!string.IsNullOrEmpty(_options.IgnoreExts))
+                    _skipExtArray = NormalizeExtensions(_options.IgnoreExts.Split(','));
 
-            ExtractFile(fileInfo);
-            Console.WriteLine("Done");
-            
-            _progress = null;
-            return true;
+                if (!string.IsNullOrEmpty(_options.OnlyExts))
+                    _onlyExtArray = NormalizeExtensions(_options.OnlyExts.Split(','));
+
+                ThrowIfCancellationRequested();
+
+                var fileInfo = new FileInfo(options.Input);
+                var directoryInfo = new DirectoryInfo(options.Input);
+
+                if (!fileInfo.Exists) {
+                    if (directoryInfo.Exists) {
+                        if (_options.TexDirectory)
+                            ExtractTexDirectory(directoryInfo);
+                        else
+                            ExtractPkgDirectory(directoryInfo);
+
+                        Console.WriteLine("Done");
+                        return true;
+                    }
+
+                    Console.WriteLine("Input file not found");
+                    Console.WriteLine(options.Input);
+                    return false;
+                }
+
+                ExtractFile(fileInfo);
+                Console.WriteLine("Done");
+                return true;
+            }
+            finally {
+                _progress = null;
+                _token = null;
+            }
         }
 
         private static string[] NormalizeExtensions(string[] array) {
@@ -108,6 +120,8 @@ namespace RePKG.Command {
             Directory.CreateDirectory(_options.OutputDirectory);
 
             foreach (var fileInfo in directoryInfo.EnumerateFiles("*.tex", flags)) {
+                ThrowIfCancellationRequested();
+
                 if (!fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase))
                     continue;
 
@@ -139,6 +153,7 @@ namespace RePKG.Command {
             if (_options.Recursive) {
                 foreach (var file in directoryInfo.EnumerateFiles("*.pkg", SearchOption.AllDirectories)
                     .Concat(directoryInfo.EnumerateFiles("*.mpkg", SearchOption.AllDirectories))) {
+                    ThrowIfCancellationRequested();
                     if (file.Directory == null || file.Directory.FullName.Length < rootDirectoryLength)
                         ExtractPkg(file);
                     else
@@ -151,6 +166,7 @@ namespace RePKG.Command {
             foreach (var directory in directoryInfo.EnumerateDirectories()) {
                 foreach (var file in directory.EnumerateFiles("*.pkg")
                     .Concat(directory.EnumerateFiles("*.mpkg"))) {
+                    ThrowIfCancellationRequested();
                     ExtractPkg(file, true, directory.FullName.Substring(rootDirectoryLength));
                 }
             }
@@ -187,6 +203,7 @@ namespace RePKG.Command {
         }
 
         private static void ExtractPkg(FileInfo file, bool appendFolderName = false, string defaultProjectName = "") {
+            ThrowIfCancellationRequested();
             Console.WriteLine($"\r\n### Extracting package: {file.FullName}");
 
             // Load package
@@ -254,6 +271,8 @@ namespace RePKG.Command {
         private static void ExtractEntry(PackageEntry entry, ref string outputDirectory) {
             if (Program.Closing)
                 Environment.Exit(0);
+
+            ThrowIfCancellationRequested();
 
             // Prepare directory
             var filePathWithoutExtension = _options.SingleDir
@@ -333,6 +352,8 @@ namespace RePKG.Command {
             if (Program.Closing)
                 Environment.Exit(0);
 
+            ThrowIfCancellationRequested();
+
             Console.WriteLine($"* Reading: {name}");
 
             //try {
@@ -355,14 +376,18 @@ namespace RePKG.Command {
             if (!overwrite && File.Exists(outputPath))
                 return;
 
+            ThrowIfCancellationRequested();
+
             // Forward() will be called inside this method
-            var resultImage = _texToImageConverter.ConvertToImage(tex, format, new ExtractProgress());
+            var resultImage = _texToImageConverter.ConvertToImage(tex, format, new ExtractProgress(), _token ?? CancellationToken.None);
             if (IsDryRunning) return;
 
             if (resultImage.Length == 1) {
+                ThrowIfCancellationRequested();
                 File.WriteAllBytes(outputPath, resultImage[0].Bytes);
             } else {
                 for (var i = 0; i < resultImage.Length; i++) {
+                    ThrowIfCancellationRequested();
                     outputPath = $"{path}_{i}.{format.GetFileExtension()}";
                     if (!overwrite && File.Exists(outputPath)) continue;
                     File.WriteAllBytes(outputPath, resultImage[i].Bytes);
