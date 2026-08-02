@@ -21,8 +21,8 @@ namespace RePKG.Application.Texture
             ITexImageContainer container,
             TexFormat texFormat)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (container == null) throw new ArgumentNullException(nameof(container));
+            ArgumentNullException.ThrowIfNull(reader);
+            ArgumentNullException.ThrowIfNull(container);
             
             if (!texFormat.IsValid())
                 throw new EnumNotValidException<TexFormat>(texFormat);

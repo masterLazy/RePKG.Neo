@@ -36,8 +36,8 @@ namespace RePKG.Application.Texture
 
         public void WriteTo(BinaryWriter writer, ITex tex)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (tex == null) throw new ArgumentNullException(nameof(tex));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(tex);
 
             if (tex.Magic1 != "TEXV0005")
                 throw new UnknownMagicException(nameof(TexWriter), nameof(tex.Magic1), tex.Magic1);

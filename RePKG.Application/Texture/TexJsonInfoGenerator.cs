@@ -9,7 +9,7 @@ namespace RePKG.Application.Texture
     {
         public string GenerateInfo(ITex tex)
         {
-            if (tex == null) throw new ArgumentNullException(nameof(tex));
+            ArgumentNullException.ThrowIfNull(tex);
 
             var json = new JObject
             {

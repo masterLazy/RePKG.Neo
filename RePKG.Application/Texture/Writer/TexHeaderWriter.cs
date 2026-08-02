@@ -8,8 +8,8 @@ namespace RePKG.Application.Texture
     {
         public void WriteTo(BinaryWriter writer, ITexHeader header)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (header == null) throw new ArgumentNullException(nameof(header));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(header);
 
             writer.Write((int) header.Format);
             writer.Write((int) header.Flags);

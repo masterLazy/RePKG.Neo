@@ -10,8 +10,8 @@ namespace RePKG.Application.Package
     {
         public void WriteTo(BinaryWriter writer, Core.Package.Package package)
         {
-            if (package == null) throw new ArgumentNullException(nameof(package));
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            ArgumentNullException.ThrowIfNull(package);
+            ArgumentNullException.ThrowIfNull(writer);
 
             if (package.Entries.Count == 0)
                 throw new Exception("Package entries is empty");

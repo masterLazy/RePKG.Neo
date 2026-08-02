@@ -16,7 +16,7 @@ namespace RePKG.Application.Texture
 
         public ITexImageContainer ReadFrom(BinaryReader reader, TexFormat texFormat)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            ArgumentNullException.ThrowIfNull(reader);
 
             if (!texFormat.IsValid())
                 throw new EnumNotValidException<TexFormat>(texFormat);

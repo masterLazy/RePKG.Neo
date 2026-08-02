@@ -9,8 +9,8 @@ namespace RePKG.Application.Texture
     {
         public ITexFrameInfoContainer ReadFrom(BinaryReader reader)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            
+            ArgumentNullException.ThrowIfNull(reader);
+
             var container = new TexFrameInfoContainer
             {
                 Magic = reader.ReadNString(maxLength: 16)

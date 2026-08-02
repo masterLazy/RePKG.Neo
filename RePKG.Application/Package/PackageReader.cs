@@ -12,7 +12,7 @@ namespace RePKG.Application.Package
 
         public Core.Package.Package ReadFrom(BinaryReader reader)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            ArgumentNullException.ThrowIfNull(reader);
             
             var packageStart = reader.BaseStream.Position;
             var package = new Core.Package.Package

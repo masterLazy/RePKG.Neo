@@ -8,8 +8,8 @@ namespace RePKG.Application
     {
         public static string ReadNString(this BinaryReader reader, int maxLength = -1)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            
+            ArgumentNullException.ThrowIfNull(reader);
+
             var builder = new StringBuilder(maxLength <= 0 ? 16 : maxLength);
             var c = reader.ReadChar();
 
@@ -24,8 +24,8 @@ namespace RePKG.Application
 
         public static void WriteNString(this BinaryWriter writer, string input)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (input == null) throw new ArgumentNullException(nameof(input));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(input);
 
             writer.Write(Encoding.UTF8.GetBytes(input));
             writer.Write((byte) 0);
@@ -33,7 +33,7 @@ namespace RePKG.Application
 
         public static string ReadStringI32Size(this BinaryReader reader, int maxLength = -1)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            ArgumentNullException.ThrowIfNull(reader);
 
             var size = reader.ReadInt32();
 
@@ -50,8 +50,8 @@ namespace RePKG.Application
 
         public static void WriteStringI32Size(this BinaryWriter writer, string input)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (input == null) throw new ArgumentNullException(nameof(input));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(input);
 
             var bytes = Encoding.UTF8.GetBytes(input);
             writer.Write(bytes.Length);

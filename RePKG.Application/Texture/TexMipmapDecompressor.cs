@@ -9,7 +9,7 @@ namespace RePKG.Application.Texture
     {
         public void DecompressMipmap(ITexMipmap mipmap)
         {
-            if (mipmap == null) throw new ArgumentNullException(nameof(mipmap));
+            ArgumentNullException.ThrowIfNull(mipmap);
 
             if (mipmap.IsLZ4Compressed)
             {

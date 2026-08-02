@@ -11,7 +11,7 @@ namespace RePKG.Application.Texture
             MipmapFormat targetCompressFormat,
             bool lz4Compress)
         {
-            if (mipmap == null) throw new ArgumentNullException(nameof(mipmap));
+            ArgumentNullException.ThrowIfNull(mipmap);
             if (mipmap.IsLZ4Compressed) throw new InvalidOperationException("Mipmap is already compressed using LZ4");
 
             if (targetCompressFormat != mipmap.Format)

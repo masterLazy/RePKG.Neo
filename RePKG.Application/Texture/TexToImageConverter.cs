@@ -12,7 +12,7 @@ using System.Text;
 namespace RePKG.Application.Texture {
     public class TexToImageConverter {
         public ImageResult[] ConvertToImage(ITex tex, MipmapFormat format, IExtractProgress ep) {
-            if (tex == null) throw new ArgumentNullException(nameof(tex));
+            ArgumentNullException.ThrowIfNull(tex);
 
             if (tex.IsMultiple)
                 return ConvertMultiple(tex, ep);
@@ -77,7 +77,7 @@ namespace RePKG.Application.Texture {
         }
 
         public static MipmapFormat GetConvertedFormat(ITex tex) {
-            if (tex == null) throw new ArgumentNullException(nameof(tex));
+            ArgumentNullException.ThrowIfNull(tex);
 
             if (tex.IsVideoTexture) {
                 return MipmapFormat.VideoMp4;

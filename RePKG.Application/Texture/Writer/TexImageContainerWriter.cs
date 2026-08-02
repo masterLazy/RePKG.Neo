@@ -16,8 +16,8 @@ namespace RePKG.Application.Texture
 
         public void WriteTo(BinaryWriter writer, ITexImageContainer imageContainer)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (imageContainer == null) throw new ArgumentNullException(nameof(imageContainer));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(imageContainer);
             
             writer.WriteNString(imageContainer.Magic);
             writer.Write(imageContainer.Images.Count);

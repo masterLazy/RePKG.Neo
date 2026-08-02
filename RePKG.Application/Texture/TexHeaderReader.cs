@@ -9,8 +9,8 @@ namespace RePKG.Application.Texture
     {
         public ITexHeader ReadFrom(BinaryReader reader)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            
+            ArgumentNullException.ThrowIfNull(reader);
+
             var header = new TexHeader
             {
                 Format = (TexFormat) reader.ReadInt32(),

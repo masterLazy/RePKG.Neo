@@ -8,8 +8,8 @@ namespace RePKG.Application.Texture
     {
         public void WriteTo(BinaryWriter writer, TexImageContainerVersion containerVersion, ITexImage image)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (image == null) throw new ArgumentNullException(nameof(image));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(image);
 
             var mipmapWriter = PickMipmapWriter(containerVersion);
 

@@ -9,8 +9,8 @@ namespace RePKG.Application.Texture
     {
         public void WriteTo(BinaryWriter writer, ITexFrameInfoContainer frameInfoContainer)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (frameInfoContainer == null) throw new ArgumentNullException(nameof(frameInfoContainer));
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(frameInfoContainer);
 
             writer.WriteNString(frameInfoContainer.Magic);
             writer.Write(frameInfoContainer.Frames.Count);
