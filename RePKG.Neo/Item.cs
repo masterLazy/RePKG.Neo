@@ -26,8 +26,8 @@ namespace RePKG.Neo {
         public string? SavePath { get; set; } = null;
 
         public string Thumb { get; private set; } = "/res/thumb.png";
-        public string Title { get; private set; }
-        public string DisplayDir { get; private set; }
+        public string Title { get; private set; } = "";
+        public string DisplayDir { get; private set; } = "";
 
         [ObservableProperty] string _text = "";
         [ObservableProperty] Brush? _textBrush = null;
@@ -60,7 +60,7 @@ namespace RePKG.Neo {
             return $"Item{{path={FilePath}, title={Title}}}";
         }
 
-        public async Task Extract(Options options) {
+        public async Task Extract(Options options, MbService mbService) {
             Log.Info($"======== Extracting {this} ========");
             if (!File.Exists(FilePath)) {
                 State = EState.Fail;
@@ -100,7 +100,7 @@ namespace RePKG.Neo {
             // Dry running
             isDryRunning = true;
             Log.Info("Dry running");
-            bool result = await TryExtractAsync(extractOptions, true);
+            bool result = await TryExtractAsync(extractOptions, mbService, true);
             if (!result) {
                 State = EState.Fail;
                 Text = Lang.Item_ExtractFailed;
@@ -113,7 +113,7 @@ namespace RePKG.Neo {
             _progress.Report(0);
             isDryRunning = false;
             Log.Info("Wet running");
-            result = await TryExtractAsync(extractOptions);
+            result = await TryExtractAsync(extractOptions, mbService);
             if (Helper.GetDirectorySize(SavePath) == 0) result = false;
 
             // Post logic
@@ -130,7 +130,7 @@ namespace RePKG.Neo {
             _progress = null;
         }
 
-        private async Task<bool> TryExtractAsync(ExtractOptions extractOptions, bool isDryRunning = false) {
+        private async Task<bool> TryExtractAsync(ExtractOptions extractOptions, MbService mbService, bool isDryRunning = false) {
             bool result = false;
             try {
                 result = await Task.Run(() => Command.Extract.Action(extractOptions, _progress, isDryRunning));
@@ -138,8 +138,7 @@ namespace RePKG.Neo {
             catch (Exception e) {
                 var msg = string.Format(Lang.Msg_ExtractError, e.Message);
                 Log.Error($"Exception occurred when extracting {this}:\n{e}");
-                new MsgBox(msg, Lang.Msg_ExtractFailed_Title,
-                    MbOpt.OK, MbIco.Error) { Owner = App.Current.MainWindow }.ShowDialog();
+                mbService.ShowDialog(msg, Lang.Msg_ExtractFailed_Title, option: MbOpt.OK, icon: MbIco.Error);
                 Text = Lang.Item_ExtractFailed;
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
                 result = false;

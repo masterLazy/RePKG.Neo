@@ -26,6 +26,8 @@ namespace RePKG.Neo {
         private HashSet<string> _itemPaths = [];
         public bool Stopping { get; set; }
 
+        private readonly MbService _mbService;
+
         // Property update logic
 
         partial void OnIsRunningChanged(bool value) {
@@ -33,7 +35,8 @@ namespace RePKG.Neo {
             CanStart = !IsRunning && HasItem;
         }
 
-        public MainWindowVM() {
+        public MainWindowVM(MbService mbService) {
+            _mbService = mbService;
             Items.CollectionChanged += (sender, e) => {
                 HasItem = Items.Count > 0;
                 CanStart = !IsRunning && HasItem;
@@ -77,12 +80,9 @@ namespace RePKG.Neo {
         public async void StartExtract() {
             bool retrySuccess = false;
             if (HasSuccess()) {
-                var mb = new MsgBox(Lang.Msg_ExtractSucceeded, Lang.Msg_Confirm, MbOpt.YesNo, MbBtn.No, MbIco.Info) {
-                    Owner = System.Windows.Application.Current.MainWindow
-                };
-                mb.ShowDialog();
-                if (mb.Result == MbBtn.Yes) retrySuccess = true;
-                else if (mb.Result == MbBtn.No) retrySuccess = false;
+                var result = _mbService.ShowDialog(Lang.Msg_ExtractSucceeded, Lang.Msg_Confirm, option: MbOpt.YesNo, icon: MbIco.Info);
+                if (result == MbBtn.Yes) retrySuccess = true;
+                else if (result == MbBtn.No) retrySuccess = false;
                 else return;
             }
             IsRunning = true;
@@ -90,7 +90,7 @@ namespace RePKG.Neo {
             foreach (var item in Items) {
                 if (Stopping) break;
                 if (item.State == Item.EState.Success && !retrySuccess) continue;
-                await item.Extract(Options);
+                await item.Extract(Options, _mbService);
             }
             IsRunning = false;
             Stopping = false;

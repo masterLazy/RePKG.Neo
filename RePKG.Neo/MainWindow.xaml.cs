@@ -8,7 +8,6 @@
       http://www.apache.org/licenses/LICENSE-2.0
 */
 using LazyWpf;
-using RePKG.Core.Texture;
 using RePKG.Neo.res;
 using System.Windows;
 using System.Windows.Media;
@@ -21,9 +20,11 @@ namespace RePKG.Neo {
     public partial class MainWindow : Window {
         private MainWindowVM DataCtx => (MainWindowVM)DataContext;
         private bool _isPopupAnimating = false;
+        private readonly MbService _mbService;
 
         public MainWindow() {
-            DataContext = new MainWindowVM();
+            _mbService = new MbService(this);
+            DataContext = new MainWindowVM(_mbService);
             InitializeComponent();
             if (App.DroppedFiles.Length > 0) {
                 DataCtx.AddPath(App.DroppedFiles);
@@ -75,7 +76,7 @@ namespace RePKG.Neo {
 
         private void Border_Drop(object sender, DragEventArgs e) {
             if (DataCtx.IsRunning) {
-                new MsgBox(Lang.Msg_DropWhenRunning, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
+                _mbService.ShowDialog(Lang.Msg_DropWhenRunning, Lang.Msg_Info, option: MbOpt.OK, icon: MbIco.Info);
                 return;
             }
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
@@ -83,7 +84,7 @@ namespace RePKG.Neo {
                 DataCtx.AddPath(files);
                 if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
             } else {
-                new MsgBox(Lang.Msg_InvalidDrop, Lang.Msg_Info, MbOpt.OK, MbIco.Info) { Owner = this }.ShowDialog();
+                _mbService.ShowDialog(Lang.Msg_InvalidDrop, Lang.Msg_Info, option: MbOpt.OK, icon: MbIco.Info);
             }
         }
 
@@ -142,11 +143,10 @@ namespace RePKG.Neo {
             PopupBorder.Opacity = 0;
             PopupOptions.IsOpen = true;
             var fadeIn = (Storyboard)PopupOptions.Resources["FadeInStoryboard"];
-            EventHandler handler = null;
-            handler = (s, _) => {
+            void handler(object? s, EventArgs _) {
                 _isPopupAnimating = false;
                 fadeIn.Completed -= handler;
-            };
+            }
             fadeIn.Completed += handler;
             fadeIn.Begin(PopupBorder);
         }
@@ -155,12 +155,11 @@ namespace RePKG.Neo {
             if (_isPopupAnimating || !PopupOptions.IsOpen) return;
             _isPopupAnimating = true;
             var fadeOut = (Storyboard)PopupOptions.Resources["FadeOutStoryboard"];
-            EventHandler handler = null;
-            handler = (s, _) => {
+            void handler(object? s, EventArgs _) {
                 PopupOptions.IsOpen = false;
                 _isPopupAnimating = false;
                 fadeOut.Completed -= handler;
-            };
+            }
             fadeOut.Completed += handler;
             fadeOut.Begin(PopupBorder);
         }

@@ -144,8 +144,8 @@
                                     <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}"/>
                                 </CheckBox>
 
-                                <lazy:Button Text="{x:Static res:Lang.Btn_ViewLog}" x:Name="BtnViewLog"
-                                             Click="BtnViewLog_Click" Height="35" Margin="5 5 5 0"/>
+                                <Button Content="{x:Static res:Lang.Btn_ViewLog}" x:Name="BtnViewLog"
+                                             Click="BtnViewLog_Click" Height="35" Margin="5 5 5 0" HorizontalAlignment="Stretch"/>
                             </StackPanel>
                         </Border>
                     </Popup>
