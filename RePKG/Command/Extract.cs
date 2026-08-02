@@ -111,7 +111,7 @@ namespace RePKG.Command {
                 if (!fileInfo.Extension.Equals(".tex", StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                try {
+                //try {
                     var tex = LoadTex(File.ReadAllBytes(fileInfo.FullName), fileInfo.FullName);
 
                     if (tex == null)
@@ -123,13 +123,13 @@ namespace RePKG.Command {
                     ConvertToImageAndSave(tex, filePath, _options.Overwrite);
                     if (!IsDryRunning && !_options.NoRawTex) {
                         var jsonInfo = _texJsonInfoGenerator.GenerateInfo(tex);
-                        File.WriteAllText($"{filePath}.tex-json", jsonInfo);
+                        File.WriteAllText($"{filePath}.tex.json", jsonInfo);
                     }
-                }
-                catch (Exception e) {
-                    Console.WriteLine("Failed to write texture");
-                    Console.WriteLine(e);
-                }
+                //}
+                //catch (Exception e) {
+                //    Console.WriteLine("Failed to write texture");
+                //    Console.WriteLine(e);
+                //}
             }
         }
 
@@ -168,19 +168,20 @@ namespace RePKG.Command {
                 if (tex == null)
                     return;
 
-                try {
+                //try {
                     var filePath = Path.Combine(_options.OutputDirectory,
                         Path.GetFileNameWithoutExtension(fileInfo.Name));
 
                     ConvertToImageAndSave(tex, filePath, _options.Overwrite);
                     if (!IsDryRunning && !_options.NoRawTex) {
                         var jsonInfo = _texJsonInfoGenerator.GenerateInfo(tex);
-                        File.WriteAllText($"{filePath}.tex-json", jsonInfo);
+                        File.WriteAllText($"{filePath}.tex.json", jsonInfo);
                     }
-                }
-                catch (Exception e) {
-                    Console.WriteLine(e);
-                }
+                //}
+                //catch (Exception e) {
+                //    Console.WriteLine("Failed to write texture");
+                //    Console.WriteLine(e);
+                //}
             } else
                 Console.WriteLine($"Unrecognized file extension: {fileInfo.Extension}");
         }
@@ -282,17 +283,17 @@ namespace RePKG.Command {
             if (tex == null)
                 return;
 
-            try {
+            //try {
                 ConvertToImageAndSave(tex, filePathWithoutExtension, _options.Overwrite);
                 if (!IsDryRunning && !_options.NoRawTex) {
                     var jsonInfo = _texJsonInfoGenerator.GenerateInfo(tex);
-                    File.WriteAllText($"{filePathWithoutExtension}.tex-json", jsonInfo);
+                    File.WriteAllText($"{filePathWithoutExtension}.tex.json", jsonInfo);
                 }
-            }
-            catch (Exception e) {
-                Console.WriteLine("Failed to write texture");
-                Console.WriteLine(e);
-            }
+            //}
+            //catch (Exception e) {
+            //    Console.WriteLine("Failed to write texture");
+            //    Console.WriteLine(e);
+            //}
         }
 
         private static void GetProjectInfo(FileInfo packageFile, ref string title, ref string preview) {
@@ -332,19 +333,19 @@ namespace RePKG.Command {
             if (Program.Closing)
                 Environment.Exit(0);
 
-            Console.WriteLine("* Reading: {0}", name);
+            Console.WriteLine($"* Reading: {name}");
 
-            try {
+            //try {
                 using (var reader = new BinaryReader(new MemoryStream(bytes), Encoding.UTF8)) {
                     return _texReader.ReadFrom(reader);
                 }
-            }
-            catch (Exception e) {
-                Console.WriteLine("Failed to read texture");
-                Console.WriteLine(e);
-            }
+            //}
+            //catch (Exception e) {
+            //    Console.WriteLine("Failed to read texture");
+            //    Console.WriteLine(e);
+            //}
 
-            return null;
+            //return null;
         }
 
         private static void ConvertToImageAndSave(ITex tex, string path, bool overwrite) {

@@ -18,9 +18,9 @@ namespace RePKG
                 return;
             }
 
-            //Parser.Default.ParseArguments<ExtractOptions, InfoOptions>(args)
-            //    .WithParsed<ExtractOptions>(Extract.Action)
-            //    .WithParsed<InfoOptions>(Info.Action);
+            Parser.Default.ParseArguments<ExtractOptions, InfoOptions>(args)
+                .WithParsed<ExtractOptions>(o => Extract.Action(o))
+                .WithParsed<InfoOptions>(o => Info.Action(o));
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -41,9 +41,9 @@ namespace RePKG
             {
                 var interactiveArgs = line.SplitArguments();
 
-                //Parser.Default.ParseArguments<ExtractOptions, InfoOptions>(interactiveArgs)
-                //    .WithParsed<ExtractOptions>(Extract.Action)
-                //    .WithParsed<InfoOptions>(Info.Action);
+                Parser.Default.ParseArguments<ExtractOptions, InfoOptions>(interactiveArgs)
+                    .WithParsed<ExtractOptions>(o => Extract.Action(o))
+                    .WithParsed<InfoOptions>(o => Info.Action(o));
             }
         }
     }
