@@ -39,16 +39,18 @@ namespace RePKG.Application.Texture {
                 }];
             }
 
-            if (format.IsCompressed())
+            if (sourceMipmap.Format.IsCompressed())
                 throw new InvalidOperationException("Raw mipmap format must be uncompressed");
 
-            if (format.IsRawFormat()) {
+            // Decide whether to encode to PNG based on the actual mipmap pixel format,
+            // not the caller-supplied output format (which is ImagePNG for raw formats).
+            if (sourceMipmap.Format.IsRawFormat()) {
                 if (ep.IsDryRunning) {
                     ep.Forward(1);
                     return null;
                 }
 
-                var image = ImageFromRawFormat(format, sourceMipmap.Bytes, sourceMipmap.Width, sourceMipmap.Height);
+                var image = ImageFromRawFormat(sourceMipmap.Format, sourceMipmap.Bytes, sourceMipmap.Width, sourceMipmap.Height);
 
                 if (sourceMipmap.Width > tex.Header.ImageWidth ||
                     sourceMipmap.Height > tex.Header.ImageHeight)
