@@ -199,4 +199,10 @@ Please check if the input file is valid.</value>
   <data name="Chk_NoRawTex" xml:space="preserve">
     <value>Don't save TEX files</value>
   </data>
+  <data name="Msg_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Msg_ExtractSucceeded" xml:space="preserve">
+    <value>Do you want to re-extract the succeeded items?</value>
+  </data>
 </root>

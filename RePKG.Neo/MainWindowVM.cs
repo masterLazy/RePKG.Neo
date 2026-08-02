@@ -8,6 +8,8 @@
        http://www.apache.org/licenses/LICENSE-2.0
  */
 using CommunityToolkit.Mvvm.ComponentModel;
+using LazyWpf;
+using RePKG.Neo.res;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -73,15 +75,33 @@ namespace RePKG.Neo {
         }
 
         public async void StartExtract() {
+            bool retrySuccess = false;
+            if (HasSuccess()) {
+                var mb = new MsgBox(Lang.Msg_ExtractSucceeded, Lang.Msg_Confirm, MbOpt.YesNoCancel) {
+                    Owner = System.Windows.Application.Current.MainWindow
+                };
+                mb.ShowDialog();
+                if (mb.Result == MbBtn.Yes) retrySuccess = true;
+                else if (mb.Result == MbBtn.No) retrySuccess = false;
+                else return;
+            }
             IsRunning = true;
             Stopping = false;
             foreach (var item in Items) {
                 if (Stopping) break;
-                if (item.State == Item.EState.Success) continue;
+                if (item.State == Item.EState.Success && !retrySuccess) continue;
                 await item.Extract(Options);
             }
             IsRunning = false;
             Stopping = false;
+        }
+
+        public bool HasSuccess() {
+            foreach (var item in Items) {
+                if (Stopping) break;
+                if (item.State == Item.EState.Success) return true;
+            }
+            return false;
         }
     }
 }

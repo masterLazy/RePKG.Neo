@@ -241,6 +241,15 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   查找类似 Confirm 的本地化字符串。
+        /// </summary>
+        public static string Msg_Confirm {
+            get {
+                return ResourceManager.GetString("Msg_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Please drop after current tasks are completed. 的本地化字符串。
         /// </summary>
         public static string Msg_DropWhenRunning {
@@ -268,6 +277,15 @@ namespace RePKG.Neo.res {
         public static string Msg_ExtractFailed_Title {
             get {
                 return ResourceManager.GetString("Msg_ExtractFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Do you want to re-extract the succeeded items? 的本地化字符串。
+        /// </summary>
+        public static string Msg_ExtractSucceeded {
+            get {
+                return ResourceManager.GetString("Msg_ExtractSucceeded", resourceCulture);
             }
         }
         

@@ -214,7 +214,7 @@
                                                   FadeOutWhenComplete="True"/>
                                     <!--Thumbnail-->
                                     <Image Source="{Binding Thumb}" DockPanel.Dock="Left" Width="48" Height="48" Margin="-5 5 5 5"
-                                           ToolTipService.InitialShowDelay="300" ToolTipService.HorizontalOffset="180">
+                                           ToolTipService.InitialShowDelay="300">
                                         <Image.Clip>
                                             <RectangleGeometry RadiusX="4" RadiusY="4" Rect="0,0,48,48"/>
                                         </Image.Clip>
