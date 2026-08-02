@@ -56,7 +56,12 @@ namespace RePKG.Neo {
             DisplayDir += Path.DirectorySeparatorChar;
         }
 
+        public override string ToString() {
+            return $"Item{{path={FilePath}, title={Title}}}";
+        }
+
         public async Task Extract(Options options) {
+            Log.Info($"======== Extracting {this} ========");
             if (!File.Exists(FilePath)) {
                 State = EState.Fail;
                 Text = Lang.Item_FileNotFound;
@@ -94,6 +99,7 @@ namespace RePKG.Neo {
 
             // Dry running
             isDryRunning = true;
+            Log.Info("Dry running");
             bool result = await TryExtractAsync(extractOptions, true);
             if (!result) {
                 State = EState.Fail;
@@ -106,6 +112,7 @@ namespace RePKG.Neo {
             // Start extractoion
             _progress.Report(0);
             isDryRunning = false;
+            Log.Info("Wet running");
             result = await TryExtractAsync(extractOptions);
             if (Helper.GetDirectorySize(SavePath) == 0) result = false;
 
@@ -123,15 +130,14 @@ namespace RePKG.Neo {
             _progress = null;
         }
 
-
-
         private async Task<bool> TryExtractAsync(ExtractOptions extractOptions, bool isDryRunning = false) {
             bool result = false;
             try {
                 result = await Task.Run(() => Command.Extract.Action(extractOptions, _progress, isDryRunning));
             }
-            catch (Exception ex) {
-                var msg = string.Format(Lang.Msg_ExtractError, ex.Message);
+            catch (Exception e) {
+                var msg = string.Format(Lang.Msg_ExtractError, e.Message);
+                Log.Error($"Exception occurred when extracting {this}:\n{e}");
                 new MsgBox(msg, Lang.Msg_ExtractFailed_Title,
                     MbOpt.OK, MbIco.Error) { Owner = App.Current.MainWindow }.ShowDialog();
                 Text = Lang.Item_ExtractFailed;

@@ -27,6 +27,8 @@ namespace RePKG.Neo {
             if (!Path.Exists(AppDataPath)) {
                 Directory.CreateDirectory(AppDataPath);
             }
+            Log.Init(AppDataPath);
+            Log.StartupInfo();
         }
 
         // "User/.../AppData/Roaming/RePKG.Neo/"

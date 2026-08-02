@@ -142,6 +142,15 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   查找类似 View log 的本地化字符串。
+        /// </summary>
+        public static string Btn_ViewLog {
+            get {
+                return ResourceManager.GetString("Btn_ViewLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Auto start extraction 的本地化字符串。
         /// </summary>
         public static string Chk_AutoExtract {

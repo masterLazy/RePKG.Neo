@@ -208,4 +208,7 @@ Please check if the input file is valid.</value>
   <data name="Item_Handling" xml:space="preserve">
     <value>Extracting</value>
   </data>
+  <data name="Btn_ViewLog" xml:space="preserve">
+    <value>View log</value>
+  </data>
 </root>

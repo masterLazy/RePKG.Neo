@@ -8,6 +8,7 @@
       http://www.apache.org/licenses/LICENSE-2.0
 */
 using LazyWpf;
+using RePKG.Core.Texture;
 using RePKG.Neo.res;
 using System.Windows;
 using System.Windows.Media;
@@ -162,6 +163,10 @@ namespace RePKG.Neo {
             };
             fadeOut.Completed += handler;
             fadeOut.Begin(PopupBorder);
+        }
+
+        private void BtnViewLog_Click(object sender, RoutedEventArgs e) {
+            System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
         }
     }
 }

@@ -208,4 +208,7 @@
   <data name="Item_Handling" xml:space="preserve">
     <value>提取中</value>
   </data>
+  <data name="Btn_ViewLog" xml:space="preserve">
+    <value>查看日志</value>
+  </data>
 </root>
