@@ -77,7 +77,7 @@ namespace RePKG.Neo {
         public async void StartExtract() {
             bool retrySuccess = false;
             if (HasSuccess()) {
-                var mb = new MsgBox(Lang.Msg_ExtractSucceeded, Lang.Msg_Confirm, MbOpt.YesNoCancel) {
+                var mb = new MsgBox(Lang.Msg_ExtractSucceeded, Lang.Msg_Confirm, MbOpt.YesNo, MbBtn.No, MbIco.Info) {
                     Owner = System.Windows.Application.Current.MainWindow
                 };
                 mb.ShowDialog();

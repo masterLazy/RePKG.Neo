@@ -70,12 +70,14 @@ namespace RePKG.Tests
 
         private void ConvertToImageAndSave(ITex tex, string name)
         {
-            var resultImage = _texToImageConverter.ConvertToImage(tex, TexToImageConverter.GetConvertedFormat(tex), $"{TestHelper.BasePath}\\{OutputDirectoryName}\\{name}");
+            var resultImage = _texToImageConverter.ConvertToImage(
+                tex,
+                TexToImageConverter.GetConvertedFormat(tex),
+                new NoOpExtractProgress());
 
+            var path = $"{TestHelper.BasePath}\\{OutputDirectoryName}\\{name}.{resultImage[0].Format.GetFileExtension()}";
 
-            var path = $"{TestHelper.BasePath}\\{OutputDirectoryName}\\{name}.{resultImage.Format.GetFileExtension()}";
-            
-            File.WriteAllBytes(path, resultImage.Bytes);
+            File.WriteAllBytes(path, resultImage[0].Bytes);
         }
 
         public static BinaryReader LoadTestFile(string name)
@@ -115,6 +117,12 @@ namespace RePKG.Tests
                     $"Expected: {validatedBytes[i]}\r\n" +
                     $"Actual: {bytes[i]}");
             }
+        }
+
+        private class NoOpExtractProgress : IExtractProgress
+        {
+            public void Forward(int count = 1) { }
+            public bool IsDryRunning => false;
         }
     }
 }

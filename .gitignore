@@ -10,4 +10,4 @@ RePKG.Tests/TestTexturesValidated/*
 *.lnk
 *.exe
 *.ini
-/sample.pkg
+samples/*

@@ -232,6 +232,15 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   查找类似 Extracting 的本地化字符串。
+        /// </summary>
+        public static string Item_Handling {
+            get {
+                return ResourceManager.GetString("Item_Handling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Output dir suffix 的本地化字符串。
         /// </summary>
         public static string Lbl_OutputSuffix {

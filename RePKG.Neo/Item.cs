@@ -16,7 +16,7 @@ using System.Windows.Media;
 
 namespace RePKG.Neo {
     partial class Item : ObservableObject {
-        public enum EState { Pending, Success, Fail }
+        public enum EState { Pending, Handling, Success, Fail }
 
         public string FilePath { get; private set; }
         public string FileDir { get; private set; }
@@ -33,6 +33,8 @@ namespace RePKG.Neo {
         [ObservableProperty] Brush? _textBrush = null;
         [ObservableProperty] int _percent = 0;
 
+        private IProgress<int>? _progress;
+
         // This method believes that filePath always exsists
         public Item(string filePath) {
             // Basic infos
@@ -47,7 +49,7 @@ namespace RePKG.Neo {
                 if (json == null) return;
                 if (json.preview != null) Thumb = Path.Combine(FileDir, json.preview);
                 if (json.title != null) Title = json.title;
-            } 
+            }
             // For display
             if (FileDir.Length < 40) DisplayDir = FileDir;
             else DisplayDir = FileDir[..19] + "…" + FileDir[^20..];
@@ -61,10 +63,24 @@ namespace RePKG.Neo {
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
                 return;
             }
+
+            //
+            State = EState.Handling;
+            Text = Lang.Item_Handling;
+            TextBrush = System.Windows.Application.Current.FindResource("BhAttention") as SolidColorBrush;
+
             // Prepare
-            var progress = new Progress<double>(percent => {
-                Percent = (int)Math.Round(percent * 100);
+            bool isDryRunning = false;
+            int totalWork = 0;
+            _progress = new Progress<int>(work => {
+                if (isDryRunning) {
+                    totalWork = work;
+                } else if (totalWork > 0) {
+                    Percent = (int)Math.Round(100.0 * work / totalWork);
+                    Text = $"{Lang.Item_Handling} ({work}/{totalWork})";
+                }
             });
+
             SavePath = Path.Combine(FileDir, FileName + options.OutputSuffix);
             ExtractOptions extractOptions = new() {
                 Input = FilePath,
@@ -76,21 +92,24 @@ namespace RePKG.Neo {
                 SingleDir = options.SingleDir,
             };
 
-            // Start extractoion
-            bool result = false;
-            try {
-                result = await Task.Run(() => Command.Extract.Action(extractOptions, progress));
-            }
-            catch (Exception ex) {
-                var msg = string.Format(Lang.Msg_ExtractError, ex.Message);
-                new MsgBox(msg, Lang.Msg_ExtractFailed_Title,
-                    MbOpt.OK, MbIco.Error) { Owner = App.Current.MainWindow }.ShowDialog();
+            // Dry running
+            isDryRunning = true;
+            bool result = await TryExtractAsync(extractOptions, true);
+            if (!result) {
+                State = EState.Fail;
                 Text = Lang.Item_ExtractFailed;
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
+                _progress = null;
+                return;
             }
 
-            // Post logic
+            // Start extractoion
+            _progress.Report(0);
+            isDryRunning = false;
+            result = await TryExtractAsync(extractOptions);
             if (Helper.GetDirectorySize(SavePath) == 0) result = false;
+
+            // Post logic
             if (result) {
                 State = EState.Success;
                 Text = Lang.Item_Complete;
@@ -101,6 +120,25 @@ namespace RePKG.Neo {
                 TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
             }
             Percent = 100;
+            _progress = null;
+        }
+
+
+
+        private async Task<bool> TryExtractAsync(ExtractOptions extractOptions, bool isDryRunning = false) {
+            bool result = false;
+            try {
+                result = await Task.Run(() => Command.Extract.Action(extractOptions, _progress, isDryRunning));
+            }
+            catch (Exception ex) {
+                var msg = string.Format(Lang.Msg_ExtractError, ex.Message);
+                new MsgBox(msg, Lang.Msg_ExtractFailed_Title,
+                    MbOpt.OK, MbIco.Error) { Owner = App.Current.MainWindow }.ShowDialog();
+                Text = Lang.Item_ExtractFailed;
+                TextBrush = System.Windows.Application.Current.FindResource("BhCritical") as SolidColorBrush;
+                result = false;
+            }
+            return result;
         }
     }
 }

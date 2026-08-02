@@ -11,11 +11,11 @@ using System.Text;
 
 namespace RePKG.Application.Texture {
     public class TexToImageConverter {
-        public ImageResult ConvertToImage(ITex tex, MipmapFormat format, string path) {
+        public ImageResult[] ConvertToImage(ITex tex, MipmapFormat format, IExtractProgress ep) {
             if (tex == null) throw new ArgumentNullException(nameof(tex));
 
             if (tex.IsMultiple)
-                return ConvertMultiple(tex, path);
+                return ConvertMultiple(tex, ep);
 
             var sourceMipmap = tex.FirstImage.FirstMipmap;
 
@@ -32,16 +32,22 @@ namespace RePKG.Application.Texture {
                     throw new InvalidOperationException("Expected mp4 magic header");
                 }
 
-                return new ImageResult {
+                ep.Forward();
+                return [new ImageResult {
                     Bytes = sourceMipmap.Bytes,
                     Format = MipmapFormat.VideoMp4
-                };
+                }];
             }
 
             if (format.IsCompressed())
                 throw new InvalidOperationException("Raw mipmap format must be uncompressed");
 
             if (format.IsRawFormat()) {
+                if (ep.IsDryRunning) {
+                    ep.Forward(1);
+                    return null;
+                }
+
                 var image = ImageFromRawFormat(format, sourceMipmap.Bytes, sourceMipmap.Width, sourceMipmap.Height);
 
                 if (sourceMipmap.Width > tex.Header.ImageWidth ||
@@ -51,20 +57,21 @@ namespace RePKG.Application.Texture {
                     sourceMipmap.Height < tex.Header.ImageHeight)
                     image.Mutate(x => x.Resize(tex.Header.ImageWidth, tex.Header.ImageHeight));
 
-                using (var memoryStream = new MemoryStream()) {
-                    image.SaveAsPng(memoryStream);
+                using var memoryStream = new MemoryStream();
+                if (!ep.IsDryRunning) image.SaveAsPng(memoryStream);
 
-                    return new ImageResult {
+                ep.Forward();
+                return [new ImageResult {
                         Bytes = memoryStream.ToArray(),
                         Format = MipmapFormat.ImagePNG
-                    };
-                }
+                    }];
             }
 
-            return new ImageResult {
+            ep.Forward();
+            return [new ImageResult {
                 Bytes = sourceMipmap.Bytes,
                 Format = format
-            };
+            }];
         }
 
         public static MipmapFormat GetConvertedFormat(ITex tex) {
@@ -82,11 +89,18 @@ namespace RePKG.Application.Texture {
             return format.IsRawFormat() ? MipmapFormat.ImagePNG : format;
         }
 
-        private static ImageResult ConvertMultiple(ITex tex, string path) {
+        private static ImageResult[] ConvertMultiple(ITex tex, IExtractProgress ep) {
             var frameFormat = tex.FirstImage.FirstMipmap.Format;
             if (!frameFormat.IsRawFormat())
                 throw new InvalidOperationException(
                     "Only raw mipmap formats are supported right now while converting multi-frame image");
+
+            if (ep.IsDryRunning) {
+                // GIF is saved as a single file, other multi-frame formats produce one PNG per frame
+                var count = frameFormat == MipmapFormat.ImageGIF ? 1 : tex.FrameInfoContainer.Frames.Count;
+                ep.Forward(count);
+                return null;
+            }
 
             // Extract all frames
             var sequenceImages = new Image[tex.ImagesContainer.Images.Count];
@@ -125,22 +139,24 @@ namespace RePKG.Application.Texture {
 
             // Check format
             if (frameFormat == MipmapFormat.ImageGIF) {
-                return ConvertGif(tex, frames, frameFormat);
+                return ConvertGif(tex, frames, frameFormat, ep);
             }
 
-            var format = GetConvertedFormat(tex);
+            var result = new ImageResult[frames.Count];
             for (var i = 0; i < frames.Count; i++) {
-                var outputPath = $"{path}_{i}.{format.GetFileExtension()}";
-                frames[i].SaveAsPng(outputPath);
+                using var memoryStream = new MemoryStream();
+                frames[i].SaveAsPng(memoryStream);
+                result[i] = new ImageResult() {
+                    Bytes = memoryStream.ToArray(),
+                    Format = MipmapFormat.ImagePNG
+                };
+                ep.Forward();
             }
 
-            return new ImageResult {
-                Bytes = null,
-                Format = MipmapFormat.ImagePNG
-            };
+            return result;
         }
 
-        private static ImageResult ConvertGif(ITex tex, List<Image> frames, MipmapFormat format) {
+        private static ImageResult[] ConvertGif(ITex tex, List<Image> frames, MipmapFormat format, IExtractProgress ep) {
             // Remove first black frame
             frames.RemoveAt(0);
 
@@ -152,13 +168,13 @@ namespace RePKG.Application.Texture {
                 image.Frames.AddFrame(frame.Frames[0]);
             }
 
-            using (var memoryStream = new MemoryStream()) {
-                image.SaveAsGif(memoryStream, new GifEncoder { ColorTableMode = GifColorTableMode.Local });
-                return new ImageResult {
+            using var memoryStream = new MemoryStream();
+            if (!ep.IsDryRunning) image.SaveAsGif(memoryStream, new GifEncoder { ColorTableMode = GifColorTableMode.Local });
+            ep.Forward();
+            return [new ImageResult {
                     Bytes = memoryStream.ToArray(),
                     Format = MipmapFormat.ImageGIF
-                };
-            }
+                } ];
         }
 
         private static Image ImageFromRawFormat(MipmapFormat format, byte[] bytes, int width, int height) {
@@ -185,7 +201,12 @@ namespace RePKG.Application.Texture {
     }
 
     public class ImageResult {
-        public byte[]? Bytes { get; set; }
+        public byte[] Bytes { get; set; }
         public MipmapFormat Format { get; set; }
+    }
+
+    public interface IExtractProgress {
+        public void Forward(int count = 1);
+        public bool IsDryRunning { get; }
     }
 }
