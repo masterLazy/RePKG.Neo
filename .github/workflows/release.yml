@@ -63,7 +63,7 @@ jobs:
       - name: Read release notes
         id: release_note
         run: |
-          $notes = Get-Content -Path RELEASE-NOTE.md -Raw
+          $notes = Get-Content -Path RELEASE-NOTES.md -Raw
           echo "notes<<EOF" >> $env:GITHUB_OUTPUT
           echo $notes >> $env:GITHUB_OUTPUT
           echo "EOF" >> $env:GITHUB_OUTPUT
