@@ -282,7 +282,7 @@ namespace RePKG.Command {
             Directory.CreateDirectory(Path.GetDirectoryName(filePathWithoutExtension));
 
             // Save raw
-            if (!_options.NoRawTex) {
+            if (!_options.NoRawTex || entry.Type != EntryType.Tex) {
                 var filePath = filePathWithoutExtension + entry.Extension;
                 if (!_options.Overwrite && File.Exists(filePath))
                     Console.WriteLine($"* Skipping, already exists: {filePath}");
