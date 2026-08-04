@@ -47,5 +47,10 @@ namespace RePKG.Neo {
                 return null;
             }
         }
+
+        public override string ToString() {
+            var json = JsonSerializer.Serialize(this, App.JsonOptions);
+            return json;
+        }
     }
 }

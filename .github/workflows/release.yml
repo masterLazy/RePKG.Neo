@@ -1,0 +1,78 @@
+name: Build and Release
+
+# Execute when push a tag with SemVer
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+
+      # 0. Check the tag
+
+      - name: Validate numeric SemVer tag
+        run: |
+          $tag = "${{ github.ref_name }}"
+          Write-Host "Validating tag: $tag"
+          if ($tag -notmatch '^\d+\.\d+\.\d+$') {
+            Write-Host "##[error] Tag '$tag' is not a valid numeric SemVer. Exiting."
+            exit 1
+          }
+          Write-Host "Tag format is valid."
+        shell: pwsh
+
+      # 1. Prepare env
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # 2. Dotnet build
+
+      - name: Restore dependencies
+        run: dotnet restore RePKG.Neo/RePKG.Neo.csproj
+
+      - name: Build project
+        run: dotnet build RePKG.Neo/RePKG.Neo.csproj -c Release --no-restore
+
+      # 3. Run Inno Setup
+
+      - name: Build Inno Setup x64 installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: .innoSetup/setup-x64.iss
+
+      - name: Build Inno Setup x86 installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: .innoSetup/setup-x86.iss
+
+      # 4. Release
+
+      - name: Read release notes
+        id: release_note
+        run: |
+          $notes = Get-Content -Path RELEASE_NOTE.md -Raw
+          echo "notes<<EOF" >> $env:GITHUB_OUTPUT
+          echo $notes >> $env:GITHUB_OUTPUT
+          echo "EOF" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          body: ${{ steps.release_note.outputs.notes }}
+          files: |
+            .innoSetup/*.exe

@@ -33,6 +33,7 @@ namespace RePKG.Neo {
         [ObservableProperty] Brush? _textBrush = null;
         [ObservableProperty] int _percent = 0;
 
+        private long _fileSize;
         private IProgress<int>? _progress;
 
         // This method believes that filePath always exsists
@@ -41,7 +42,8 @@ namespace RePKG.Neo {
             FilePath = filePath;
             FileDir = Path.GetDirectoryName(filePath) ?? "";
             FileName = Path.GetFileName(filePath) ?? "";
-            FileSize = Helper.ByteToString(new FileInfo(filePath).Length);
+            _fileSize = new FileInfo(filePath).Length;
+            FileSize = Helper.ByteToString(_fileSize);
             // Infos associated with project.json
             var jsonPath = Path.Combine(FileDir, "project.json");
             if (File.Exists(jsonPath)) {
@@ -57,11 +59,17 @@ namespace RePKG.Neo {
         }
 
         public override string ToString() {
-            return $"Item{{path={FilePath}, title={Title}}}";
+            return $"{{\n" +
+            $"  \"FilePath\": \"{FilePath}\",\n" +
+            $"  \"FileSize\": {_fileSize},\n" +
+            $"  \"Title\": \"{Title}\"\n" +
+            $"}}";
         }
 
         public async Task Extract(Options options, MbService mbService, CancellationToken token) {
-            Log.Info($"======== Extracting {this} ========");
+            Log.Info($"**** Start extraction ****\n" +
+            $"Item = {this}\n" +
+            $"Options = {options}");
             if (!File.Exists(FilePath)) {
                 State = EState.Fail;
                 Text = Lang.Item_FileNotFound;
