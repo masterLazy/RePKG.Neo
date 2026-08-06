@@ -1,6 +1,8 @@
 # RePKG.Neo
 <img src="https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/RePKG.Neo/res/repkg-neo.png" width="162px" align="right"/>
 
+English | [中文](README_zh.md)
+
 <p>
     <a href="https://github.com/masterLazy/RePKG.Neo/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/masterLazy/RePKG.Neo"/></a>
   <a href="https://github.com/masterLazy/RePKG.Neo/releases"><img src="https://img.shields.io/github/downloads/masterLazy/RePKG.Neo/total" alt="Release Downloads"/></a>
@@ -14,52 +16,54 @@
   <a href="https://deepwiki.com/masterLazy/RePKG.Neo"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"/></a>
 </p>
 
-此自述文件还有 [中文版](README_zh.md)。
-
-An enhanced Wallpaper Engine PKG extractor and TEX converter, built upon the original [RePKG](https://github.com/notscuffed/repkg), **featuring a modern GUI** – supporting extracting images, sounds, videos, and more.
+An enhanced Wallpaper Engine PKG unpacker and TEX converter, built upon the original [RePKG](https://github.com/notscuffed/repkg), **featuring a modern graphical interface** — supports extracting images, audio, videos, and other resources.
 
 <br/>
 
-## New Features
+## Features
 
 > [!tip]
 >
 > To use RePKG.Neo, you need to install [.NET 10 Desktop Runtime](https://get.dot.net/10).
-
-- **Modern Graphical Interface (GUI)**: Built with WPF + MVVM architecture, providing an intuitive and user-friendly desktop application experience.
-- **Upgraded to .NET 10**: Leverage the latest performance optimizations and framework features.
-- **Batch Processing**: Add multiple files and folders at once — extract them all in sequence with a single click.
-- **Per-item Progress & Status**: Each file shows its own progress bar, status (Pending/Success/Fail), and preview thumbnail.
-- **Flexible File Input Methods**:
-  - Right-click and select "Open with RePKG.Neo"
-  - Drag and drop files onto the program icon
-  - Select files or folders directly within the application (supports multi-select)
-  - Drag and drop files or folders directly into the program window
-  - **Smart Folder Recognition**: Recursively scans folders for all supported files (.pkg, .mpkg, .tex)
-- **File Operations**: Remove individual items from the list, or reveal extracted files in File Explorer with one click.
-
-## Screenshot
-
-> [!tip]
 >
-> RePKG.Neo supports internationalization. If your system language is set to `zh-CN`, the UI will be displayed in Chinese.
+> OS requirements: >= Windows 10 1507
+
+- **Modern Graphical Interface (GUI)**: Intuitive and user-friendly interface.
+- **Actively Maintained**: Continuous bug fixes based on RePKG v0.4.0.
+- **Batch Processing**: Supports adding multiple files/folders at once, with one-click sequential batch extraction.
+- **Multiple File Input Methods**:
+  - Double-click `.pkg` / `.mpkg` / `.tex` files to open
+  - Right-click menu "Open with RePKG.Neo"
+  - Drag and drop files onto the program icon
+  - Drag files or folders directly into the program window
+  - Click buttons to select files or folders
+  - **Smart Folder Scanning**: Recursively scans folders for all supported files (`.pkg`, `.mpkg`, `.tex`)
+- **i18n**: Supports both English and Simplified Chinese.
+
+## Screenshots
 
 ![screenshot](https://raw.githubusercontent.com/masterLazy/RePKG.Neo/refs/heads/master/img/screenshot.webp)
 
-> The following parts are from the original README of RePKG.
+## Contributing
+
+You can [report a bug](https://github.com/masterLazy/RePKG.Neo/issues/new) or open a pull request to support this repo.
+
+
+
+> The section below is from the original README of RePKG.
 >
-> The original license file of RePKG see LICENSE-RePKG.
-
----
-
-Wallpaper engine PKG unpacker/TEX converter, written in C#.
-
-PKG and TEX formats reverse engineered by me.
-
-Feel free to report errors.
-
-## Features
-- Extract PKG files
-- Convert PKG into wallpaper engine project
-- Convert TEX to image
-- Dump PKG/TEX info
+> See LICENSE-RePKG for the original RePKG license.
+> 
+> ---
+> 
+> Wallpaper engine PKG unpacker/TEX converter, written in C#.
+> 
+> PKG and TEX formats reverse engineered by me.
+> 
+> Feel free to report errors.
+> 
+> ## Features
+> - Extract PKG files
+> - Convert PKG into wallpaper engine project
+> - Convert TEX to image
+> - Dump PKG/TEX info
