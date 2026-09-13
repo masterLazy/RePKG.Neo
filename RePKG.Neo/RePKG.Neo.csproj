@@ -7,7 +7,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>res\repkg-neo.ico</ApplicationIcon>
-        <Version>2.2.1</Version>
+        <Version>2.2.2</Version>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,6 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="..\bump-version.ps1">
+          <Link>bump-version.ps1</Link>
+        </Content>
         <Content Include="res\repkg-neo.ico"/>
     </ItemGroup>
 

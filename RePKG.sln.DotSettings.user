@@ -2,6 +2,7 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="D:\Projects\C#\RePKG\packages\K4os.Compression.LZ4.1.1.1\lib\net46\K4os.Compression.LZ4.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Numerics.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\NuGet\packages\lazywpf\1.1.5\lib\net10.0-windows7.0\LazyWpf.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002DCN/@EntryIndexedValue">False</s:Boolean>

@@ -1,11 +1,11 @@
-## What's new ✨
+## What's new
 
-- Fix: `NoRawTex` skips all raw files.
-- Add GitHub workflow for auto build & release.
+- Refactor&clean codes.
+- Fix several small bugs.
 
-## 更新内容 ✨
+## 更新内容
 
-- 修复 `NoRawTex` 选项排除所有原始文件的问题
-- 添加自动构建&发布 GitHub 工作流
+- 重构 & 清理代码
+- 修复若干小 bug
 
-**Full Changelog**: https://github.com/masterLazy/RePKG.Neo/compare/2.2.0...2.2.1
+**Full Changelog**: https://github.com/masterLazy/RePKG.Neo/compare/2.2.1...2.2.2
