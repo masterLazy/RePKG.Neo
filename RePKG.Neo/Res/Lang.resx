@@ -1,214 +1,219 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="Msg_FileFilter" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Msg_FileFilter" xml:space="preserve">
     <value>PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.*</value>
   </data>
-  <data name="Btn_AddFile" xml:space="preserve">
+    <data name="Btn_AddFile" xml:space="preserve">
     <value>Add file</value>
   </data>
-  <data name="Btn_AddFolder" xml:space="preserve">
+    <data name="Btn_AddFolder" xml:space="preserve">
     <value>Add folder</value>
   </data>
-  <data name="Btn_AddFolder_ToolTip" xml:space="preserve">
+    <data name="Btn_AddFolder_ToolTip" xml:space="preserve">
     <value>Recursively search supported files (.pkg, .mpkg, .tex)</value>
   </data>
-  <data name="Btn_Clear_ToolTip" xml:space="preserve">
+    <data name="Btn_Clear_ToolTip" xml:space="preserve">
     <value>Clear</value>
   </data>
-  <data name="Btn_StartExtract" xml:space="preserve">
+    <data name="Btn_StartExtract" xml:space="preserve">
     <value>Extract</value>
   </data>
-  <data name="Btn_Stop_ToolTip" xml:space="preserve">
+    <data name="Btn_Stop_ToolTip" xml:space="preserve">
     <value>Stop</value>
   </data>
-  <data name="Btn_Options" xml:space="preserve">
+    <data name="Btn_Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="Chk_AutoExtract" xml:space="preserve">
+    <data name="Chk_AutoExtract" xml:space="preserve">
     <value>Auto start extraction</value>
   </data>
-  <data name="Chk_CopyProject" xml:space="preserve">
+    <data name="Chk_CopyProject" xml:space="preserve">
     <value>Copy project.json and preview.jpg to output directory</value>
   </data>
-  <data name="Chk_NoTexConvert" xml:space="preserve">
+    <data name="Chk_NoTexConvert" xml:space="preserve">
     <value>Don't convert TEX to images</value>
   </data>
-  <data name="Chk_SingleDir" xml:space="preserve">
+    <data name="Chk_SingleDir" xml:space="preserve">
     <value>Put all output files in single directory</value>
   </data>
-  <data name="Lbl_OutputSuffix" xml:space="preserve">
+    <data name="Lbl_OutputSuffix" xml:space="preserve">
     <value>Output dir suffix</value>
   </data>
-  <data name="EmptyState_Text" xml:space="preserve">
+    <data name="EmptyState_Text" xml:space="preserve">
     <value>Drag files / folders here</value>
   </data>
-  <data name="Btn_Remove_ToolTip" xml:space="preserve">
+    <data name="Btn_Remove_ToolTip" xml:space="preserve">
     <value>Remove</value>
   </data>
-  <data name="Btn_Reveal_ToolTip" xml:space="preserve">
+    <data name="Btn_Reveal_ToolTip" xml:space="preserve">
     <value>Reveal in File Explorer</value>
   </data>
-  <data name="FolderDialog_Title" xml:space="preserve">
+    <data name="FolderDialog_Title" xml:space="preserve">
     <value>Add folder</value>
   </data>
-  <data name="Msg_InvalidDrop" xml:space="preserve">
+    <data name="Msg_InvalidDrop" xml:space="preserve">
     <value>Invalid drop. Please drag a file or folder.</value>
   </data>
-  <data name="Msg_Info" xml:space="preserve">
+    <data name="Msg_Info" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="Item_FileNotFound" xml:space="preserve">
+    <data name="Item_FileNotFound" xml:space="preserve">
     <value>File not found</value>
   </data>
-  <data name="Msg_ExtractError" xml:space="preserve">
+    <data name="Msg_ExtractError" xml:space="preserve">
     <value>An error occurred during extraction:
 
 {0}
 
 Please check if the input file is valid.</value>
   </data>
-  <data name="Msg_ExtractFailed_Title" xml:space="preserve">
+    <data name="Msg_ExtractFailed_Title" xml:space="preserve">
     <value>Extraction failed</value>
   </data>
-  <data name="Item_Complete" xml:space="preserve">
+    <data name="Item_Complete" xml:space="preserve">
     <value>Completed</value>
   </data>
-  <data name="Item_ExtractFailed" xml:space="preserve">
+    <data name="Item_ExtractFailed" xml:space="preserve">
     <value>Extraction failed</value>
   </data>
-  <data name="Msg_DropWhenRunning" xml:space="preserve">
+    <data name="Msg_DropWhenRunning" xml:space="preserve">
     <value>Please drop after current tasks are completed.</value>
   </data>
-  <data name="Chk_NoRawTex" xml:space="preserve">
+    <data name="Chk_NoRawTex" xml:space="preserve">
     <value>Don't save TEX files</value>
   </data>
-  <data name="Msg_Confirm" xml:space="preserve">
+    <data name="Msg_Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
-  <data name="Msg_ExtractSucceeded" xml:space="preserve">
+    <data name="Msg_ExtractSucceeded" xml:space="preserve">
     <value>Do you want to re-extract the succeeded items?</value>
   </data>
-  <data name="Item_Handling" xml:space="preserve">
+    <data name="Item_Handling" xml:space="preserve">
     <value>Extracting</value>
   </data>
-  <data name="Btn_ViewLog" xml:space="preserve">
+    <data name="Btn_ViewLog" xml:space="preserve">
     <value>View log</value>
   </data>
 </root>

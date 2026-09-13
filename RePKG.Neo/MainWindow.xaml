@@ -4,13 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:CaptionButtons="clr-namespace:SuGarToolkit.WPF.Controls.CaptionButtons;assembly=SuGarToolkit.WPF.Controls.CaptionButtons"
-        xmlns:system="clr-namespace:System;assembly=netstandard"
         xmlns:lazy="clr-namespace:LazyWpf;assembly=LazyWpf"
         xmlns:res="clr-namespace:RePKG.Neo.res"
         xmlns:local="clr-namespace:RePKG.Neo"
-        d:DataContext="{d:DesignInstance Type=local:MainWindowVM}"
+        d:DataContext="{d:DesignInstance Type=local:MainWindowVm}"
         mc:Ignorable="d"
-        Title="RePKG.Neo" 
+        Title="RePKG.Neo"
         Height="550" Width="800" FontSize="13"
         MinHeight="550" MinWidth="800"
         Background="#f0f0f0" ThemeMode="Light"
@@ -19,9 +18,9 @@
         StateChanged="Window_StateChanged" Closed="Window_Closed">
     <WindowChrome.WindowChrome>
         <WindowChrome
-        x:Name="WindowChrome"
-        CaptionHeight="36"
-        UseAeroCaptionButtons="False" />
+            x:Name="WindowChrome"
+            CaptionHeight="36"
+            UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Border BorderThickness="1" BorderBrush="#878787" x:Name="LayoutRoot">
         <Grid>
@@ -38,17 +37,17 @@
 
                 <CaptionButtons:CaptionButtonBar
                     Grid.Column="1"
-                    Height="36"/>
+                    Height="36" />
             </Grid>
 
             <Grid Height="36">
-                <Image Height="18" Margin="16 8" Source="/res/icon.png" 
-               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <Image Height="18" Margin="16 8" Source="/res/icon.png"
+                       VerticalAlignment="Center" HorizontalAlignment="Left" />
                 <TextBlock Margin="45 8" FontSize="12"
-                   VerticalAlignment="Center" HorizontalAlignment="Left">
+                           VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Run>RePKG.Neo</Run>
-                    <Run/>
-                    <Run Foreground="#999" Text="{x:Static local:Log.VersionText}"/>
+                    <Run />
+                    <Run Foreground="#999" Text="{x:Static local:Log.VersionText}" />
                 </TextBlock>
             </Grid>
             <!--Top panel-->
@@ -57,24 +56,26 @@
                     <DockPanel.Resources>
                         <ResourceDictionary>
                             <Style TargetType="lazy:Button">
-                                <Setter Property="DockPanel.Dock" Value="Left"/>
-                                <Setter Property="Height" Value="40"/>
-                                <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
-                                <Setter Property="DockPanel.Dock" Value="Left"/>
+                                <Setter Property="DockPanel.Dock" Value="Left" />
+                                <Setter Property="Height" Value="40" />
+                                <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
+                                <Setter Property="DockPanel.Dock" Value="Left" />
                             </Style>
                         </ResourceDictionary>
                     </DockPanel.Resources>
-                    <lazy:Button Icon="&#xE8E5;" Text="{x:Static res:Lang.Btn_AddFile}" IsEnabled="{Binding NotRunning}"
+                    <lazy:Button Icon="&#xE8E5;" Text="{x:Static res:Lang.Btn_AddFile}"
+                                 IsEnabled="{Binding NotRunning}"
                                  x:Name="BtnAddFile" Click="BtnAddFile_Click" />
 
-                    <lazy:Button Icon="&#xE8DA;" Text="{x:Static res:Lang.Btn_AddFolder}" IsEnabled="{Binding NotRunning}"
+                    <lazy:Button Icon="&#xE8DA;" Text="{x:Static res:Lang.Btn_AddFolder}"
+                                 IsEnabled="{Binding NotRunning}"
                                  x:Name="BtnAddFolder" Click="BtnAddFolder_Click"
-                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_AddFolder_ToolTip}" 
-                                 Margin="5 0 0 0"/>
+                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_AddFolder_ToolTip}"
+                                 Margin="5 0 0 0" />
 
                     <lazy:Button Icon="&#xE74D;" IsEnabled="{Binding NotRunning}"
                                  x:Name="BtnClear" Click="BtnClear_Click"
-                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Clear_ToolTip}" Margin="5 0 0 0"/>
+                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Clear_ToolTip}" Margin="5 0 0 0" />
 
                     <Separator Margin="0 10" BorderBrush="{StaticResource BhBorder}">
                         <Separator.LayoutTransform>
@@ -82,69 +83,61 @@
                         </Separator.LayoutTransform>
                     </Separator>
 
-                    <lazy:Button Icon="&#xE768;" Text="{x:Static res:Lang.Btn_StartExtract}" IsEnabled="{Binding CanStart}"
+                    <lazy:Button Icon="&#xE768;" Text="{x:Static res:Lang.Btn_StartExtract}"
+                                 IsEnabled="{Binding CanStart}"
                                  x:Name="BtnStart" Click="BtnStart_Click"
-                                 IsAccented="True"/>
+                                 IsAccented="True" />
 
                     <lazy:Button Icon="&#xE769;" IsEnabled="{Binding IsRunning}"
                                  x:Name="BtnStop" Click="BtnStop_Click"
-                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Stop_ToolTip}" Margin="5 0 0 0"/>
+                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Stop_ToolTip}" Margin="5 0 0 0" />
 
                     <lazy:Button Icon="&#xE9E9;" Text="{x:Static res:Lang.Btn_Options}" DockPanel.Dock="Right"
-                                 x:Name="BtnOptions" Click="BtnOptions_Click"/>
+                                 x:Name="BtnOptions" Click="BtnOptions_Click" />
                     <!--Options panel-->
                     <Popup x:Name="PopupOptions" AllowsTransparency="True"
                            PlacementTarget="{Binding ElementName=BtnOptions}"
                            Placement="Bottom"
                            MouseLeave="PopupOptions_MouseLeave">
                         <Popup.Resources>
-                            <Storyboard x:Key="FadeInStoryboard">
-                                <DoubleAnimation Storyboard.TargetName="PopupBorder"
-                                                 Storyboard.TargetProperty="Opacity"
-                                                 From="0" To="1" Duration="0:0:0.07" />
-                            </Storyboard>
-                            <Storyboard x:Key="FadeOutStoryboard">
-                                <DoubleAnimation Storyboard.TargetName="PopupBorder"
-                                                 Storyboard.TargetProperty="Opacity"
-                                                 From="1" To="0" Duration="0:0:0.07" />
-                            </Storyboard>
                         </Popup.Resources>
-                        <Border x:Name="PopupBorder" Background="#f9f9f9" BorderBrush="{StaticResource BhBorder}" 
+                        <Border x:Name="PopupBorder" Background="#f9f9f9" BorderBrush="{StaticResource BhBorder}"
                                 BorderThickness="1" CornerRadius="8" Padding="8" Opacity="0">
                             <StackPanel MaxWidth="220" IsEnabled="{Binding NotRunning}">
                                 <StackPanel.Resources>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                        <Setter Property="TextWrapping" Value="Wrap" />
                                     </Style>
                                     <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
-                                        <Setter Property="Margin" Value="5"/>
+                                        <Setter Property="Margin" Value="5" />
                                     </Style>
                                 </StackPanel.Resources>
 
                                 <CheckBox IsChecked="{Binding Options.AutoExtract}">
-                                    <TextBlock Text="{x:Static res:Lang.Chk_AutoExtract}"/>
+                                    <TextBlock Text="{x:Static res:Lang.Chk_AutoExtract}" />
                                 </CheckBox>
 
-                                <Separator Margin="5 0 5 0"/>
+                                <Separator Margin="5 0 5 0" />
 
                                 <CheckBox IsChecked="{Binding Options.CopyProject}">
-                                    <TextBlock Text="{x:Static res:Lang.Chk_CopyProject}"/>
+                                    <TextBlock Text="{x:Static res:Lang.Chk_CopyProject}" />
                                 </CheckBox>
 
                                 <CheckBox IsChecked="{Binding Options.NoTexConvert}">
-                                    <TextBlock Text="{x:Static res:Lang.Chk_NoTexConvert}"/>
+                                    <TextBlock Text="{x:Static res:Lang.Chk_NoTexConvert}" />
                                 </CheckBox>
 
                                 <CheckBox IsChecked="{Binding Options.NoRawTex}">
-                                    <TextBlock Text="{x:Static res:Lang.Chk_NoRawTex}"/>
+                                    <TextBlock Text="{x:Static res:Lang.Chk_NoRawTex}" />
                                 </CheckBox>
 
                                 <CheckBox IsChecked="{Binding Options.SingleDir}">
-                                    <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}"/>
+                                    <TextBlock Text="{x:Static res:Lang.Chk_SingleDir}" />
                                 </CheckBox>
 
                                 <Button Content="{x:Static res:Lang.Btn_ViewLog}" x:Name="BtnViewLog"
-                                             Click="BtnViewLog_Click" Height="35" Margin="5 5 5 0" HorizontalAlignment="Stretch"/>
+                                        Click="BtnViewLog_Click" Height="35" Margin="5 5 5 0"
+                                        HorizontalAlignment="Stretch" />
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -155,9 +148,9 @@
                         </Separator.LayoutTransform>
                     </Separator>
 
-                    <TextBlock Text="{x:Static res:Lang.Lbl_OutputSuffix}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static res:Lang.Lbl_OutputSuffix}" VerticalAlignment="Center" />
                     <TextBox Text="{Binding Options.OutputSuffix, Mode=TwoWay}" Margin="8 0 0 -3"
-                             Height="30" Width="120" VerticalAlignment="Center"/>
+                             Height="30" Width="120" VerticalAlignment="Center" />
                 </DockPanel>
                 <Border CornerRadius="8" BorderThickness="1" AllowDrop="True" Drop="Border_Drop"
                         Background="{StaticResource BhLight}" BorderBrush="{StaticResource BhBorder}">
@@ -172,7 +165,7 @@
                                                 <Grid>
                                                     <!-- Scroll-view area -->
                                                     <ScrollViewer>
-                                                        <ItemsPresenter/>
+                                                        <ItemsPresenter />
                                                     </ScrollViewer>
 
                                                     <!-- Empty hint layer (invisible for default) -->
@@ -181,17 +174,21 @@
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center"
                                                                 Visibility="Collapsed">
-                                                        <TextBlock Text="&#xE7B8;" FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                                                   FontSize="50" Foreground="{StaticResource BhBorder}"/>
-                                                        <TextBlock Margin="20 0 0 0" Text="{x:Static res:Lang.EmptyState_Text}" VerticalAlignment="Center"
-                                                                   FontSize="28" Foreground="{StaticResource BhBorder}"/>
+                                                        <TextBlock Text="&#xE7B8;"
+                                                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                                                   FontSize="50" Foreground="{StaticResource BhBorder}" />
+                                                        <TextBlock Margin="20 0 0 0"
+                                                                   Text="{x:Static res:Lang.EmptyState_Text}"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="28" Foreground="{StaticResource BhBorder}" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <!-- Show hint when list is empty -->
                                                 <Trigger Property="HasItems" Value="False">
-                                                    <Setter TargetName="EmptyStateImage" Property="Visibility" Value="Visible"/>
+                                                    <Setter TargetName="EmptyStateImage" Property="Visibility"
+                                                            Value="Visible" />
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -213,44 +210,51 @@
                                     <!--Progressbar-->
                                     <lazy:ProgBar DockPanel.Dock="Bottom" Height="4" Margin="-5 0"
                                                   Maximum="100" Value="{Binding Percent}"
-                                                  FadeOutWhenComplete="True"/>
+                                                  FadeOutWhenComplete="True" />
                                     <!--Thumbnail-->
-                                    <Image Source="{Binding Thumb}" DockPanel.Dock="Left" Width="48" Height="48" Margin="-5 5 5 5"
+                                    <Image Source="{Binding Thumb}" DockPanel.Dock="Left" Width="48" Height="48"
+                                           Margin="-5 5 5 5"
                                            ToolTipService.InitialShowDelay="300">
                                         <Image.Clip>
-                                            <RectangleGeometry RadiusX="4" RadiusY="4" Rect="0,0,48,48"/>
+                                            <RectangleGeometry RadiusX="4" RadiusY="4" Rect="0,0,48,48" />
                                         </Image.Clip>
                                         <ToolTipService.ToolTip>
                                             <Image VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0"
-                                                   MaxHeight="100" MaxWidth="100"  Source="{Binding Thumb}" />
+                                                   MaxHeight="100" MaxWidth="100" Source="{Binding Thumb}" />
                                         </ToolTipService.ToolTip>
                                     </Image>
                                     <!--Buttons at right-->
-                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;" ToolTipService.ToolTip="{x:Static res:Lang.Btn_Remove_ToolTip}"
+                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;"
+                                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Remove_ToolTip}"
                                                  x:Name="BtnRemove" Click="BtnRemove_Click"
-                                                 Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
+                                                 Height="40" HorizontalAlignment="Right" Visibility="Collapsed" />
 
-                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;" ToolTipService.ToolTip="{x:Static res:Lang.Btn_Reveal_ToolTip}"
+                                    <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;"
+                                                 ToolTipService.ToolTip="{x:Static res:Lang.Btn_Reveal_ToolTip}"
                                                  x:Name="BtnReveal" Click="BtnReveal_Click" Margin="5 0"
-                                                 Height="40" HorizontalAlignment="Right" Visibility="Collapsed"/>
+                                                 Height="40" HorizontalAlignment="Right" Visibility="Collapsed" />
                                     <!--Infos-->
-                                    <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5 2.5 2.5 2.5" HorizontalAlignment="Stretch">
+                                    <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5 2.5 2.5 2.5"
+                                                HorizontalAlignment="Stretch">
                                         <StackPanel Orientation="Horizontal" Margin="2.5">
-                                            <TextBlock Text="{Binding FileName}"/>
-                                            <TextBlock Text="{Binding Title}" Margin="10 0 0 0" Foreground="#355590"/>
+                                            <TextBlock Text="{Binding FileName}" />
+                                            <TextBlock Text="{Binding Title}" Margin="10 0 0 0" Foreground="#355590" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="2.5">
-                                            <TextBlock Text="{Binding DisplayDir}" FontSize="12" Foreground="#999"/>
-                                            <TextBlock Text="{Binding FileSize}" Margin="10 0 0 0" FontSize="12" Foreground="#999"/>
-                                            <TextBlock Text="{Binding Text}" Margin="10 0 0 0" FontSize="12" Foreground="{Binding TextBrush}"/>
+                                            <TextBlock Text="{Binding DisplayDir}" FontSize="12" Foreground="#999" />
+                                            <TextBlock Text="{Binding FileSize}" Margin="10 0 0 0" FontSize="12"
+                                                       Foreground="#999" />
+                                            <TextBlock Text="{Binding Text}" Margin="10 0 0 0" FontSize="12"
+                                                       Foreground="{Binding TextBrush}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </DockPanel>
                                 <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsMouseOver}"
-                                     Value="True">
-                                        <Setter TargetName="BtnRemove" Property="Visibility" Value="Visible"/>
-                                        <Setter TargetName="BtnReveal" Property="Visibility" Value="Visible"/>
+                                    <DataTrigger
+                                        Binding="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsMouseOver}"
+                                        Value="True">
+                                        <Setter TargetName="BtnRemove" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="BtnReveal" Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>

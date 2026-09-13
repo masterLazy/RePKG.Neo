@@ -7,6 +7,7 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -14,36 +15,34 @@ using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Windows;
 
-namespace RePKG.Neo {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : System.Windows.Application {
-        public static string[] DroppedFiles { get; set; }
+namespace RePKG.Neo;
 
-        protected override void OnStartup(StartupEventArgs e) {
-            base.OnStartup(e);
-            DroppedFiles = e.Args;
-            if (!Path.Exists(AppDataPath)) {
-                Directory.CreateDirectory(AppDataPath);
-            }
-            Log.Init(AppDataPath);
-            Log.StartupInfo();
-        }
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : System.Windows.Application {
+    public static string[] DroppedFiles { get; set; }
 
-        // "User/.../AppData/Roaming/RePKG.Neo/"
-        public static readonly string AppDataPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RePKG.Neo");
-
-        // Json Options
-        public static readonly JsonSerializerOptions JsonOptions = new() {
-            // Serialization
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs),
-            // Deserialization
-            PropertyNameCaseInsensitive = true,
-            UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
-            UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement,
-        };
+    protected override void OnStartup(StartupEventArgs e) {
+        base.OnStartup(e);
+        DroppedFiles = e.Args;
+        if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
+        Log.Init(AppDataPath);
+        Log.StartupInfo();
     }
+
+    // "User/.../AppData/Roaming/RePKG.Neo/"
+    public static readonly string AppDataPath =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RePKG.Neo");
+
+    // Json Options
+    public static readonly JsonSerializerOptions JsonOptions = new() {
+        // Serialization
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs),
+        // Deserialization
+        PropertyNameCaseInsensitive = true,
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
+        UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement
+    };
 }

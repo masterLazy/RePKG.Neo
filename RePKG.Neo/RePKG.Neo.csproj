@@ -1,75 +1,75 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net10.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<UseWPF>true</UseWPF>
-		<ApplicationIcon>res\repkg-neo.ico</ApplicationIcon>
-		<Version>2.2.1</Version>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <ApplicationIcon>res\repkg-neo.ico</ApplicationIcon>
+        <Version>2.2.1</Version>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DebugType>portable</DebugType>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DebugType>none</DebugType>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>none</DebugType>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <None Remove="res\icon.png" />
-	  <None Remove="res\thumb.png" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Remove="res\icon.png"/>
+        <None Remove="res\thumb.png"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Content Include="res\repkg-neo.ico" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Include="res\repkg-neo.ico"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-	  <PackageReference Include="LazyWpf" Version="1.1.5" />
-	  <PackageReference Include="SuGarToolkit.WPF.Controls.CaptionButtons" Version="1.2.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
+        <PackageReference Include="LazyWpf" Version="1.1.5"/>
+        <PackageReference Include="SuGarToolkit.WPF.Controls.CaptionButtons" Version="1.2.0"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\RePKG\RePKG.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RePKG\RePKG.csproj"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="res\icon.png" />
-	  <Resource Include="res\thumb.png" />
-	</ItemGroup>
+    <ItemGroup>
+        <Resource Include="res\icon.png"/>
+        <Resource Include="res\thumb.png"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Compile Update="res\Lang.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Lang.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Update="res\Lang.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Lang.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <EmbeddedResource Update="res\Lang.resx">
-	    <Generator>PublicResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Lang.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-	</ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="res\Lang.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Lang.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <None Update="LICENSE">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="res\file-mpkg.ico">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="res\file-pkg.ico">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="res\file-tex.ico">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="LICENSE">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="res\file-mpkg.ico">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="res\file-pkg.ico">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="res\file-tex.ico">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>

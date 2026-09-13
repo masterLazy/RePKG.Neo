@@ -1,4 +1,4 @@
-﻿/**
+﻿/*
    Copyright 2025 masterLazy
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -7,24 +7,26 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
  */
+
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace RePKG.Neo {
-    // Only contains what we need
-    internal class ProjectJson {
-        public string title { get; set; } = "";
-        public string preview { get; set; } = "";
+namespace RePKG.Neo;
 
-        public static ProjectJson? ReadFrom(string filePath) {
-            try {
-                var json = File.ReadAllText(filePath);
-                var projectJson = JsonSerializer.Deserialize<ProjectJson>(json, App.JsonOptions);
-                return projectJson;
-            }
-            catch {
-                return null;
-            }
+// Only contains what we need
+internal class ProjectJson {
+    [JsonPropertyName("title")] public string? Title { get; init; }
+    [JsonPropertyName("preview")] public string? Preview { get; init; }
+
+    public static ProjectJson? ReadFrom(string filePath) {
+        try {
+            string json = File.ReadAllText(filePath);
+            var projectJson = JsonSerializer.Deserialize<ProjectJson>(json, App.JsonOptions);
+            return projectJson;
+        }
+        catch {
+            return null;
         }
     }
 }
