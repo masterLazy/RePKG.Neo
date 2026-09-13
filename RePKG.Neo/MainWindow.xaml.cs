@@ -1,4 +1,4 @@
-﻿/**
+﻿/*
   Copyright 2025 masterLazy
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +11,6 @@
 using LazyWpf;
 using RePKG.Neo.res;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace RePKG.Neo;
@@ -28,10 +27,9 @@ public partial class MainWindow : Window {
         _mbService = new MbService(this);
         DataContext = new MainWindowVm(_mbService);
         InitializeComponent();
-        if (App.DroppedFiles.Length > 0) {
-            DataCtx.AddPath(App.DroppedFiles);
-            if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
-        }
+        if (App.DroppedFiles.Length <= 0) return;
+        DataCtx.AddPath(App.DroppedFiles);
+        if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
     }
 
     private void Window_StateChanged(object sender, EventArgs e) {
@@ -60,10 +58,9 @@ public partial class MainWindow : Window {
             Multiselect = true
         };
         bool? result = dialog.ShowDialog();
-        if (result == true) {
-            DataCtx.AddPath(dialog.FileNames);
-            if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
-        }
+        if (result != true) return;
+        DataCtx.AddPath(dialog.FileNames);
+        if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
     }
 
     private void BtnAddFolder_Click(object sender, RoutedEventArgs e) {
@@ -72,10 +69,9 @@ public partial class MainWindow : Window {
             Multiselect = true
         };
         bool? result = dialog.ShowDialog();
-        if (result == true) {
-            DataCtx.AddPath(dialog.FolderNames);
-            if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
-        }
+        if (result != true) return;
+        DataCtx.AddPath(dialog.FolderNames);
+        if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
     }
 
     private void Border_Drop(object sender, DragEventArgs e) {
@@ -84,11 +80,11 @@ public partial class MainWindow : Window {
             return;
         }
         if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+            if (files == null) return;
             DataCtx.AddPath(files);
             if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
-        }
-        else {
+        } else {
             _mbService.ShowDialog(Lang.Msg_InvalidDrop, Lang.Msg_Info, MbOpt.OK, icon: MbIco.Info);
         }
     }
@@ -114,23 +110,26 @@ public partial class MainWindow : Window {
     private void BtnReveal_Click(object sender, RoutedEventArgs e) {
         if (sender is not Button btn) return;
         if (btn.DataContext is not Item item) return;
-        if (item.SavePath != null)
+        if (item.SavePath != null) {
             System.Diagnostics.Process.Start("explorer.exe", $"\"{item.SavePath}\"");
-        else
+        } else {
             System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{item.FilePath}\"");
+        }
     }
 
     private void BtnOptions_Click(object sender, RoutedEventArgs e) {
         if (_isPopupAnimating) return;
-        if (PopupOptions.IsOpen)
+        if (PopupOptions.IsOpen) {
             ClosePopupWithAnimation();
-        else
+        } else {
             OpenPopupWithAnimation();
+        }
     }
 
     private void PopupOptions_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
-        if (PopupOptions.IsOpen && !PopupOptions.IsMouseOver)
+        if (PopupOptions.IsOpen && !PopupOptions.IsMouseOver) {
             ClosePopupWithAnimation();
+        }
     }
 
     private void OpenPopupWithAnimation() {
@@ -138,30 +137,32 @@ public partial class MainWindow : Window {
         _isPopupAnimating = true;
         PopupBorder.Opacity = 0;
         PopupOptions.IsOpen = true;
-        var fadeIn = (Storyboard)PopupOptions.Resources["FadeInStoryboard"];
+        var fadeIn = (Storyboard?)PopupOptions.Resources["FadeInStoryboard"];
 
-        void handler(object? s, EventArgs _) {
+        fadeIn?.Completed += Handler;
+        fadeIn?.Begin(PopupBorder);
+        return;
+
+        void Handler(object? s, EventArgs _) {
             _isPopupAnimating = false;
-            fadeIn.Completed -= handler;
+            fadeIn.Completed -= Handler;
         }
-
-        fadeIn.Completed += handler;
-        fadeIn.Begin(PopupBorder);
     }
 
     private void ClosePopupWithAnimation() {
         if (_isPopupAnimating || !PopupOptions.IsOpen) return;
         _isPopupAnimating = true;
-        var fadeOut = (Storyboard)PopupOptions.Resources["FadeOutStoryboard"];
+        var fadeOut = (Storyboard?)PopupOptions.Resources["FadeOutStoryboard"];
 
-        void handler(object? s, EventArgs _) {
+        fadeOut?.Completed += Handler;
+        fadeOut?.Begin(PopupBorder);
+        return;
+
+        void Handler(object? s, EventArgs _) {
             PopupOptions.IsOpen = false;
             _isPopupAnimating = false;
-            fadeOut.Completed -= handler;
+            fadeOut.Completed -= Handler;
         }
-
-        fadeOut.Completed += handler;
-        fadeOut.Begin(PopupBorder);
     }
 
     private void BtnViewLog_Click(object sender, RoutedEventArgs e) {
