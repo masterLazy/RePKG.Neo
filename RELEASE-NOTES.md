@@ -1,11 +1,9 @@
 ## What's new
 
-- Refactor&clean codes.
-- Fix several small bugs.
+- Attempt to fix the issue of the app crashing upon startup.
 
 ## 更新内容
 
-- 重构 & 清理代码
-- 修复若干小 bug
+- 尝试修复启动闪退的问题
 
-**Full Changelog**: https://github.com/masterLazy/RePKG.Neo/compare/2.2.1...2.2.2
+**Full Changelog**: https://github.com/masterLazy/RePKG.Neo/compare/2.2.2...2.2.3-beta.1

@@ -1,10 +1,11 @@
 name: Build and Release
 
-# Execute when push a tag with SemVer
+# Execute when push a tag with SemVer (stable, beta, rc) — alpha is excluded.
 on:
   push:
     tags:
       - '*.*.*'
+      - '!*.*.*-alpha*'
 
 permissions:
   contents: write
@@ -15,17 +16,25 @@ jobs:
 
     steps:
 
-      # 0. Check the tag
+      # 0. Check the tag and detect the channel
 
-      - name: Validate numeric SemVer tag
+      - name: Validate tag and detect channel
+        id: tag
         run: |
           $tag = "${{ github.ref_name }}"
           Write-Host "Validating tag: $tag"
-          if ($tag -notmatch '^\d+\.\d+\.\d+$') {
-            Write-Host "##[error] Tag '$tag' is not a valid numeric SemVer. Exiting."
+
+          # Accept:  1.2.3, 1.2.3-beta, 1.2.3-beta.1, 1.2.3-rc, 1.2.3-rc.1
+          # Reject:  anything else (alpha should already be filtered out by on.push.tags)
+          if ($tag -notmatch '^\d+\.\d+\.\d+(-(beta|rc)(\.\d+)?)?$') {
+            Write-Host "##[error] Tag '$tag' is not a valid release tag. Exiting."
             exit 1
           }
           Write-Host "Tag format is valid."
+
+          $isPrerelease = $tag -match '-(beta|rc)'
+          Write-Host "Is prerelease: $isPrerelease"
+          "is_prerelease=$($isPrerelease.ToString().ToLower())" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       # 1. Prepare env
@@ -69,10 +78,10 @@ jobs:
           echo "EOF" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
           body: ${{ steps.release_note.outputs.notes }}
+          prerelease: ${{ steps.tag.outputs.is_prerelease }}
           files: |
             .innoSetup/*.exe

@@ -14,7 +14,7 @@ function Read-TextFile {
     param([string]$Path)
     $bytes  = [IO.File]::ReadAllBytes($Path)
     $hasBom = $bytes.Length -ge 3 -and
-              $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF
+            $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF
     $offset = 0
     if ($hasBom) { $offset = 3 }
     $text = [Text.Encoding]::UTF8.GetString($bytes, $offset, $bytes.Length - $offset)
@@ -27,6 +27,33 @@ function Write-TextFile {
     [IO.File]::WriteAllText($Path, $Text, $enc)
 }
 
+# ---------- Suggest next version ----------
+# Handles SemVer: major.minor.patch[-prerelease][+build]
+#   - with prerelease: bump the trailing numeric segment (alpha -> alpha.1,
+#     alpha.1 -> alpha.2, rc.1 -> rc.2, beta.12 -> beta.13)
+#   - without:         bump the patch segment (2.2.1 -> 2.2.2)
+function Get-SuggestedVersion {
+    param([string]$Version)
+    if ($Version -match '^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.\-]+))?(\+[0-9A-Za-z.\-]+)?$') {
+        $major = [int]$Matches[1]
+        $minor = [int]$Matches[2]
+        $patch = [int]$Matches[3]
+        $pre   = $Matches[4]     # without leading '-', may be empty
+        $build = $Matches[5]     # includes leading '+', may be empty
+
+        if ($pre) {
+            if ($pre -match '^(.*?)(\d+)$') {
+                $preNew = $Matches[1] + ([int]$Matches[2] + 1)
+            } else {
+                $preNew = "$pre.1"
+            }
+            return "$major.$minor.$patch-$preNew$build"
+        }
+        return "$major.$minor.$($patch + 1)$build"
+    }
+    return $null
+}
+
 # ---------- Target files ----------
 $targets = @(
     [pscustomobject]@{
@@ -37,13 +64,13 @@ $targets = @(
     }
     [pscustomobject]@{
         Name     = 'setup-x64.iss'
-        Path     = Join-Path $ProjectRoot '.innoSetup\setup-x64.iss'
+        Path     = Join-Path $ProjectRoot '.innoSetup/setup-x64.iss'
         Pattern  = '#define\s+MyAppVersion\s+"([^"]+)"'
         Template = '#define MyAppVersion "{0}"'
     }
     [pscustomobject]@{
         Name     = 'setup-x86.iss'
-        Path     = Join-Path $ProjectRoot '.innoSetup\setup-x86.iss'
+        Path     = Join-Path $ProjectRoot '.innoSetup/setup-x86.iss'
         Pattern  = '#define\s+MyAppVersion\s+"([^"]+)"'
         Template = '#define MyAppVersion "{0}"'
     }
@@ -92,10 +119,10 @@ try {
         Write-Host "Warning: version mismatch: $($distinct -join ' / ')" -ForegroundColor Yellow
     }
 
-    # Suggested version (only when all versions agree)
+    # Suggest next version only when all files agree
     $suggested = $null
-    if ($distinct.Count -eq 1 -and $distinct[0] -match '^(\d+)\.(\d+)\.(\d+)(.*)$') {
-        $suggested = '{0}.{1}.{2}{3}' -f $Matches[1], $Matches[2], ([int]$Matches[3] + 1), $Matches[4]
+    if ($distinct.Count -eq 1) {
+        $suggested = Get-SuggestedVersion -Version $distinct[0]
     }
 
     # ---------- Prompt for new version ----------
@@ -113,7 +140,8 @@ try {
         return
     }
 
-    if ($NewVersion -notmatch '^\d+(\.\d+){1,3}([-+][0-9A-Za-z.\-]+)?$') {
+    # SemVer-ish check: 2 to 4 numeric segments, optional -prerelease, optional +build
+    if ($NewVersion -notmatch '^\d+(\.\d+){1,3}(-[0-9A-Za-z.\-]+)?(\+[0-9A-Za-z.\-]+)?$') {
         Write-Warning "Version format looks non-standard: $NewVersion"
     }
 
@@ -137,8 +165,8 @@ try {
         $new     = $e.Target.Template -f $NewVersion
         $m       = $e.Match
         $updated = $e.Raw.Text.Substring(0, $m.Index) +
-                   $new +
-                   $e.Raw.Text.Substring($m.Index + $m.Length)
+                $new +
+                $e.Raw.Text.Substring($m.Index + $m.Length)
 
         Write-TextFile -Path $e.Target.Path -Text $updated -HasBom $e.Raw.HasBom
         Write-Host "Updated $($e.Target.Name)" -ForegroundColor Green
