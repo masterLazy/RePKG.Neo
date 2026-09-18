@@ -32,6 +32,12 @@ public partial class MainWindow : Window {
         if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
     }
 
+    private void Window_OnLoaded(object sender, RoutedEventArgs e) {
+        if (App.ErrorMessage != null) {
+            new MsgBox($"{Lang.Msg_ErrorStartUp}\n\n{App.ErrorMessage}", Lang.Msg_Error, MbOpt.OK, MbBtn.None, MbIco.Error).ShowDialog();
+        }
+    }
+
     private void Window_StateChanged(object sender, EventArgs e) {
         switch (WindowState) {
             case WindowState.Maximized:

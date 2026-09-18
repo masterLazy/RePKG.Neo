@@ -15,7 +15,7 @@
         Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
-        StateChanged="Window_StateChanged" Closed="Window_Closed">
+        StateChanged="Window_StateChanged" Closed="Window_Closed" Loaded="Window_OnLoaded">
     <WindowChrome.WindowChrome>
         <WindowChrome
             x:Name="WindowChrome"
@@ -40,15 +40,24 @@
                     Height="36" />
             </Grid>
 
+            <!--Window caption-->
             <Grid Height="36">
                 <Image Height="18" Margin="16 8" Source="/res/icon.png"
                        VerticalAlignment="Center" HorizontalAlignment="Left" />
-                <TextBlock Margin="45 8" FontSize="12"
-                           VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <Run>RePKG.Neo</Run>
-                    <Run />
-                    <Run Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{x:Static local:Log.VersionText}" />
-                </TextBlock>
+                <StackPanel Margin="45 8" Orientation="Horizontal">
+                    <TextBlock FontSize="12"
+                               VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Run>RePKG.Neo</Run>
+                        <Run />
+                        <Run Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                             Text="{x:Static local:Log.VersionText}" />
+                        <Run />
+                    </TextBlock>
+                    <TextBlock Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                               FontFamily="{StaticResource SymbolThemeFontFamily}"
+                               Text="&#xE7BA;" Visibility="{Binding ErrorIconVisibility}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
             </Grid>
             <!--Top panel-->
             <DockPanel Grid.Row="1" Margin="12 6 12 12">
@@ -190,11 +199,13 @@
                                                                 Visibility="Collapsed">
                                                         <TextBlock Text="&#xE7B8;"
                                                                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                                                   FontSize="50" Foreground="{DynamicResource TextFillColorDisabledBrush}" />
+                                                                   FontSize="50"
+                                                                   Foreground="{DynamicResource TextFillColorDisabledBrush}" />
                                                         <TextBlock Margin="20 0 0 0"
                                                                    Text="{x:Static res:Lang.EmptyState_Text}"
                                                                    VerticalAlignment="Center"
-                                                                   FontSize="28" Foreground="{DynamicResource TextFillColorDisabledBrush}" />
+                                                                   FontSize="28"
+                                                                   Foreground="{DynamicResource TextFillColorDisabledBrush}" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -252,10 +263,12 @@
                                                 HorizontalAlignment="Stretch">
                                         <StackPanel Orientation="Horizontal" Margin="2.5">
                                             <TextBlock Text="{Binding FileName}" />
-                                            <TextBlock Text="{Binding Title}" Margin="10 0 0 0" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                            <TextBlock Text="{Binding Title}" Margin="10 0 0 0"
+                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="2.5">
-                                            <TextBlock Text="{Binding DisplayDir}" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            <TextBlock Text="{Binding DisplayDir}" FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             <TextBlock Text="{Binding FileSize}" Margin="10 0 0 0" FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             <TextBlock Text="{Binding Text}" Margin="10 0 0 0" FontSize="12"

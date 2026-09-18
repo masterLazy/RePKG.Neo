@@ -13,6 +13,7 @@ using LazyWpf;
 using RePKG.Neo.res;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 
 namespace RePKG.Neo;
 
@@ -24,6 +25,7 @@ internal partial class MainWindowVm : ObservableObject {
     [ObservableProperty] private bool _hasItem = false;
     [ObservableProperty] private bool _isRunning = false;
     [ObservableProperty] private bool _notRunning = true;
+    public Visibility ErrorIconVisibility { get; } = App.ErrorMessage == null  ? Visibility.Collapsed : Visibility.Visible;
 
     private readonly HashSet<string> _itemPaths = [];
     private CancellationTokenSource? _cts;

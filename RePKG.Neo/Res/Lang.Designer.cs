@@ -276,6 +276,24 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Msg_Error {
+            get {
+                return ResourceManager.GetString("Msg_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception occurred when starting up RePKG.Neo. Some functions (e.g. log, config) may be unavailable..
+        /// </summary>
+        public static string Msg_ErrorStartUp {
+            get {
+                return ResourceManager.GetString("Msg_ErrorStartUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred during extraction:
         ///
         ///{0}

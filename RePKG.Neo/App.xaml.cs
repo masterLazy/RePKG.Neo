@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Windows;
+using LazyWpf;
 
 namespace RePKG.Neo;
 
@@ -22,13 +23,27 @@ namespace RePKG.Neo;
 /// </summary>
 public partial class App : System.Windows.Application {
     public static string[] DroppedFiles { get; private set; } = [];
+    public static string? ErrorMessage { get; private set; }
 
     protected override void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
         DroppedFiles = e.Args;
-        if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
-        Log.Init(AppDataPath);
-        Log.StartupInfo();
+        try {
+            if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
+            Log.Init(AppDataPath);
+            Log.StartupInfo();
+        } catch (Exception ex) {
+            ErrorMessage = ex.GetType().FullName + ": " + ex.Message;
+        }
+
+        AppDomain.CurrentDomain.UnhandledException += (_, args) => LogException(args.ExceptionObject as Exception);
+        DispatcherUnhandledException += (_, args) => LogException(args.Exception);
+        TaskScheduler.UnobservedTaskException += (_, args) => LogException(args.Exception);
+    }
+
+    private static void LogException(Exception? ex) {
+        if (ex == null) return;
+        Log.Error(ex.GetType().FullName + ": " + ex.Message);
     }
 
     // "User/.../AppData/Roaming/RePKG.Neo/"
