@@ -20,8 +20,9 @@ namespace RePKG.Neo;
 /// </summary>
 public partial class MainWindow : Window {
     private MainWindowVm DataCtx => (MainWindowVm)DataContext;
-    private bool _isPopupAnimating = false;
     private readonly MbService _mbService;
+    private bool _isPopupAnimating = false;
+    private bool _hasShowedError = false;
 
     public MainWindow() {
         _mbService = new MbService(this);
@@ -32,10 +33,11 @@ public partial class MainWindow : Window {
         if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
     }
 
-    private void Window_OnLoaded(object sender, RoutedEventArgs e) {
-        if (App.ErrorMessage != null) {
-            new MsgBox($"{Lang.Msg_ErrorStartUp}\n\n{App.ErrorMessage}", Lang.Msg_Error, MbOpt.OK, MbBtn.None, MbIco.Error).ShowDialog();
-        }
+    private void Window_OnActivated(object? sender, EventArgs e) {
+        if (_hasShowedError || App.ErrorMessage == null) return;
+        _mbService.ShowDialog($"{Lang.Msg_ErrorStartUp}\n\n{App.ErrorMessage}", Lang.Msg_Error, MbOpt.OK,
+            MbBtn.None, MbIco.Error);
+        _hasShowedError = true;
     }
 
     private void Window_StateChanged(object sender, EventArgs e) {

@@ -109,6 +109,10 @@ public class Log : Core.ILogger {
     public static void Error(string msg) {
         Write("error", msg);
     }
+    
+    public static void Fatal(string msg) {
+        Write("fatal", msg);
+    }
 
     internal static void WriteCli(string line) {
         // Strip leading newlines; skip calls that are entirely empty or "\r\n"-only.

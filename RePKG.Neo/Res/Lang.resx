@@ -222,4 +222,7 @@ Please check if the input file is valid.</value>
     <data name="Msg_Error" xml:space="preserve">
         <value>Error</value>
     </data>
+    <data name="Msg_FatalError" xml:space="preserve">
+        <value>RePKG.Neo is exiting due to a fatal error. Click "Yes" to open log for details.</value>
+    </data>
 </root>

@@ -15,7 +15,7 @@
         Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}"
         WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
-        StateChanged="Window_StateChanged" Closed="Window_Closed" Loaded="Window_OnLoaded">
+        StateChanged="Window_StateChanged" Closed="Window_Closed" Activated="Window_OnActivated">
     <WindowChrome.WindowChrome>
         <WindowChrome
             x:Name="WindowChrome"

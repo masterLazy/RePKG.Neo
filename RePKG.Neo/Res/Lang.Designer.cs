@@ -325,6 +325,15 @@ namespace RePKG.Neo.res {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RePKG.Neo is exiting due to a fatal error. Click &quot;Yes&quot; to open log for details..
+        /// </summary>
+        public static string Msg_FatalError {
+            get {
+                return ResourceManager.GetString("Msg_FatalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PKG File|*.pkg|MPKG File|*.mpkg|TEX File|*.tex|All Files|*.*.
         /// </summary>
         public static string Msg_FileFilter {

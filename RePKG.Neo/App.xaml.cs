@@ -15,6 +15,7 @@ using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Windows;
 using LazyWpf;
+using RePKG.Neo.res;
 
 namespace RePKG.Neo;
 
@@ -34,17 +35,17 @@ public partial class App : System.Windows.Application {
             Log.StartupInfo();
         } catch (Exception ex) {
             ErrorMessage = ex.GetType().FullName + ": " + ex.Message;
+            Log.Error($"Exception occurred during starting up: {Helper.ExceptionToString(ex)}");
         }
-
-        AppDomain.CurrentDomain.UnhandledException += (_, args) => LogException(args.ExceptionObject as Exception);
-        DispatcherUnhandledException += (_, args) => LogException(args.Exception);
-        TaskScheduler.UnobservedTaskException += (_, args) => LogException(args.Exception);
+        AppDomain.CurrentDomain.UnhandledException += (_, args) => {
+            Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
+            int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
+            if (result == 6) { // User clicked "Yes"
+                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
+            }
+        };
     }
 
-    private static void LogException(Exception? ex) {
-        if (ex == null) return;
-        Log.Error(ex.GetType().FullName + ": " + ex.Message);
-    }
 
     // "User/.../AppData/Roaming/RePKG.Neo/"
     public static readonly string AppDataPath =

@@ -9,6 +9,7 @@
  */
 
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace RePKG.Neo;
 
@@ -52,4 +53,11 @@ internal static class Helper {
         }
         return totalSize;
     }
+    
+    public static string ExceptionToString(Exception? ex) {
+        return ex == null ? "null" : $"{ex.GetType().FullName}: {ex.Message}\n{ex.StackTrace}";
+    }
+    
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
 }
