@@ -7,6 +7,7 @@
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002DCN/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002DCN/@EntryIndexRemoved">True</s:Boolean>
+	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002Dhans/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002Dhans/@EntryIndexRemoved">True</s:Boolean>
 	<s:String x:Key="/Default/ResxEditorPersonal/DisabledLanguages/@EntryValue"></s:String>

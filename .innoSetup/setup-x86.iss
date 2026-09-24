@@ -6,7 +6,7 @@
 #define RepoDir "..\"
 
 #define MyAppName "RePKG.Neo"
-#define MyAppVersion "2.2.3-beta.1"
+#define MyAppVersion "2.2.3-beta.2"
 #define MyAppPublisher "masterLazy"
 #define MyAppURL "https://github.com/masterLazy/RePKG.Neo"
 #define MyAppExeName "RePKG.Neo.exe"
@@ -51,14 +51,14 @@ Name: "chinesesimplified"; MessagesFile: "ChineseSimplified.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#ReleaseDir}*"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleaseDir}\Res\*"; DestDir: "{app}\Res\"; Flags: ignoreversion
-Source: "{#ReleaseDir}\zh-CN\*"; DestDir: "{app}\zh-CN\"; Flags: ignoreversion
-Source: "{#RepoDir}LICENSE"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#RepoDir}LICENSE-RePKG"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleaseDir}*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoDir}README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#RepoDir}README_zh.md"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+[InstallDelete]
+; Delete outdated resources
+Type: filesandordirs; Name: "{app}\zh-CN"
 
 [Registry]
 ; .pkg

@@ -68,7 +68,6 @@
                                 <Setter Property="DockPanel.Dock" Value="Left" />
                                 <Setter Property="Height" Value="40" />
                                 <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
-                                <Setter Property="DockPanel.Dock" Value="Left" />
                             </Style>
                         </ResourceDictionary>
                     </DockPanel.Resources>
