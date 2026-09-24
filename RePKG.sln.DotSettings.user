@@ -11,7 +11,8 @@
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002Dhans/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_002FLang_002Ezh_002Dhans/@EntryIndexRemoved">True</s:Boolean>
-	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_005Ftemp_002FLang/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_005Ftemp_002FLang/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=RePKG_002ENeo_002Fres_005Ftemp_002FLang/@EntryIndexRemoved">True</s:Boolean>
 	<s:String x:Key="/Default/ResxEditorPersonal/DisabledLanguages/@EntryValue"></s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/ShowOnlyErrors/@EntryValue">False</s:Boolean>
