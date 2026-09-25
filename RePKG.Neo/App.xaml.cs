@@ -26,9 +26,18 @@ public partial class App : System.Windows.Application {
     public static string[] DroppedFiles { get; private set; } = [];
     public static string? ErrorMessage { get; private set; }
 
-    protected override void OnStartup(StartupEventArgs e) {
-        base.OnStartup(e);
-        DroppedFiles = e.Args;
+    static App() {
+        Console.WriteLine("static App() has been called");
+        AppDomain.CurrentDomain.UnhandledException += (_, args) => {
+            Console.WriteLine(Helper.ExceptionToString(args.ExceptionObject as Exception));
+            Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
+            int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
+            if (result == 6) { // User clicked "Yes"
+                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
+            }
+        };
+        Console.WriteLine("Registered UnhandledException handler");
+        Console.WriteLine($"RePKG.Neo {Log.VersionText} (commit {Log.CommitHash})");
         try {
             if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
             Log.Init(AppDataPath);
@@ -37,13 +46,12 @@ public partial class App : System.Windows.Application {
             ErrorMessage = ex.GetType().FullName + ": " + ex.Message;
             Log.Error($"Exception occurred during starting up: {Helper.ExceptionToString(ex)}");
         }
-        AppDomain.CurrentDomain.UnhandledException += (_, args) => {
-            Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
-            int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
-            if (result == 6) { // User clicked "Yes"
-                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
-            }
-        };
+    }
+
+    protected override void OnStartup(StartupEventArgs e) {
+        Console.WriteLine("OnStartup(e) has been called");
+        base.OnStartup(e);
+        DroppedFiles = e.Args;
     }
 
 
