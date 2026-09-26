@@ -1,4 +1,4 @@
-﻿/*
+/*
    Copyright 2025 masterLazy
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,17 +27,13 @@ public partial class App : System.Windows.Application {
     public static string? ErrorMessage { get; private set; }
 
     static App() {
-        Console.WriteLine("static App() has been called");
         AppDomain.CurrentDomain.UnhandledException += (_, args) => {
-            Console.WriteLine(Helper.ExceptionToString(args.ExceptionObject as Exception));
             Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
             int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
             if (result == 6) { // User clicked "Yes"
                 System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
             }
         };
-        Console.WriteLine("Registered UnhandledException handler");
-        Console.WriteLine($"RePKG.Neo {Log.VersionText} (commit {Log.CommitHash})");
         try {
             if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
             Log.Init(AppDataPath);
@@ -49,7 +45,6 @@ public partial class App : System.Windows.Application {
     }
 
     protected override void OnStartup(StartupEventArgs e) {
-        Console.WriteLine("OnStartup(e) has been called");
         base.OnStartup(e);
         DroppedFiles = e.Args;
     }
