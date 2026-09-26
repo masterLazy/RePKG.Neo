@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
+        <CETCompat>false</CETCompat>
         <Version>0.4.0</Version>
         <Copyright>Copyright © NotScuffed 2025</Copyright>
     </PropertyGroup>

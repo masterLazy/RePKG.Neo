@@ -1,4 +1,4 @@
-﻿/*
+/*
    Copyright 2025 masterLazy
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,9 +26,14 @@ public partial class App : System.Windows.Application {
     public static string[] DroppedFiles { get; private set; } = [];
     public static string? ErrorMessage { get; private set; }
 
-    protected override void OnStartup(StartupEventArgs e) {
-        base.OnStartup(e);
-        DroppedFiles = e.Args;
+    static App() {
+        AppDomain.CurrentDomain.UnhandledException += (_, args) => {
+            Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
+            int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
+            if (result == 6) { // User clicked "Yes"
+                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
+            }
+        };
         try {
             if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
             Log.Init(AppDataPath);
@@ -37,13 +42,11 @@ public partial class App : System.Windows.Application {
             ErrorMessage = ex.GetType().FullName + ": " + ex.Message;
             Log.Error($"Exception occurred during starting up: {Helper.ExceptionToString(ex)}");
         }
-        AppDomain.CurrentDomain.UnhandledException += (_, args) => {
-            Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
-            int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
-            if (result == 6) { // User clicked "Yes"
-                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
-            }
-        };
+    }
+
+    protected override void OnStartup(StartupEventArgs e) {
+        base.OnStartup(e);
+        DroppedFiles = e.Args;
     }
 
 
