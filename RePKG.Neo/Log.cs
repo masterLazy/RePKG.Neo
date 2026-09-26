@@ -49,12 +49,17 @@ public class Log : Core.ILogger {
     /// <summary>
     /// Logs the assembly version (with short commit hash) and build time once at startup.
     /// </summary>
-    public static void StartupInfo() {
-        DateTime buildTime = File.GetLastWriteTimeUtc(Assembly.GetExecutingAssembly().Location);
+    public static void StartupInfo()
+    {
+        var buildTime = Assembly.GetExecutingAssembly()
+            .GetCustomAttributes<AssemblyMetadataAttribute>()
+            .FirstOrDefault(a => a.Key == "BuildTimeUtc")
+            ?.Value ?? "unknown";
+
         string commit = CommitHash == null ? "" : $" (commit {CommitHash})";
 
         Info($"RePKG.Neo version {VersionText}{commit}");
-        Info($"Build time {buildTime:yyyy-MM-dd HH:mm:ss} UTC");
+        Info($"Build time {buildTime} UTC");
     }
 
     /// <summary>

@@ -77,4 +77,11 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>BuildTimeUtc</_Parameter1>
+            <_Parameter2>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))</_Parameter2>
+        </AssemblyAttribute>
+    </ItemGroup>
+
 </Project>
