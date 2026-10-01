@@ -22,22 +22,33 @@ public partial class MainWindow : Window {
     private MainWindowVm DataCtx => (MainWindowVm)DataContext;
     private readonly MbService _mbService;
     private bool _isPopupAnimating = false;
-    private bool _hasShowedError = false;
+    private bool _isFirstActivated = true;
 
     public MainWindow() {
         _mbService = new MbService(this);
         DataContext = new MainWindowVm(_mbService);
+        
         InitializeComponent();
+        
         if (App.DroppedFiles.Length <= 0) return;
         DataCtx.AddPath(App.DroppedFiles);
         if (DataCtx.Options.AutoExtract) DataCtx.StartExtract();
     }
 
     private void Window_OnActivated(object? sender, EventArgs e) {
-        if (_hasShowedError || App.ErrorMessage == null) return;
+        if (!_isFirstActivated) return;
+        _isFirstActivated = false;
+        
+        // The right timing to add lister
+        App.SingleInstance.IncomingFiles += paths => {
+            DataCtx.AddPath(paths);
+            if (DataCtx.Options.AutoExtract && DataCtx.CanStart) DataCtx.StartExtract();
+        };
+        
+        // Show error msg
+        if (App.ErrorMessage == null) return;
         _mbService.ShowDialog($"{Lang.Msg_ErrorStartUp}\n\n{App.ErrorMessage}", Lang.Msg_Error, MbOpt.OK,
             MbBtn.None, MbIco.Error);
-        _hasShowedError = true;
     }
 
     private void Window_StateChanged(object sender, EventArgs e) {

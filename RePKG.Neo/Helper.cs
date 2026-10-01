@@ -60,4 +60,11 @@ internal static class Helper {
     
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+    
+    [DllImport("user32.dll")]
+    public static extern bool SetForegroundWindow(IntPtr hWnd);
+    [DllImport("user32.dll")]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    
+    public const int SW_RESTORE = 9;
 }

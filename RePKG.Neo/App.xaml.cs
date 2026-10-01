@@ -8,6 +8,7 @@
        http://www.apache.org/licenses/LICENSE-2.0
  */
 
+using System.Diagnostics;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -23,17 +24,24 @@ namespace RePKG.Neo;
 /// Interaction logic for App.xaml
 /// </summary>
 public partial class App : System.Windows.Application {
+    private static Mutex? _mutex;
+    public static readonly SingleInstance SingleInstance = new(AppName);
+    
+    public const string AppName = "masterLazy.RePKG.Neo";
     public static string[] DroppedFiles { get; private set; } = [];
     public static string? ErrorMessage { get; private set; }
 
     static App() {
+        // Register exception handlers
         AppDomain.CurrentDomain.UnhandledException += (_, args) => {
             Log.Fatal(Helper.ExceptionToString(args.ExceptionObject as Exception));
             int result = Helper.MessageBox(IntPtr.Zero, Lang.Msg_FatalError, Lang.Msg_Error, 0x00040014);
             if (result == 6) { // User clicked "Yes"
-                System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
+                Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
             }
         };
+        
+        // Create data dir; setup logger
         try {
             if (!Path.Exists(AppDataPath)) Directory.CreateDirectory(AppDataPath);
             Log.Init(AppDataPath);
@@ -45,8 +53,30 @@ public partial class App : System.Windows.Application {
     }
 
     protected override void OnStartup(StartupEventArgs e) {
+        // Single instance
+        _mutex = new Mutex(true, $"{AppName}_{Environment.UserName}", out bool isNewInstance);
+        if (!isNewInstance) { // If instance exists
+            var current = Process.GetCurrentProcess();
+            foreach (var process in Process.GetProcessesByName(current.ProcessName)) {
+                if (process.Id == current.Id) continue;
+                IntPtr handle = process.MainWindowHandle;
+                Helper.ShowWindow(handle, Helper.SW_RESTORE);
+                Helper.SetForegroundWindow(handle);
+                break;
+            }
+            SingleInstance.ConnectAndSend(e.Args);
+            Environment.Exit(0);
+            return;
+        }
+        SingleInstance.StartServer();
+        
         base.OnStartup(e);
         DroppedFiles = e.Args;
+    }
+
+    protected override void OnExit(ExitEventArgs e) {
+        base.OnExit(e);
+        SingleInstance.StopServer();
     }
 
 

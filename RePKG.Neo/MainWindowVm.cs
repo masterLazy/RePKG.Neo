@@ -21,10 +21,10 @@ internal partial class MainWindowVm : ObservableObject {
     [ObservableProperty] private ObservableCollection<Item> _items = [];
     [ObservableProperty] private Options _options = Options.Load() ?? new Options();
 
-    [ObservableProperty] private bool _canStart = false;
     [ObservableProperty] private bool _hasItem = false;
-    [ObservableProperty] private bool _isRunning = false;
-    [ObservableProperty] private bool _notRunning = true;
+    [ObservableProperty] private bool _isRunning = false; // Change this
+    [ObservableProperty] private bool _notRunning = true; // Don't change this; it will be automatically set
+    [ObservableProperty] private bool _canStart = false; // Don't change this too
     public Visibility ErrorIconVisibility { get; } = App.ErrorMessage == null  ? Visibility.Collapsed : Visibility.Visible;
 
     private readonly HashSet<string> _itemPaths = [];
