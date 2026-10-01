@@ -141,7 +141,7 @@ public class WallpaperViewer {
             }
             e.Response = Respond($"Not found", 404);
         } catch (Exception ex) {
-            e.Response = Respond($"Internal Error", 500);
+            e.Response = Respond($"Internal Error: {Helper.ExceptionToString(ex)}", 500);
         }
     }
 
