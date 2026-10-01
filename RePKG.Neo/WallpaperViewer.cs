@@ -94,6 +94,9 @@ public class WallpaperViewer {
 
     public async void Initialize() {
         try {
+            _webView.CreationProperties = new CoreWebView2CreationProperties {
+                UserDataFolder = Path.Combine(App.AppDataPath, "WebView2")
+            };
             await _webView.EnsureCoreWebView2Async();
             _webView.CoreWebView2.AddWebResourceRequestedFilter("https://appassets.local/*",
                 CoreWebView2WebResourceContext.All);
