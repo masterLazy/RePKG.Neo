@@ -10,6 +10,8 @@
 
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace RePKG.Neo;
 
@@ -57,6 +59,12 @@ internal static class Helper {
     public static string ExceptionToString(Exception? ex) {
         return ex == null ? "null" : $"{ex.GetType().FullName}: {ex.Message}\n{ex.StackTrace}";
     }
+
+    public static string Sha256Of(string text) {
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(text))).ToLower();
+    }
+    
+    // Win32 APIs
     
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);

@@ -17,7 +17,7 @@ using System.Windows.Media;
 
 namespace RePKG.Neo;
 
-internal partial class Item : ObservableObject {
+public partial class Item : ObservableObject {
     public enum EState {
         Pending,
         Handling,

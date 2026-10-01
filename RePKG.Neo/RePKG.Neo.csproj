@@ -35,6 +35,7 @@
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
         <PackageReference Include="LazyWpf" Version="1.1.5"/>
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
         <PackageReference Include="SuGarToolkit.WPF.Controls.CaptionButtons" Version="1.2.0"/>
     </ItemGroup>
 
