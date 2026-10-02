@@ -26,6 +26,7 @@ internal partial class MainWindowVm : ObservableObject {
     [ObservableProperty] private bool _notRunning = true; // Don't change this; it will be automatically set
     [ObservableProperty] private bool _canStart = false; // Don't change this too
     [ObservableProperty] private static bool _isWebviewReady = false;
+    [ObservableProperty] private string _previewing = "";
     public Visibility ErrorIconVisibility { get; } = App.ErrorMessage == null  ? Visibility.Collapsed : Visibility.Visible;
 
     private readonly HashSet<string> _itemPaths = [];

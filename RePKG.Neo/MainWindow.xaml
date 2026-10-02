@@ -89,12 +89,12 @@
                             <lazy:Button Icon="&#xE8DA;" Text="{x:Static res:Lang.Btn_AddFolder}"
                                          IsEnabled="{Binding NotRunning}"
                                          x:Name="BtnAddFolder" Click="BtnAddFolder_Click"
-                                         ToolTipService.ToolTip="{x:Static res:Lang.Btn_AddFolder_ToolTip}"
+                                         ToolTip="{x:Static res:Lang.Btn_AddFolder_ToolTip}"
                                          Margin="5 0 0 0" />
 
                             <lazy:Button Icon="&#xE74D;" IsEnabled="{Binding NotRunning}"
                                          x:Name="BtnClear" Click="BtnClear_Click"
-                                         ToolTipService.ToolTip="{x:Static res:Lang.Btn_Clear_ToolTip}"
+                                         ToolTip="{x:Static res:Lang.Btn_Clear_ToolTip}"
                                          Margin="5 0 0 0" />
 
                             <Separator Margin="0 10" BorderBrush="{DynamicResource TextFillColorDisabledBrush}">
@@ -110,7 +110,7 @@
 
                             <lazy:Button Icon="&#xE769;" IsEnabled="{Binding IsRunning}"
                                          x:Name="BtnStop" Click="BtnStop_Click"
-                                         ToolTipService.ToolTip="{x:Static res:Lang.Btn_Stop_ToolTip}" Margin="5 0 0 0" />
+                                         ToolTip="{x:Static res:Lang.Btn_Stop_ToolTip}" Margin="5 0 0 0" />
 
                             <lazy:Button Icon="&#xE9E9;" Text="{x:Static res:Lang.Btn_Options}" DockPanel.Dock="Right"
                                          x:Name="BtnOptions" Click="BtnOptions_Click" />
@@ -265,16 +265,16 @@
                                             </Image>
                                             <!--Buttons at right-->
                                             <lazy:Button DockPanel.Dock="Right" Icon="&#xE894;"
-                                                         ToolTipService.ToolTip="{x:Static res:Lang.Btn_Remove_ToolTip}"
+                                                         ToolTip="{x:Static res:Lang.Btn_Remove_ToolTip}"
                                                          x:Name="BtnRemove" Click="BtnRemove_Click"
                                                          Height="40" HorizontalAlignment="Right" Visibility="Collapsed" />
                                             <lazy:Button DockPanel.Dock="Right" Icon="&#xEC50;"
-                                                         ToolTipService.ToolTip="{x:Static res:Lang.Btn_Reveal_ToolTip}"
+                                                         ToolTip="{x:Static res:Lang.Btn_Reveal_ToolTip}"
                                                          x:Name="BtnReveal" Click="BtnReveal_Click" Margin="0 0 5 0"
                                                          Height="40" HorizontalAlignment="Right" Visibility="Collapsed" />
                                             <lazy:Button DockPanel.Dock="Right" Icon="&#xE786;" IsEnabled="{Binding IsWebviewReady, ElementName=Root}"
-                                                         ToolTipService.ToolTip="Preview (beta)"
-                                                         x:Name="BtnPreview" Click="Button_OnClick" Margin="0 0 5 0"
+                                                         ToolTip="Preview (beta)"
+                                                         x:Name="BtnPreview" Click="BtnPreview_OnClick" Margin="0 0 5 0"
                                                          Height="40" HorizontalAlignment="Right" Visibility="Collapsed" />
                                             <!--Infos-->
                                             <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center"
@@ -320,7 +320,10 @@
                     </TabItem.Header>
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="12 6" Orientation="Horizontal">
-                            <lazy:Button Icon="&#xE72C;" Click="RefreshButton_OnClick" Height="40"/>
+                            <lazy:Button Icon="&#xE8DA;" Text="Open" Click="BtnOpenWallpaper_OnClick" Height="40" Margin="0 0 5 0"/>
+                            <lazy:Button Icon="&#xE72C;" Text="Reload" Click="BtnRefreshWallpaper_OnClick" Height="40" Margin="0 0 5 0"/>
+                            <lazy:Button Icon="&#xE894;" Click="BtnCloseWallpaper_OnClick" Height="40" Margin="0 0 5 0"/>
+                            <TextBlock Text="{Binding Previewing}" Margin="10 0" VerticalAlignment="Center"/>
                         </StackPanel>
                         <wv2:WebView2 x:Name="WebView"/>
                     </DockPanel>

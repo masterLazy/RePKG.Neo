@@ -173,10 +173,11 @@ public partial class MainWindow : Window {
         }
     }
 
-    private void Button_OnClick(object sender, RoutedEventArgs e) {
+    private void BtnPreview_OnClick(object sender, RoutedEventArgs e) {
         if (sender is not Button btn) return;
         if (btn.DataContext is not Item item) return;
         _wallpaperViewer.View(item.FilePath);
+        DataCtx.Previewing = item.Title != "" ? item.Title : item.FileName;
         TabControl.SelectedItem = TabViewer;
     }
 
@@ -232,7 +233,25 @@ public partial class MainWindow : Window {
         System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{Log.LogPath}\"");
     }
 
-    private void RefreshButton_OnClick(object sender, RoutedEventArgs e) {
-        _wallpaperViewer.Refresh();
+    private void BtnOpenWallpaper_OnClick(object sender, RoutedEventArgs e) {
+        Microsoft.Win32.OpenFolderDialog dialog = new() {
+            Title = Lang.FolderDialog_Title,
+            Multiselect = false
+        };
+        bool? result = dialog.ShowDialog();
+        if (result != true) return;
+        Item item = new(Path.Combine(dialog.FolderName, "scene.pkg"));
+        _wallpaperViewer.View(item.FilePath);
+        DataCtx.Previewing = item.Title != "" ? item.Title : item.FileName;
+    }
+
+    private void BtnRefreshWallpaper_OnClick(object sender, RoutedEventArgs e) {
+        DataCtx.Previewing = "";
+        _wallpaperViewer.Reload();
+    }
+
+    private void BtnCloseWallpaper_OnClick(object sender, RoutedEventArgs e) {
+        DataCtx.Previewing = "";
+        _wallpaperViewer.Close();
     }
 }

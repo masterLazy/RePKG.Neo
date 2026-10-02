@@ -9,6 +9,7 @@
  */
 
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -60,8 +61,30 @@ internal static class Helper {
         return ex == null ? "null" : $"{ex.GetType().FullName}: {ex.Message}\n{ex.StackTrace}";
     }
 
-    public static string Sha256Of(string text) {
-        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(text))).ToLower();
+    public static string ContentTypeOf(string filename) {
+        filename = Path.GetExtension(filename);
+        return filename switch {
+            ".html" =>  "text/html",
+            ".css"  =>  "text/css",
+            ".js"  =>  "application/javascript",
+            ".png"  =>  "image/png",
+            ".gif"  =>  "image/gif",
+            ".ico"  =>  "image/x-icon",
+            ".svg"  =>  "image/svg+xml",
+            ".webp" =>  "image/webp",
+            ".json" =>  "application/json",
+            _ => "application/octet-stream"
+        };
+    }
+    
+    public static string GetEmbeddedResource(string resourceName) {
+        var assembly = Assembly.GetExecutingAssembly();
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream == null) {
+            return string.Empty;
+        }
+        using StreamReader reader = new(stream, Encoding.UTF8);
+        return reader.ReadToEnd();
     }
     
     // Win32 APIs

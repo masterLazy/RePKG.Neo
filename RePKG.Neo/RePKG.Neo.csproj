@@ -23,6 +23,9 @@
     <ItemGroup>
         <None Remove="res\icon.png"/>
         <None Remove="res\thumb.png"/>
+        <None Update="res\webwallgl.global.min.js">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -46,6 +49,7 @@
     <ItemGroup>
         <Resource Include="res\icon.png"/>
         <Resource Include="res\thumb.png"/>
+        <None Remove="res\viewer.html" />
     </ItemGroup>
 
     <ItemGroup>
@@ -61,6 +65,9 @@
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Lang.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+        <EmbeddedResource Include="WallpaperViewer.html" />
+        <None Remove="res\web-shim.js" />
+        <EmbeddedResource Include="res\web-shim.js" />
     </ItemGroup>
 
     <ItemGroup>

@@ -9,7 +9,9 @@
 */
 
 using System.IO;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 
@@ -17,76 +19,11 @@ namespace RePKG.Neo;
 
 public class WallpaperViewer {
     private readonly WebView2 _webView;
-    private readonly Dictionary<string, string> _paths = new();
-    
-    private const string ViewerPage = """
-      <html>
-      <head>
-      <script src="https://cdn.jsdelivr.net/npm/webwallgl/webwallgl.global.min.js"></script>
-      <style>
-      html,body{margin:0;height:100%;overflow:hidden;background:#111}
-      #stage{position:relative;width:100%;height:100%;background:#111}
-      #wp{position:absolute;inset:0}
-      #loading{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:#111;color:#999;font:14px/1.4 system-ui,-apple-system,sans-serif;transition:opacity .3s}
-      #loading.hide{opacity:0;pointer-events:none}
-      #loading.idle .spinner{display:none}
-      #loading.error .spinner{display:none}
-      #loading.error .text{color:#fff;text-align:center;word-break:break-all;max-width:70%}
-      .spinner{width:28px;height:28px;border:3px solid #333;border-top-color:#eaeaea;border-radius:50%;animation:spin .8s linear infinite}
-      @keyframes spin{to{transform:rotate(360deg)}}
-      </style>
-      </head>
-      <body>
-      <div id="stage">
-        <div id="wp"></div>
-        <div id="loading" class="idle"><div class="spinner"></div><div class="text">No wallpaper to view</div></div>
-      </div>
-      <script>
-      (function(){
-        const { mount, httpSource } = WebWallGL;
-        const wpEl = document.getElementById('wp');
-        const loading = document.getElementById('loading');
-        const textEl = loading.querySelector('.text');
-        let current = null, requestedPkg = null, seq = 0, chain = Promise.resolve();
-      
-        function show(msg){ loading.className = ''; textEl.textContent = msg; }
-        function idle(msg){ loading.className = 'idle'; textEl.textContent = msg || 'No wallpaper to view'; }
-        function hide(){ loading.classList.add('hide'); }
-        function fail(e){ loading.className = 'error'; textEl.textContent = 'Failed: ' + ((e && e.message) || e); }
-      
-        function load(pkg){
-          if (pkg === requestedPkg) return;
-          requestedPkg = pkg;
-          const id = ++seq;
-          chain = chain.then(async () => {
-            if (id !== seq) return;
-            if (current) { try { current.destroy(); } catch(e){} current = null; }
-            show('Loading...');
-            try {
-              const wp = await mount(wpEl, { source: httpSource('/pkg/' + pkg), fps: 60, fit: "contain" });
-              if (id !== seq) { try { wp.destroy(); } catch(e){} return; }
-              current = wp;
-              hide();
-            } catch (e) {
-              if (id === seq) {
-                fail(e);
-                console.error('Failed: ' + ((e && e.message) || e));
-                if (requestedPkg === pkg) requestedPkg = null;
-              }
-            }
-          });
-        }
-      
-        if (window.chrome && window.chrome.webview) {
-          window.chrome.webview.addEventListener('message', e => {
-            load(e.data);
-          });
-        }
-      })();
-      </script>
-      </body>
-      </html>
-      """;
+
+    private static string ViewerPage => Helper.GetEmbeddedResource("RePKG.Neo.WallpaperViewer.html");
+    private const string HostName = "appassets.local";
+
+    private string? _pkgPath;
 
     public WallpaperViewer(WebView2 webView) {
         _webView = webView;
@@ -98,59 +35,106 @@ public class WallpaperViewer {
                 UserDataFolder = Path.Combine(App.AppDataPath, "WebView2")
             };
             await _webView.EnsureCoreWebView2Async();
-            _webView.CoreWebView2.AddWebResourceRequestedFilter("https://appassets.local/*",
+            _webView.CoreWebView2.AddWebResourceRequestedFilter($"https://{HostName}/*",
                 CoreWebView2WebResourceContext.All);
             _webView.CoreWebView2.WebResourceRequested += CoreWebView2OnWebResourceRequested;
-            _webView.CoreWebView2.Navigate("https://appassets.local/");
+            _webView.CoreWebView2.Navigate($"https://{HostName}/viewer");
         } catch (Exception e) {
             Log.Error($"Failed to initialize wallpaper viewer: {Helper.ExceptionToString(e)}");
         }
     }
 
-    public void Refresh() {
-        _webView.CoreWebView2.Reload();
+    public void View(string path) {
+        Log.Info($"Viewing: {path}");
+        _pkgPath = path;
+        Reload();
     }
 
-    public void View(string path) {
-        string id = Helper.Sha256Of(path);
-        _paths.TryAdd(id, path);
-        _webView.CoreWebView2.PostWebMessageAsString(id);
+    public void Reload() {
+        _webView.CoreWebView2.PostWebMessageAsString("load");
+    }
+
+    public void Close() {
+        _webView.CoreWebView2.PostWebMessageAsString("close");
     }
 
     private void CoreWebView2OnWebResourceRequested(object? sender, CoreWebView2WebResourceRequestedEventArgs e) {
         try {
             var uri = new Uri(e.Request.Uri);
-            if (uri.Host != "appassets.local") return;
+            if (uri.Host != HostName) return;
 
-            string path = uri.AbsolutePath; // starts with '/'
+            string path = WebUtility.UrlDecode(uri.AbsolutePath); // starts with '/'
+            // Log.Debug($"Requested: {path}");
 
-            if (path == "/") {
+            if (path == "/viewer") {
                 e.Response = Respond(ViewerPage, 200);
                 return;
             }
-            if (path.StartsWith("/pkg/")) {
-                string rel = path["/pkg/".Length..];
-                string id = rel[..rel.IndexOf('/')];
-                string filename = rel[rel.LastIndexOf('/')..];
-                if (!_paths.ContainsKey(id) || filename != "/scene.pkg") {
-                    e.Response = Respond($"Not found", 404);
-                    return;
-                }
-
-                var stream = File.OpenRead(_paths[id]);
-                string headers = $"Content-Type: application/octet-stream\r\n";
-                e.Response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(stream, 200, "OK", headers);
+            if (path == "/webwallgl.global.min.js") {
+                e.Response = RespondFile("res/webwallgl.global.min.js");
                 return;
             }
-            e.Response = Respond($"Not found", 404);
+            // Wallpaper file
+            if (_pkgPath == null) {
+                e.Response = Respond("Not found", 404);
+                return;
+            }
+            string filename = path[1..];
+            if (filename == "/scene.pkg") {
+                e.Response = RespondFile(_pkgPath);
+            } else {
+                string? parent = Path.GetDirectoryName(_pkgPath);
+                if (parent == null) {
+                    e.Response = Respond("Not found", 404);
+                    return;
+                }
+                ;
+                string realPath = Path.Combine(parent, filename);
+                if (!File.Exists(realPath)) {
+                    e.Response = Respond("Not found", 404);
+                    return;
+                }
+                e.Response = RespondFile(realPath);
+                return;
+            }
+            e.Response = Respond("Not found", 404);
         } catch (Exception ex) {
             e.Response = Respond($"Internal Error: {Helper.ExceptionToString(ex)}", 500);
         }
     }
 
     private CoreWebView2WebResourceResponse Respond(string text, int statusCode, string contentType = "text/html") {
+        string reasonPhrase = "OK";
+        if (statusCode == 404) reasonPhrase = "Not Found";
+        else if (statusCode == 500) reasonPhrase = "Internal Server Error";
         return _webView.CoreWebView2.Environment.CreateWebResourceResponse(
             new MemoryStream(Encoding.UTF8.GetBytes(text)),
-            statusCode, "OK", $"Content-Type: {contentType}\r\n");
+            statusCode, reasonPhrase, $"Content-Type: {contentType}\r\n");
+    }
+
+    private CoreWebView2WebResourceResponse RespondFile(string path) {
+        string contentType = Helper.ContentTypeOf(path);
+        string headers = $"Content-Type: {contentType}\r\n";
+        Stream stream = File.OpenRead(path);
+        if (contentType == "text/html") {
+            string html = File.ReadAllText(path);
+            html = InjectShim(html);
+            byte[] bytes = Encoding.UTF8.GetBytes(html);
+            stream = new MemoryStream(bytes);
+        }
+        return _webView.CoreWebView2.Environment.CreateWebResourceResponse(stream, 200, "OK", headers);
+    }
+
+    // Inject WE shim
+    private static readonly Regex ShimProbe = new(@"\bdata-we-shim(?:-src)?\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex HeadTag = new(@"<head(\s[^>]*)?>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static string InjectShim(string html) {
+        if (string.IsNullOrEmpty(html) || ShimProbe.IsMatch(html)) return html;
+        string inject = $"<script data-we-shim-src=\"1\">{Helper.GetEmbeddedResource("RePKG.Neo.res.web-shim.js")}</script>";
+        var m = HeadTag.Match(html);
+        if (m.Success) {
+            return html.Insert(m.Index + m.Length, inject);
+        }
+        return $"<!DOCTYPE html><html><head>{inject}</head><body>{html}</body></html>";
     }
 }

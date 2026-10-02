@@ -49,8 +49,10 @@ public partial class Item : ObservableObject {
         FilePath = filePath;
         FileDir = Path.GetDirectoryName(filePath) ?? "";
         FileName = Path.GetFileName(filePath);
-        _fileSize = new FileInfo(filePath).Length;
-        FileSize = Helper.ByteToString(_fileSize);
+        try {
+            _fileSize = new FileInfo(filePath).Length;
+            FileSize = Helper.ByteToString(_fileSize);
+        } catch { /* ignored */ }
         // Infos associated with project.json
         string jsonPath = Path.Combine(FileDir, "project.json");
         if (File.Exists(jsonPath)) {
