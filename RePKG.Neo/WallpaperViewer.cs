@@ -100,6 +100,7 @@ public class WallpaperViewer {
             e.Response = Respond("Not found", 404);
         } catch (Exception ex) {
             e.Response = Respond($"Internal Error: {Helper.ExceptionToString(ex)}", 500);
+            Log.Error($"Failed to handle request {e.Request.Uri}: {Helper.ExceptionToString(ex)}");
         }
     }
 
@@ -114,7 +115,6 @@ public class WallpaperViewer {
 
     private CoreWebView2WebResourceResponse RespondFile(string path) {
         string contentType = Helper.ContentTypeOf(path);
-        string headers = $"Content-Type: {contentType}\r\n";
         Stream stream = File.OpenRead(path);
         if (contentType == "text/html") {
             string html = File.ReadAllText(path);
@@ -122,6 +122,7 @@ public class WallpaperViewer {
             byte[] bytes = Encoding.UTF8.GetBytes(html);
             stream = new MemoryStream(bytes);
         }
+        string headers = $"Content-Type: {contentType}\r\nContent-Length: {stream.Length}\r\n";
         return _webView.CoreWebView2.Environment.CreateWebResourceResponse(stream, 200, "OK", headers);
     }
 
