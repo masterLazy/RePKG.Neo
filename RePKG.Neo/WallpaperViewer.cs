@@ -71,7 +71,7 @@ public class WallpaperViewer {
                 return;
             }
             if (path == "/webwallgl.global.min.js") {
-                e.Response = RespondFile("res/webwallgl.global.min.js");
+                e.Response = RespondFile(Path.Combine(AppContext.BaseDirectory, "res/webwallgl.global.min.js"));
                 return;
             }
             // Wallpaper file
@@ -105,9 +105,11 @@ public class WallpaperViewer {
     }
 
     private CoreWebView2WebResourceResponse Respond(string text, int statusCode, string contentType = "text/html") {
-        string reasonPhrase = "OK";
-        if (statusCode == 404) reasonPhrase = "Not Found";
-        else if (statusCode == 500) reasonPhrase = "Internal Server Error";
+        string reasonPhrase = statusCode switch {
+            404 => "Not Found",
+            500 => "Internal Server Error",
+            _   => "OK"
+        };
         return _webView.CoreWebView2.Environment.CreateWebResourceResponse(
             new MemoryStream(Encoding.UTF8.GetBytes(text)),
             statusCode, reasonPhrase, $"Content-Type: {contentType}\r\n");

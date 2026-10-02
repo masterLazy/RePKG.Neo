@@ -54,12 +54,14 @@ public partial class Item : ObservableObject {
         } catch { /* ignored */ }
         FileSize = Helper.ByteToString(_fileSize);
         // Infos associated with project.json
-        string jsonPath = Path.Combine(FileDir, "project.json");
-        if (File.Exists(jsonPath)) {
-            ProjectJson? json = ProjectJson.ReadFrom(jsonPath);
-            if (json == null) return;
-            if (json.Preview != null) Thumb = Path.Combine(FileDir, json.Preview);
-            if (json.Title != null) Title = json.Title;
+        if (FileName == "scene.pkg") {
+            string jsonPath = Path.Combine(FileDir, "project.json");
+            if (File.Exists(jsonPath)) {
+                ProjectJson? json = ProjectJson.ReadFrom(jsonPath);
+                if (json == null) return;
+                if (json.Preview != null) Thumb = Path.Combine(FileDir, json.Preview);
+                if (json.Title != null) Title = json.Title;
+            }
         }
         // For display
         if (FileDir.Length < 40) DisplayDir = FileDir;
