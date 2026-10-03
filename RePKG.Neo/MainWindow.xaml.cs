@@ -28,6 +28,8 @@ public partial class MainWindow : Window {
     private readonly WallpaperViewer _wallpaperViewer;
 
     private bool _isPopupAnimating = false;
+    private string? _lastLogFromWebview;
+    private int _repeatCount;
 
     public MainWindow() {
         _mbService = new MbService(this);
@@ -81,9 +83,18 @@ public partial class MainWindow : Window {
                         parts.Add(part);
                     }
                 }
-                if (type == "error") Log.Error($"[WebView2] {string.Join("\n", parts)}");
-                else if (type == "warning") Log.Warn($"[WebView2] {string.Join("\n", parts)}");
-                else Log.Info($"[WebView2] {string.Join("\n", parts)}");
+                string log = string.Join("\n", parts);
+                if (log == _lastLogFromWebview) { // Suppress repeated log
+                    _repeatCount++;
+                    return;
+                } else if (_repeatCount > 0) {
+                    Log.Info($"Last log from WebView2 has been repeated for {_repeatCount} times");
+                }
+                if (type == "error") Log.Error($"[WebView2] {log}");
+                else if (type == "warning") Log.Warn($"[WebView2] {log}");
+                else Log.Info($"[WebView2] {log}");
+                _lastLogFromWebview = log;
+                _repeatCount = 0;
             };
         };
     }
