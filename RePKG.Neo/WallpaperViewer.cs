@@ -80,24 +80,21 @@ public class WallpaperViewer {
                 return;
             }
             string filename = path[1..];
-            if (filename == "/scene.pkg") {
+            if (filename == "scene.pkg") {
                 e.Response = RespondFile(_pkgPath);
             } else {
                 string? parent = Path.GetDirectoryName(_pkgPath);
-                if (parent == null) {
+                if (parent == null || filename == "project.json" && Path.GetFileName(_pkgPath) != "scene.pkg") {
                     e.Response = Respond("Not found", 404);
                     return;
                 }
-                ;
                 string realPath = Path.Combine(parent, filename);
                 if (!File.Exists(realPath)) {
                     e.Response = Respond("Not found", 404);
                     return;
                 }
                 e.Response = RespondFile(realPath);
-                return;
             }
-            e.Response = Respond("Not found", 404);
         } catch (Exception ex) {
             e.Response = Respond($"Internal Error: {Helper.ExceptionToString(ex)}", 500);
             Log.Error($"Failed to handle request {e.Request.Uri}: {Helper.ExceptionToString(ex)}");
